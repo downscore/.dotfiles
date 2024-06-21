@@ -61,6 +61,10 @@ setopt hist_find_no_dups # Don't display dupes while searching through history.
 setopt hist_reduce_blanks # Remove extra blanks from commands added to history.
 setopt hist_verify # Don't execute when pressing enter, just expand.
 
+# Search history with up and down keys using the typed prefix.
+bindkey "^[[A" history-search-backward
+bindkey "^[[B" history-search-forward
+
 # Prevent `less` from logging history.
 export LESSHISTFILE=/dev/null
 
@@ -85,8 +89,8 @@ export FZF_CTRL_R_OPTS="
   --color header:italic
   --header 'Ctrl-Y to copy command to clipboard'"
 
-# Replace ls with exa.
-alias ls='exa -a --icons'
+# Replace ls with eza.
+alias ls='eza -a --icons'
 
 # Set grep options. Colour, case-insensitive, show line numbers.
 alias grep='grep --color=auto -in'
