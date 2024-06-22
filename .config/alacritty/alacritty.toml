@@ -12,6 +12,7 @@ decorations = "Buttonless"
 
 [cursor]
 style = "Beam"
+vi_mode_style = "Beam"
 
 [font]
 size = 13.0
