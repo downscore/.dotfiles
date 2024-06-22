@@ -99,6 +99,9 @@ alias grep='grep --color=auto -in'
 alias python=python3
 alias pip=pip3
 
+# Print colors.
+alias print_colors='for i in {0..255}; do print -Pn "%K{$i}  %k%F{$i}${(l:3::0:)i}%f " ${${(M)$((i%6)):#3}:+$'\''\n'\''}; done'
+
 # API keys.
 [[ ! -f ~/.api_keys.zsh ]] || source ~/.api_keys.zsh
 

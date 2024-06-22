@@ -1,0 +1,48 @@
+[shell]
+args = ["--login"]
+program = "/bin/zsh"
+
+[env]
+TERM = "xterm-256color"
+
+[window]
+padding.x = 10
+padding.y = 10
+decorations = "Buttonless"
+
+[cursor]
+style = "Beam"
+
+[font]
+size = 13.0
+
+[font.normal]
+family = "MesloLGL Nerd Font"
+
+[colors.primary]
+background = "#1b1f22"
+foreground = "#b1bac4"
+
+[colors.cursor]
+text = "#30363d"
+cursor = "#e6edf3"
+
+[colors.normal]
+black = "#101010"
+red = "#ff1111"
+green = "#30d158"
+yellow = "#ffd60a"
+blue = "#58a6ff"
+magenta = "#ff37f2"
+cyan = "#53c2c5"
+white= "#b1bac4"
+
+[colors.bright]
+black = "#6e7681"
+red = "#ff4d3d"
+green = "#56d364"
+yellow = "#e3b341"
+blue = "#79c0ff"
+magenta = "#ff2dde"
+cyan = "#22e5ef"
+white = "#d0dae6"
