@@ -1,7 +1,7 @@
 # Powerlevel10k
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 source ~/.powerlevel10k/powerlevel10k.zsh-theme
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+test -f ~/.p10k.zsh && source ~/.p10k.zsh
 
 # Add Homebrew autocompletions if Homebrew is present.
 if type brew &>/dev/null
@@ -21,12 +21,9 @@ zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'  # Make case-insensiti
 # Show hidden files in tab completion.
 _comp_options+=(globdots)
 
-# Colors for use in prompts, etc.
+# Colors for use in prompts, ls, tab completion, etc.
 autoload -U colors && colors
-
-# Colors for ls and tab completion.
 export CLICOLOR=1
-# export LSCOLORS=Gxfxcxdxbxegedabagacad
 export LSCOLORS=Exfxcxdxbxegedabagacad
 export LS_COLORS='di=1;34:ln=35:so=32:pi=33:ex=31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43'
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
@@ -34,51 +31,39 @@ zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 # Bulk renaming tool.
 autoload -U zmv
 
-# Extended filename globbing. Allows negation, approximate matching, and qualifiers.
-# Note: May interfere with some comands. e.g. git commands that use carets.
-# setopt extended_glob
-
-# Suggest spelling corrections for mistyped commands.
-# Note: May have false positives with newly-created binaries.
-# setopt correct
-# export SPROMPT="Correct $fg[red]%R$reset_color to $fg[green]%r?$reset_color (y)es, (n)o, (a)bort, (e)dit: "
-
-# Share history between multiple terminals.
-setopt append_history
-setopt inc_append_history
-setopt share_history
-
-# Other history options.
+# History options.
 HISTSIZE=200000
 SAVEHIST=200000
 # Only include `cd` commands containing a slash in history.
 HISTORY_IGNORE='(ls|cd [^/]*|pwd|exit)'
-setopt extended_history # Save command timestamp and duration.
-setopt hist_expire_dups_first # Delete oldest dupes first.
-setopt hist_ignore_dups # Do not write duped to history.
-setopt hist_ignore_space # If first char is a space, command is not written to history.
-setopt hist_find_no_dups # Don't display dupes while searching through history.
-setopt hist_reduce_blanks # Remove extra blanks from commands added to history.
-setopt hist_verify # Don't execute when pressing enter, just expand.
+setopt append_history  # Append commands to the history file, rather than overwriting it.
+setopt inc_append_history  # Append commands as soon as they are executed, rather than at the end of the session.
+setopt share_history  # Share history between all sessions.
+setopt extended_history  # Save command timestamp and duration.
+setopt hist_expire_dups_first  # Delete oldest dupes first.
+setopt hist_ignore_dups  # Do not write duped to history.
+setopt hist_ignore_space  # If first char is a space, command is not written to history.
+setopt hist_find_no_dups  # Don't display dupes while searching through history.
+setopt hist_reduce_blanks  # Remove extra blanks from commands added to history.
+setopt hist_verify  # Don't execute when pressing enter, just expand.
 
-# Search history with up and down keys using the typed prefix.
-bindkey "^[[A" history-search-backward
+# Other terminal options.
+setopt nobeep  # No beeping on error.
+setopt autopushd  # Enable auto directory stack.
+setopt interactive_comments  # Allow inline comments in interactive shells.
+
+# Keyboard shortcuts.
+bindkey "^[^[[D" backward-word  # Navigating by word on remote Linux machine using option+left/right.
+bindkey "^[^[[C" forward-word
+bindkey "^[[1;3D" backward-word  # Navigating by word on macOS using option+left/right.
+bindkey "^[[1;3C" forward-word
+bindkey "^[[A" history-search-backward  # Search history with up and down keys using the typed prefix.
 bindkey "^[[B" history-search-forward
 
 # Prevent `less` from logging history.
 export LESSHISTFILE=/dev/null
 
-# No beeping on error.
-setopt nobeep
-
-# Enable auto dir stack.
-setopt autopushd
-
-# Allow inline comments in interactive shells.
-setopt interactive_comments
-
 # fzf integration.
-eval "$(fzf --zsh)"
 export FZF_DEFAULT_OPTS="
   --height 75%
   --preview 'echo {}'
@@ -89,27 +74,23 @@ export FZF_CTRL_R_OPTS="
   --color header:italic
   --header 'Ctrl-Y to copy command to clipboard'"
 
-# Replace ls with eza.
-alias ls='eza -a --icons'
-
-# Set grep options. Colour, case-insensitive, show line numbers.
-alias grep='grep --color=auto -in'
-
-# Set default python version.
-alias python=python3
-alias pip=pip3
-
-# Print colors.
+# Aliases.
+alias ls='eza -a --icons'  # Replace ls with eza.
+alias grep='grep --color=auto -in'  # Set grep options. Colour, case-insensitive, show line numbers.
+alias python=python3  # Set default python version.
+alias pip=pip3  # Set default pip version.
 alias print_colors='for i in {0..255}; do print -Pn "%K{$i}  %k%F{$i}${(l:3::0:)i}%f " ${${(M)$((i%6)):#3}:+$'\''\n'\''}; done'
 
-# API keys.
-[[ ! -f ~/.api_keys.zsh ]] || source ~/.api_keys.zsh
+# Load API keys and other private configuration if available.
+test -f ~/.api_keys.zsh && source ~/.api_keys.zsh
+test -f ~/.private.zsh && source ~/.private.zsh
 
-# iTerm2 shell integration.
-test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
-
-# Fish-style autocomplete.
-source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+# Load OS-specific configuration.
+if test "$(uname)" = "Darwin"; then
+  source ~/.zshrc-macos
+else
+  source ~/.zshrc-linux
+fi
 
 # Enable syntax highlighting.
 # Note: This must be at the end of .zshrc

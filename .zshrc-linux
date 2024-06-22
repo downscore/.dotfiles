@@ -1,0 +1,2 @@
+# Fish-style autocomplete.
+source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh

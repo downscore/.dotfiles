@@ -1,2 +1,5 @@
 # Set PATH, MANPATH, etc., for Homebrew.
-eval "$(/opt/homebrew/bin/brew shellenv)"
+if test "$(uname)" = "Darwin"; then
+  # Run the Homebrew shell environment setup
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
