@@ -69,10 +69,6 @@ export FZF_DEFAULT_OPTS="
   --preview 'echo {}'
   --preview-window down:3:wrap
   --border"
-export FZF_CTRL_R_OPTS="
-  --bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort'
-  --color header:italic
-  --header 'Ctrl-Y to copy command to clipboard'"
 export FZF_TMUX_OPTS="-p80%,80%"
 
 # Aliases.
