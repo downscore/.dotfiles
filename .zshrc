@@ -75,6 +75,8 @@ export FZF_TMUX_OPTS="-p80%,80%"
 # Aliases.
 alias ls='eza -a --icons'  # Replace ls with eza.
 alias grep='grep --color=auto -in'  # Set grep options. Colour, case-insensitive, show line numbers.
+alias vi='nvim'  # Use neovim as default editor.
+alias v='nvim'
 alias python=python3  # Set default python version.
 alias pip=pip3  # Set default pip version.
 alias print_colors='for i in {0..255}; do print -Pn "%K{$i}  %k%F{$i}${(l:3::0:)i}%f " ${${(M)$((i%6)):#3}:+$'\''\n'\''}; done'
