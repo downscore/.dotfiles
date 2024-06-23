@@ -88,14 +88,17 @@ test -f ~/.private.zsh && source ~/.private.zsh
 
 # Load OS-specific configuration.
 if test "$(uname)" = "Darwin"; then
-  source ~/.zshrc-macos
+  source ~/.config/zsh/macos.zsh
 else
-  source ~/.zshrc-linux
+  source ~/.config/zsh/linux.zsh
 fi
+
+# Fish-style autocomplete.
+source ~/.config/zsh/zsh-autosuggestions.zsh
 
 # Enable syntax highlighting.
 # Note: This must be at the end of .zshrc
-source ~/.zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source ~/.config/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 ZSH_HIGHLIGHT_STYLES[path]=none
 ZSH_HIGHLIGHT_STYLES[path_prefix]=none
 ZSH_HIGHLIGHT_STYLES[comment]=fg-245

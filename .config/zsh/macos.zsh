@@ -10,6 +10,3 @@ export FZF_CTRL_R_OPTS="
   --bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort'
   --color header:italic
   --header 'Ctrl-Y to copy command to clipboard'"
-
-# Fish-style autocomplete.
-source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
