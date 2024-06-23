@@ -3,10 +3,9 @@
 source ~/.powerlevel10k/powerlevel10k.zsh-theme
 test -f ~/.p10k.zsh && source ~/.p10k.zsh
 
-# Add Homebrew autocompletions if Homebrew is present.
-if type brew &>/dev/null
-then
-  FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
+# Add ~/.bin to PATH if it exists.
+if test -d "$HOME/.bin"; then
+  export PATH="$HOME/.bin:$PATH"
 fi
 
 # Extended tab completion with colours and menu selection.
@@ -60,19 +59,21 @@ bindkey "^[[1;3C" forward-word
 bindkey "^[[A" history-search-backward  # Search history with up and down keys using the typed prefix.
 bindkey "^[[B" history-search-forward
 
-# Prevent `less` from logging history.
-export LESSHISTFILE=/dev/null
+# less options.
+export LESSHISTFILE=/dev/null  # Prevent `less` from logging history.
+export LESS='--mouse'  # Enable mouse scrolling in `less`.
 
 # fzf integration.
 export FZF_DEFAULT_OPTS="
   --height 75%
   --preview 'echo {}'
   --preview-window down:3:wrap
-  --layout=reverse --border"
+  --border"
 export FZF_CTRL_R_OPTS="
   --bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort'
   --color header:italic
   --header 'Ctrl-Y to copy command to clipboard'"
+export FZF_TMUX_OPTS="-p80%,80%"
 
 # Aliases.
 alias ls='eza -a --icons'  # Replace ls with eza.

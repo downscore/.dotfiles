@@ -1,3 +1,9 @@
+# Add Homebrew autocompletions if Homebrew is present.
+if type brew &>/dev/null
+then
+  FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
+fi
+
 # OS-specific fzf setup.
 eval "$(fzf --zsh)"
 export FZF_CTRL_R_OPTS="
