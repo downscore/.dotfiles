@@ -31,6 +31,7 @@ zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 autoload -U zmv
 
 # History options.
+HISTFILE=~/.zsh_history
 HISTSIZE=200000
 SAVEHIST=200000
 # Only include `cd` commands containing a slash in history.
