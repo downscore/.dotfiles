@@ -59,7 +59,7 @@ vim.opt.cursorline = true
 vim.opt.scrolloff = 10
 
 -- Use a default color scheme
-vim.cmd('colorscheme retrobox')
+vim.cmd('colorscheme slate')
 
 -- Set highlight on search, but clear on pressing <Esc> in normal mode.
 vim.opt.hlsearch = true
