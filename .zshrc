@@ -8,6 +8,11 @@ if test -d "$HOME/.bin"; then
   export PATH="$HOME/.bin:$PATH"
 fi
 
+# Add neovim to PATH if it exists in .bin.
+if test -d "$HOME/.bin/nvim/bin"; then
+  export PATH="$HOME/.bin/nvim/bin:$PATH"
+fi
+
 # Extended tab completion with colours and menu selection.
 autoload -Uz compinit && compinit
 zstyle ':completion:*' menu select
