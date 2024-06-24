@@ -72,9 +72,15 @@ vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Show diagn
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
 -- Split keymaps.
-vim.keymap.set('n', '<C-\\>', ':vsplit<CR>', { desc = 'Open a vertical split' })
+-- Disable the default key bindings of vim-tmux-navigator so they don't overwrite our split key bindings.
+vim.g.tmux_navigator_no_mappings = 1
+vim.api.nvim_set_keymap('n', '<C-h>', ':TmuxNavigateLeft<cr>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<C-j>', ':TmuxNavigateDown<cr>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<C-k>', ':TmuxNavigateUp<cr>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<C-l>', ':TmuxNavigateRight<cr>', { noremap = true, silent = true })
+vim.keymap.set('n', '<C-BSlash>', ':vsplit<CR>', { noremap = true, desc = 'Open a vertical split' })
 -- The following keymap allows using - without pressing shift.
-vim.keymap.set('n', '<C-_>', ':split<CR>', { desc = 'Open a horizontal split' })
+vim.keymap.set('n', '<C-_>', ':split<CR>', { noremap = true, desc = 'Open a horizontal split' })
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
@@ -107,22 +113,7 @@ vim.opt.rtp:prepend(lazypath)
 -- Load `lazy.nvim` and install plugins.
 require('lazy').setup({
   -- Allows seamless navigation between tmux and nvim panes.
-  {
-    "christoomey/vim-tmux-navigator",
-    cmd = {
-      "TmuxNavigateLeft",
-      "TmuxNavigateDown",
-      "TmuxNavigateUp",
-      "TmuxNavigateRight",
-      "TmuxNavigatePrevious",
-    },
-    keys = {
-      { "<c-h>", "<cmd><C-U>TmuxNavigateLeft<cr>" },
-      { "<c-j>", "<cmd><C-U>TmuxNavigateDown<cr>" },
-      { "<c-k>", "<cmd><C-U>TmuxNavigateUp<cr>" },
-      { "<c-l>", "<cmd><C-U>TmuxNavigateRight<cr>" },
-    },
-  },
+  { "christoomey/vim-tmux-navigator", },
 
   -- Telescope fuzzy finder.
   {
