@@ -1,0 +1,142 @@
+{
+  "telemetry.telemetryLevel": "off",
+  "terminal.integrated.fontFamily": "MesloLGS NF",
+  "security.workspace.trust.untrustedFiles": "open",
+  "editor.rulers": [
+    120
+  ],
+  "editor.tabSize": 2,
+  "python.testing.pytestEnabled": true,
+  "coverage-gutters.showLineCoverage": true,
+  "coverage-gutters.showGutterCoverage": false,
+  "coverage-gutters.noHighlightDark": "rgba(163, 0, 0, 0.3)",
+  "coverage-gutters.highlightdark": "rgba(0, 122, 30, 0.0)",
+  "editor.formatOnPaste": true,
+  "editor.formatOnSave": true,
+  "workbench.tree.indent": 16,
+  "editor.minimap.enabled": false,
+  "editor.stickyScroll.enabled": true,
+  "errorLens.fontSize": "80%",
+  "errorLens.fontStyleItalic": true,
+  "errorLens.margin": "5ch",
+  "C_Cpp.clang_format_style": "{BasedOnStyle: Google, ColumnLimit: 120}",
+  "editor.accessibilitySupport": "off",
+  "editor.accessibilityPageSize": 300,
+  "editor.suggest.showStatusBar": true,
+  "diffEditor.diffAlgorithm": "advanced",
+  "C_Cpp.default.compilerPath": "/usr/bin/clang",
+  "editor.defaultFormatter": "eeyore.yapf",
+  "git.autofetch": true,
+  "workbench.editor.enablePreview": false,
+  "python.analysis.typeCheckingMode": "basic",
+  "[jsonc]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "terminal.integrated.fontSize": 14,
+  "accessibility.signals.lineHasError": {
+    "sound": "off"
+  },
+  "accessibility.signals.lineHasFoldedArea": {
+    "sound": "off"
+  },
+  "accessibility.signals.lineHasBreakpoint": {
+    "sound": "off",
+    "announcement": "off"
+  },
+  "accessibility.signals.lineHasInlineSuggestion": {
+    "sound": "off"
+  },
+  "accessibility.signals.terminalQuickFix": {
+    "sound": "off",
+    "announcement": "off"
+  },
+  "accessibility.signals.onDebugBreak": {
+    "sound": "off"
+  },
+  "accessibility.signals.noInlayHints": {
+    "sound": "off",
+    "announcement": "off"
+  },
+  "accessibility.signals.taskCompleted": {
+    "sound": "off",
+    "announcement": "off"
+  },
+  "accessibility.signals.taskFailed": {
+    "sound": "off"
+  },
+  "accessibility.signals.terminalCommandFailed": {
+    "sound": "on"
+  },
+  "accessibility.signals.notebookCellCompleted": {
+    "sound": "off",
+    "announcement": "off"
+  },
+  "accessibility.signals.notebookCellFailed": {
+    "sound": "off"
+  },
+  "accessibility.signals.diffLineInserted": {
+    "sound": "off"
+  },
+  "accessibility.signals.diffLineDeleted": {
+    "sound": "off"
+  },
+  "accessibility.signals.diffLineModified": {
+    "sound": "off"
+  },
+  "accessibility.signals.lineHasWarning": {
+    "sound": "off",
+    "announcement": "off"
+  },
+  "files.insertFinalNewline": true,
+  "files.trimTrailingWhitespace": true,
+  "[python]": {
+    "editor.defaultFormatter": "eeyore.yapf",
+    "editor.formatOnType": false
+  },
+  "explorer.confirmDelete": false,
+  "[typescript]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "accessibility.signals.chatRequestSent": {
+    "sound": "off"
+  },
+  "accessibility.signals.clear": {
+    "sound": "off"
+  },
+  "accessibility.signals.chatResponseReceived": {
+    "sound": "off"
+  },
+  "accessibility.signals.terminalBell": {
+    "sound": "off"
+  },
+  "diffEditor.ignoreTrimWhitespace": false,
+  "accessibility.signals.progress": {
+    "sound": "off"
+  },
+  "github.copilot.editor.enableAutoCompletions": true,
+  "workbench.editor.showTabs": "single",
+  "python.analysis.inlayHints.functionReturnTypes": true,
+  "python.analysis.inlayHints.callArgumentNames": "all",
+  "editor.inlayHints.enabled": "offUnlessPressed",
+  "python.analysis.inlayHints.variableTypes": true,
+  "C_Cpp.inlayHints.referenceOperator.enabled": true,
+  "C_Cpp.inlayHints.parameterNames.enabled": true,
+  "C_Cpp.inlayHints.autoDeclarationTypes.showOnLeft": true,
+  "C_Cpp.inlayHints.autoDeclarationTypes.enabled": true,
+  "typescript.inlayHints.enumMemberValues.enabled": true,
+  "typescript.inlayHints.functionLikeReturnTypes.enabled": true,
+  "typescript.inlayHints.parameterNames.enabled": "all",
+  "typescript.inlayHints.parameterTypes.enabled": true,
+  "typescript.inlayHints.propertyDeclarationTypes.enabled": true,
+  "typescript.inlayHints.variableTypes.enabled": true,
+  "editor.fontFamily": "Menlo, IosevkaTerm Nerd Font, Monaco, 'Courier New', monospace",
+  "editor.fontSize": 13,
+  "editor.quickSuggestions": {
+    "other": "off"
+  },
+  "numberedBookmarks.gutterIconFillColor": "#00aaff",
+  "numberedBookmarks.navigateThroughAllFiles": "replace",
+}
