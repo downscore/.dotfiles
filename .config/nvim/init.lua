@@ -78,6 +78,7 @@ vim.api.nvim_set_keymap('n', '<C-h>', ':TmuxNavigateLeft<cr>', { noremap = true,
 vim.api.nvim_set_keymap('n', '<C-j>', ':TmuxNavigateDown<cr>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<C-k>', ':TmuxNavigateUp<cr>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<C-l>', ':TmuxNavigateRight<cr>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<C-p>', ':TmuxNavigatePrevious<cr>', { noremap = true, silent = true })
 vim.keymap.set('n', '<C-BSlash>', ':vsplit<CR>', { noremap = true, desc = 'Open a vertical split' })
 -- The following keymap allows using - without pressing shift.
 vim.keymap.set('n', '<C-_>', ':split<CR>', { noremap = true, desc = 'Open a horizontal split' })

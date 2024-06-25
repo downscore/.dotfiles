@@ -9,14 +9,12 @@
     "key": "shift+cmd+d",
     "command": "editor.action.duplicateSelection"
   },
-
   // Accessibility mode breaks pressing cmd+up to go to the top of the document.
   {
     "key": "cmd+up",
     "command": "-search.action.focusSearchFromResults",
     "when": "accessibilityModeEnabled && searchViewletVisible || firstMatchFocus && searchViewletVisible"
   },
-
   // Jump to numbered bookmarks.
   {
     "key": "ctrl+1",
@@ -108,7 +106,6 @@
     "command": "-numberedBookmarks.jumpToBookmark9",
     "when": "editorTextFocus"
   },
-
   // Save numbered bookmarks.
   {
     "key": "ctrl+shift+1",
@@ -200,7 +197,6 @@
     "command": "-numberedBookmarks.toggleBookmark9",
     "when": "editorTextFocus"
   },
-
   // Navigate splits using ctrl+hjkl.
   // Same behavior as tmux and neovim configs.
   {
@@ -260,7 +256,6 @@
     "key": "cmd+k cmd+right",
     "command": "-workbench.action.focusRightGroup"
   },
-
   // Split editor with ctrl+\ ctrl+| and ctrl+-
   {
     "key": "ctrl+-",
@@ -291,5 +286,40 @@
   {
     "key": "cmd+k cmd+\\",
     "command": "-workbench.action.splitEditorRight"
+  },
+  // Go to last split using ctrl+p.
+  {
+    "key": "ctrl+p",
+    "command": "-workbench.action.quickOpenSelectPrevious",
+    "when": "inQuickOpen"
+  },
+  {
+    "key": "ctrl+p",
+    "command": "-list.focusUp",
+    "when": "listFocus && !inputFocus && !treestickyScrollFocused"
+  },
+  {
+    "key": "ctrl+p",
+    "command": "-selectPrevCodeAction",
+    "when": "codeActionMenuVisible"
+  },
+  {
+    "key": "ctrl+p",
+    "command": "-selectPrevSuggestion",
+    "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus || suggestWidgetVisible && textInputFocus && !suggestWidgetHasFocusedSuggestion"
+  },
+  {
+    "key": "ctrl+p",
+    "command": "-showPrevParameterHint",
+    "when": "editorFocus && parameterHintsMultipleSignatures && parameterHintsVisible"
+  },
+  {
+    "key": "ctrl+p",
+    "command": "-cursorUp",
+    "when": "textInputFocus"
+  },
+  {
+    "key": "ctrl+p",
+    "command": "workbench.action.focusPreviousGroup"
   },
 ]
