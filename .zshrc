@@ -64,6 +64,8 @@ bindkey "^[[1;3D" backward-word  # Navigating by word on macOS using option+left
 bindkey "^[[1;3C" forward-word
 bindkey "^[[A" history-search-backward  # Search history with up and down keys using the typed prefix.
 bindkey "^[[B" history-search-forward
+bindkey "^O" backward-kill-line  # Delete from cursor to beginning of line.
+bindkey "^P" kill-line  # Delete from cursor to end of line.
 
 # less options.
 export LESSHISTFILE=/dev/null  # Prevent `less` from logging history.
