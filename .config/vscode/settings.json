@@ -139,4 +139,7 @@
   },
   "numberedBookmarks.gutterIconFillColor": "#00aaff",
   "numberedBookmarks.navigateThroughAllFiles": "replace",
+  "git.confirmSync": false,
+  "git.enableSmartCommit": true,
+  "workbench.activityBar.location": "bottom",
 }
