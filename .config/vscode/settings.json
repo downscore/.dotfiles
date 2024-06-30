@@ -142,4 +142,7 @@
   "git.confirmSync": false,
   "git.enableSmartCommit": true,
   "workbench.activityBar.location": "top",
+  "files.associations": {
+    "*.json": "jsonc"
+  },
 }
