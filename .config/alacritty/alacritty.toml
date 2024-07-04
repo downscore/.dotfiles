@@ -15,6 +15,14 @@ startup_mode = "Maximized"
 style = "Beam"
 vi_mode_style = "Beam"
 
+[keyboard]
+bindings = [
+  # Bind cmd-shift-p to open command search (sends ^R).
+  { key = "P", mods = "Command|Shift", chars = "\u0012" },
+  # Bind cmd-p to open file search (sends ^T).
+  { key = "P", mods = "Command", chars = "\u0014" },
+]
+
 [font]
 size = 13.0
 
