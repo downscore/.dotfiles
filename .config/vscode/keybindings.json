@@ -322,4 +322,25 @@
     "key": "ctrl+p",
     "command": "workbench.action.focusPreviousGroup"
   },
+  // Focus active editor using ctrl+a.
+  {
+    "key": "ctrl+a",
+    "command": "-cursorLineStart",
+    "when": "textInputFocus"
+  },
+  {
+    "key": "ctrl+a",
+    "command": "workbench.action.focusActiveEditorGroup"
+  },
+  // Toggle maximizing split using ctrl+f.
+  {
+    "key": "ctrl+f",
+    "command": "-cursorRight",
+    "when": "textInputFocus"
+  },
+  {
+    "key": "ctrl+f",
+    "command": "workbench.action.toggleMaximizeEditorGroup",
+    "when": "editorPartMaximizedEditorGroup || editorPartMultipleEditorGroups"
+  },
 ]
