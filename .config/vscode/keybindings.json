@@ -332,7 +332,13 @@
     "key": "ctrl+a",
     "command": "workbench.action.focusActiveEditorGroup"
   },
-  // Toggle maximizing split using ctrl+f.
+  // Toggle maximizing split using ctrl+z.
+  {
+    "key": "ctrl+z",
+    "command": "workbench.action.toggleMaximizeEditorGroup",
+    "when": "editorPartMaximizedEditorGroup || editorPartMultipleEditorGroups"
+  },
+  // Search local file symbols using ctrl+f.
   {
     "key": "ctrl+f",
     "command": "-cursorRight",
@@ -340,7 +346,33 @@
   },
   {
     "key": "ctrl+f",
-    "command": "workbench.action.toggleMaximizeEditorGroup",
-    "when": "editorPartMaximizedEditorGroup || editorPartMultipleEditorGroups"
+    "command": "workbench.action.gotoSymbol",
+    "when": "!accessibilityHelpIsShown && !accessibleViewIsShown"
+  },
+  // Navigate to next/previous changes with ctrl+[ and ctrl+].
+  {
+    "key": "ctrl+]",
+    "command": "workbench.action.editor.nextChange",
+    "when": "editorTextFocus && !textCompareEditorActive"
+  },
+  {
+    "key": "ctrl+[",
+    "command": "workbench.action.editor.previousChange",
+    "when": "editorTextFocus && !textCompareEditorActive"
+  },
+  {
+    "key": "ctrl+[",
+    "command": "workbench.action.compareEditor.previousChange",
+    "when": "textCompareEditorVisible"
+  },
+  {
+    "key": "shift+alt+f5",
+    "command": "-workbench.action.compareEditor.previousChange",
+    "when": "textCompareEditorVisible"
+  },
+  {
+    "key": "ctrl+]",
+    "command": "workbench.action.compareEditor.nextChange",
+    "when": "textCompareEditorVisible"
   },
 ]
