@@ -3,7 +3,7 @@
   "terminal.integrated.fontFamily": "MesloLGS NF",
   "security.workspace.trust.untrustedFiles": "open",
   "editor.rulers": [
-    120
+    100
   ],
   "editor.tabSize": 2,
   "python.testing.pytestEnabled": true,
@@ -19,13 +19,12 @@
   "errorLens.fontSize": "80%",
   "errorLens.fontStyleItalic": true,
   "errorLens.margin": "5ch",
-  "C_Cpp.clang_format_style": "{BasedOnStyle: Google, ColumnLimit: 120}",
+  "C_Cpp.clang_format_style": "{BasedOnStyle: Google, ColumnLimit: 100}",
   "editor.accessibilitySupport": "off",
   "editor.accessibilityPageSize": 300,
   "editor.suggest.showStatusBar": true,
   "diffEditor.diffAlgorithm": "advanced",
   "C_Cpp.default.compilerPath": "/usr/bin/clang",
-  "editor.defaultFormatter": "eeyore.yapf",
   "git.autofetch": true,
   "workbench.editor.enablePreview": false,
   "python.analysis.typeCheckingMode": "basic",
@@ -145,4 +144,7 @@
   "files.associations": {
     "*.json": "jsonc"
   },
+  "workbench.colorTheme": "Catppuccin Mocha",
+  "editor.folding": false,
+  "workbench.iconTheme": "material-icon-theme",
 }
