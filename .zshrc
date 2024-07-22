@@ -71,9 +71,6 @@ bindkey "^P" kill-line  # Delete from cursor to end of line.
 export LESSHISTFILE=/dev/null  # Prevent `less` from logging history.
 export LESS='--mouse'  # Enable mouse scrolling in `less`.
 
-# Use bat for man pages.
-export MANPAGER="sh -c 'col -bx | bat -l man -p'"
-
 # fzf integration.
 export FZF_DEFAULT_OPTS="
   --height 75%
