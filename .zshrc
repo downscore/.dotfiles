@@ -105,6 +105,8 @@ source ~/.config/zsh/zsh-autosuggestions.zsh
 # Enable syntax highlighting.
 # Note: This must be at the end of .zshrc
 source ~/.config/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+# Remove underlines from path highlighting.
 ZSH_HIGHLIGHT_STYLES[path]=none
 ZSH_HIGHLIGHT_STYLES[path_prefix]=none
-ZSH_HIGHLIGHT_STYLES[comment]=fg-245
+# Make comments a readable color.
+ZSH_HIGHLIGHT_STYLES[comment]='fg=245'
