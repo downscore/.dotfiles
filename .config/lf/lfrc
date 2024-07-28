@@ -1,0 +1,8 @@
+# Show hidden files.
+set hidden
+
+# Draw borders around panes.
+set drawbox
+
+# Use bat for previews.
+set previewer ~/.config/lf/preview.sh

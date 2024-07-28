@@ -67,6 +67,9 @@ bindkey "^[[B" history-search-forward
 bindkey "^O" backward-kill-line  # Delete from cursor to beginning of line.
 bindkey "^P" kill-line  # Delete from cursor to end of line.
 
+# Set default editor to neovim.
+export EDITOR=nvim
+
 # less options.
 export LESSHISTFILE=/dev/null  # Prevent `less` from logging history.
 export LESS='--mouse'  # Enable mouse scrolling in `less`.
