@@ -83,7 +83,7 @@ export FZF_DEFAULT_OPTS="
 export FZF_TMUX_OPTS="-p80%,80%"
 
 # Aliases.
-alias ls='eza -a --icons'  # Replace ls with eza.
+alias ls='eza -a --icons --group-directories-first'  # Replace ls with eza.
 alias grep='grep --color=auto -in'  # Set grep options. Colour, case-insensitive, show line numbers.
 alias vi='nvim'  # Use neovim as default editor.
 alias v='nvim'
