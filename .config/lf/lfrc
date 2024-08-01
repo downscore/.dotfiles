@@ -1,8 +1,10 @@
-# Show hidden files.
-set hidden
-
-# Draw borders around panes.
-set drawbox
+set hidden  # Show hidden files.
+set drawbox  # Draw borders around panes.
+set icons  # Show icons.
+set relativenumber  # Show relative line numbers.
 
 # Use bat for previews.
 set previewer ~/.config/lf/preview.sh
+
+# Change prompt to just show the current directory and file.
+set promptfmt "\033[34;1m%d\033[0m\033[1m%f\033[0m"
