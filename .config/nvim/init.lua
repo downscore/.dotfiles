@@ -119,6 +119,9 @@ require('lazy').setup({
   -- Catppuccin theme.
   { "catppuccin/nvim", name = "catppuccin", priority = 1000 },
 
+  -- Mason (LSP manager).
+  { "williamboman/mason.nvim" },
+
   -- Telescope fuzzy finder.
   {
     'nvim-telescope/telescope.nvim',
@@ -243,3 +246,14 @@ require("catppuccin").setup({
   },
 })
 vim.cmd.colorscheme "catppuccin"
+
+-- Load Mason.
+require("mason").setup({
+  ui = {
+    icons = {
+      package_installed = "✓",
+      package_pending = "➜",
+      package_uninstalled = "✗"
+    }
+  }
+})
