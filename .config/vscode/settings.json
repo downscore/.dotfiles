@@ -147,4 +147,5 @@
   "workbench.colorTheme": "Catppuccin Mocha",
   "editor.folding": false,
   "workbench.iconTheme": "material-icon-theme",
+  "workbench.layoutControl.enabled": false,
 }
