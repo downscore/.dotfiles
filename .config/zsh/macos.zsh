@@ -2,8 +2,10 @@
 if type brew &>/dev/null
 then
   FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
-  autoload -Uz compinit && compinit
 fi
+
+# Load autocompletions.
+autoload -Uz compinit && compinit
 
 # OS-specific fzf setup.
 eval "$(fzf --zsh)"

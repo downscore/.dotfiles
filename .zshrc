@@ -13,11 +13,8 @@ if test -d "$HOME/.bin/nvim/bin"; then
   export PATH="$HOME/.bin/nvim/bin:$PATH"
 fi
 
-# Extended tab completion with colours and menu selection.
-autoload -Uz compinit && compinit
+# Tab completion options.
 zstyle ':completion:*' menu select
-
-# Tab completion prompts.
 zstyle ':completion:*' list-prompt '%SList: %M (%p)%s'
 zstyle ':completion:*' select-prompt '%SMenu: %M (%p)%s'
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'  # Make case-insensitive.
@@ -69,10 +66,12 @@ bindkey "^P" kill-line  # Delete from cursor to end of line.
 
 # Set default editor to neovim.
 export EDITOR=nvim
+export VISUAL=nvim
 
-# less options.
+# Pager options.
 export LESSHISTFILE=/dev/null  # Prevent `less` from logging history.
 export LESS='--mouse'  # Enable mouse scrolling in `less`.
+export PAGER='bat --paging=always'  # Use `bat` as the default pager.
 
 # fzf integration.
 export FZF_DEFAULT_OPTS="
@@ -101,6 +100,9 @@ if test "$(uname)" = "Darwin"; then
 else
   source ~/.config/zsh/linux.zsh
 fi
+
+# Load completion scripts after os-specific completion data has been loaded.
+autoload -Uz compinit && compinit
 
 # Fish-style autocomplete.
 source ~/.config/zsh/zsh-autosuggestions.zsh
