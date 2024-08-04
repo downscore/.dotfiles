@@ -64,14 +64,18 @@ bindkey "^[[B" history-search-forward
 bindkey "^O" backward-kill-line  # Delete from cursor to beginning of line.
 bindkey "^P" kill-line  # Delete from cursor to end of line.
 
-# Set default editor to neovim.
-export EDITOR=nvim
-export VISUAL=nvim
+# Set default editor to neovim if it is available.
+if type nvim &>/dev/null; then
+  export EDITOR=nvim
+  export VISUAL=nvim
+fi
 
 # Pager options.
 export LESSHISTFILE=/dev/null  # Prevent `less` from logging history.
 export LESS='--mouse'  # Enable mouse scrolling in `less`.
-export PAGER='bat --paging=always'  # Use `bat` as the default pager.
+if type bat &>/dev/null; then
+  export PAGER='bat --paging=always'  # Use `bat` as the default pager.
+fi
 
 # fzf integration.
 export FZF_DEFAULT_OPTS="
@@ -82,10 +86,14 @@ export FZF_DEFAULT_OPTS="
 export FZF_TMUX_OPTS="-p80%,80%"
 
 # Aliases.
-alias ls='eza -a --icons --group-directories-first'  # Replace ls with eza.
+if type eza &>/dev/null; then
+  alias ls='eza -a --icons --group-directories-first'  # Replace ls with eza.
+fi
+if type nvim &>/dev/null; then
+  alias vi='nvim'  # Use neovim as default editor.
+  alias v='nvim'
+fi
 alias grep='grep --color=auto -in'  # Set grep options. Colour, case-insensitive, show line numbers.
-alias vi='nvim'  # Use neovim as default editor.
-alias v='nvim'
 alias python=python3  # Set default python version.
 alias pip=pip3  # Set default pip version.
 alias print_colors='for i in {0..255}; do print -Pn "%K{$i}  %k%F{$i}${(l:3::0:)i}%f " ${${(M)$((i%6)):#3}:+$'\''\n'\''}; done'
