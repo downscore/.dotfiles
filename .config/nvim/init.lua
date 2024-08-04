@@ -58,6 +58,9 @@ vim.opt.cursorline = true
 -- Minimum number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 10
 
+-- Make sign column autoresize and allow it to get wider.
+vim.opt.signcolumn="auto:9"
+
 -- Uncomment to use a default color scheme.
 -- vim.cmd('colorscheme retrobox')
 
@@ -121,6 +124,30 @@ require('lazy').setup({
 
   -- Mason (LSP manager).
   { "williamboman/mason.nvim" },
+
+  -- Visualize marks.
+  { "chentoast/marks.nvim" },
+
+  -- Git gutter.
+  {
+    'lewis6991/gitsigns.nvim',
+    opts = {
+      sign_priority = 6,
+      signs = {
+        change = { text = '󰜛' },
+        changedelete = { text = '󰜛' },
+      },
+      current_line_blame = true,
+      current_line_blame_opts = {
+        virt_text = true,
+        virt_text_pos = 'right_align',  -- 'eol' | 'overlay' | 'right_align'
+        delay = 0,
+        ignore_whitespace = false,
+        virt_text_priority = 100,
+      },
+      current_line_blame_formatter = '<author>, <author_time:%R> - <summary>',
+    },
+  },
 
   -- Telescope fuzzy finder.
   {
@@ -198,24 +225,24 @@ require('lazy').setup({
 
 -- Load the Catppuccin theme.
 require("catppuccin").setup({
-  flavour = "mocha", -- auto, latte, frappe, macchiato, mocha
-  background = { -- :h background
+  flavour = "mocha",  -- auto, latte, frappe, macchiato, mocha
+  background = {  -- :h background
     light = "latte",
     dark = "mocha",
   },
-  transparent_background = false, -- Disables setting the background color.
-  show_end_of_buffer = false, -- Shows the '~' characters after the end of buffers.
-  term_colors = false, -- Sets terminal colors (e.g. `g:terminal_color_0`).
+  transparent_background = false,  -- Disables setting the background color.
+  show_end_of_buffer = false,  -- Shows the '~' characters after the end of buffers.
+  term_colors = false,  -- Sets terminal colors (e.g. `g:terminal_color_0`).
   dim_inactive = {
-    enabled = false, -- Dims the background color of inactive window.
+    enabled = false,  -- Dims the background color of inactive window.
     shade = "dark",
-    percentage = 0.15, -- Percentage of the shade to apply to the inactive window.
+    percentage = 0.15,  -- Percentage of the shade to apply to the inactive window.
   },
-  no_italic = false, -- Force no italic.
-  no_bold = false, -- Force no bold.
-  no_underline = false, -- Force no underline.
-  styles = { -- Handles the styles of general hi groups (see `:h highlight-args`):
-    comments = { "italic" }, -- Change the style of comments.
+  no_italic = false,  -- Force no italic.
+  no_bold = false,  -- Force no bold.
+  no_underline = false,  -- Force no underline.
+  styles = {  -- Handles the styles of general hi groups (see `:h highlight-args`):
+    comments = { "italic" },  -- Change the style of comments.
     conditionals = { "italic" },
     loops = {},
     functions = {},
@@ -227,16 +254,16 @@ require("catppuccin").setup({
     properties = {},
     types = {},
     operators = {},
-    -- miscs = {}, -- Uncomment to turn off hard-coded styles.
+    -- miscs = {},  -- Uncomment to turn off hard-coded styles.
   },
   color_overrides = {},
   custom_highlights = {},
   default_integrations = true,
   integrations = {
+    gitsigns = true,
+    nvimtree = true,
     -- TODO: Enable more integrations when plugins installed.
     -- cmp = true,
-    -- gitsigns = true,
-    nvimtree = true,
     -- treesitter = true,
     -- notify = false,
     -- mini = {
@@ -247,7 +274,7 @@ require("catppuccin").setup({
 })
 vim.cmd.colorscheme "catppuccin"
 
--- Load Mason.
+-- Configure Mason.
 require("mason").setup({
   ui = {
     icons = {
@@ -257,3 +284,11 @@ require("mason").setup({
     }
   }
 })
+
+-- Configure marks plugin.
+require("marks").setup {
+  default_mappings = true,  -- Default keybindings.
+  builtin_marks = { ".", "<", ">", "^" },  -- Which builtin marks to show.
+  cyclic = true,  -- Movements cycle back to beginning/end of buffer.
+  sign_priority = { lower=10, upper=10, builtin=10, bookmark=10 },
+}
