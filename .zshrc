@@ -85,6 +85,13 @@ export FZF_DEFAULT_OPTS="
   --border"
 export FZF_TMUX_OPTS="-p80%,80%"
 
+# Enable zoxide if it is available.
+if type zoxide &>/dev/null; then
+  eval "$(zoxide init zsh)"
+  # Replace `cd` with zoxide.
+  alias cd='z'
+fi
+
 # Aliases.
 if type eza &>/dev/null; then
   alias ls='eza -a --icons --group-directories-first'  # Replace ls with eza.
