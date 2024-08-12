@@ -13,14 +13,16 @@ if test -d "$HOME/.bin/nvim/bin"; then
   export PATH="$HOME/.bin/nvim/bin:$PATH"
 fi
 
+# Fish-style autocomplete and abbreviations.
+source ~/.config/zsh/zsh-autosuggestions.zsh
+source ~/.config/zsh/zsh-abbr/zsh-abbr.zsh
+
 # Tab completion options.
 zstyle ':completion:*' menu select
 zstyle ':completion:*' list-prompt '%SList: %M (%p)%s'
 zstyle ':completion:*' select-prompt '%SMenu: %M (%p)%s'
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'  # Make case-insensitive.
-
-# Show hidden files in tab completion.
-_comp_options+=(globdots)
+_comp_options+=(globdots)  # Show hidden files in tab completion.
 
 # Colors for use in prompts, ls, tab completion, etc.
 autoload -U colors && colors
@@ -119,9 +121,6 @@ fi
 
 # Load completion scripts after os-specific completion data has been loaded.
 autoload -Uz compinit && compinit
-
-# Fish-style autocomplete.
-source ~/.config/zsh/zsh-autosuggestions.zsh
 
 # Enable syntax highlighting.
 # Note: This must be at the end of .zshrc
