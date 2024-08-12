@@ -41,7 +41,8 @@ SAVEHIST=200000
 # Only include `cd` commands containing a slash in history.
 HISTORY_IGNORE='(ls|cd [^/]*|pwd|exit)'
 setopt append_history  # Append commands to the history file, rather than overwriting it.
-setopt inc_append_history  # Append commands as soon as they are executed, rather than at the end of the session.
+# Append commands as soon as they are executed, rather than at the end of the session.
+setopt inc_append_history
 setopt share_history  # Share history between all sessions.
 setopt extended_history  # Save command timestamp and duration.
 setopt hist_expire_dups_first  # Delete oldest dupes first.
@@ -57,11 +58,13 @@ setopt autopushd  # Enable auto directory stack.
 setopt interactive_comments  # Allow inline comments in interactive shells.
 
 # Keyboard shortcuts.
-bindkey "^[^[[D" backward-word  # Navigating by word on remote Linux machine using option+left/right.
+# Navigating by word on remote Linux machine using option+left/right.
+bindkey "^[^[[D" backward-word
 bindkey "^[^[[C" forward-word
 bindkey "^[[1;3D" backward-word  # Navigating by word on macOS using option+left/right.
 bindkey "^[[1;3C" forward-word
-bindkey "^[[A" history-search-backward  # Search history with up and down keys using the typed prefix.
+# Search history with up and down keys using the typed prefix.
+bindkey "^[[A" history-search-backward
 bindkey "^[[B" history-search-forward
 bindkey "^O" backward-kill-line  # Delete from cursor to beginning of line.
 bindkey "^P" kill-line  # Delete from cursor to end of line.
@@ -95,7 +98,7 @@ if type zoxide &>/dev/null; then
   alias cd='z'
 fi
 
-# Aliases.
+# Command aliases.
 if type eza &>/dev/null; then
   alias ls='eza -a --icons --group-directories-first'  # Replace ls with eza.
 fi
@@ -103,10 +106,15 @@ if type nvim &>/dev/null; then
   alias vi='nvim'  # Use neovim as default editor.
   alias v='nvim'
 fi
-alias grep='grep --color=auto -in'  # Set grep options. Colour, case-insensitive, show line numbers.
 alias python=python3  # Set default python version.
 alias pip=pip3  # Set default pip version.
 alias print_colors='for i in {0..255}; do print -Pn "%K{$i}  %k%F{$i}${(l:3::0:)i}%f " ${${(M)$((i%6)):#3}:+$'\''\n'\''}; done'
+
+# Expanding abbreviations.
+# Set grep options. Colour, case-insensitive, show line numbers.
+abbr --force -q grep='grep --color=auto -in'
+abbr --force -q ll='ls -al'
+abbr --force -q ldd='otool -L'
 
 # Load API keys and other private configuration if available.
 test -f ~/.api_keys.zsh && source ~/.api_keys.zsh
