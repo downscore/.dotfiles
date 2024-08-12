@@ -80,6 +80,7 @@ fi
 # fzf integration.
 export FZF_DEFAULT_OPTS="
   --height 75%
+  --layout=reverse
   --preview 'echo {}'
   --preview-window down:3:wrap
   --border"

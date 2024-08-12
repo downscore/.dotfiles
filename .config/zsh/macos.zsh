@@ -13,10 +13,11 @@ if type fzf &>/dev/null; then
 fi
 
 # OS-specific fzf setup.
-export FZF_CTRL_R_OPTS="
-  --bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort'
+export FZF_DEFAULT_OPTS="
+  ${FZF_DEFAULT_OPTS}
+  --bind 'ctrl-y:execute-silent(echo {} | pbcopy)+abort'
   --color header:italic
-  --header 'Ctrl-Y to copy command to clipboard'"
+  --header 'Ctrl-Y: Copy'"
 
 # Use bat for man pages if it is available.
 if type bat &>/dev/null; then
