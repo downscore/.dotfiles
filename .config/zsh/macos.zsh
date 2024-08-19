@@ -23,3 +23,6 @@ export FZF_DEFAULT_OPTS="
 if type bat &>/dev/null; then
   export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 fi
+
+# OS-specific aliases and abbreviations.
+abbr --force -q ldd='otool -L'

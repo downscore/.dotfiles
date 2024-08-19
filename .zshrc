@@ -113,7 +113,6 @@ alias print_colors='for i in {0..255}; do print -Pn "%K{$i}  %k%F{$i}${(l:3::0:)
 # Set grep options. Colour, case-insensitive, show line numbers.
 abbr --force -qq grep='grep --color=auto -in'  # -qq to prevent warning about overriding "grep".
 abbr --force -q ll='ls -al'
-abbr --force -q ldd='otool -L'
 abbr --force -q v='vi'
 abbr --force -q l='lf'
 abbr --force -q lg='lazygit'
