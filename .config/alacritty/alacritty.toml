@@ -14,6 +14,7 @@ padding.x = 10
 padding.y = 10
 decorations = "Buttonless"
 startup_mode = "Maximized"
+option_as_alt = "Both"
 
 [cursor]
 style = "Beam"

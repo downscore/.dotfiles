@@ -85,6 +85,9 @@ vim.api.nvim_set_keymap('n', '<C-p>', ':TmuxNavigatePrevious<cr>', { noremap = t
 vim.keymap.set('n', '<C-BSlash>', ':vsplit<CR>', { noremap = true, desc = 'Open a vertical split' })
 -- The following keymap allows using - without pressing shift.
 vim.keymap.set('n', '<C-_>', ':split<CR>', { noremap = true, desc = 'Open a horizontal split' })
+vim.keymap.set('n', '<C-M-l>', ':vsplit<CR>', { noremap = true, desc = 'Open a vertical split' })
+vim.keymap.set('n', '<C-M-j>', ':split<CR>', { noremap = true, desc = 'Open a horizontal split' })
+vim.keymap.set('n', '<C-x>', ':close<CR>', { noremap = true, desc = 'Close the current split' })
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which

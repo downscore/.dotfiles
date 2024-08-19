@@ -370,4 +370,54 @@
     "command": "workbench.action.compareEditor.nextChange",
     "when": "textCompareEditorVisible"
   },
+  // Close split using ctrl+x.
+  {
+    "key": "ctrl+x",
+    "command": "workbench.action.closeEditorsAndGroup"
+  },
+  // Open splits using ctrl-alt-j/l.
+  {
+    "key": "ctrl+alt+j",
+    "command": "-notebook.cell.joinBelow",
+    "when": "notebookEditorFocused"
+  },
+  {
+    "key": "ctrl+alt+j",
+    "command": "workbench.action.splitEditorDown"
+  },
+  {
+    "key": "ctrl+alt+l",
+    "command": "workbench.action.splitEditorRight"
+  },
+  // Go to next/previous change with ctrl-alt-n/p.
+  {
+    "key": "ctrl+alt+n",
+    "command": "-list.focusAnyDown",
+    "when": "listFocus && !inputFocus && !treestickyScrollFocused"
+  },
+  {
+    "key": "ctrl+alt+p",
+    "command": "-list.focusAnyUp",
+    "when": "listFocus && !inputFocus && !treestickyScrollFocused"
+  },
+  {
+    "key": "ctrl+alt+n",
+    "command": "workbench.action.compareEditor.nextChange",
+    "when": "textCompareEditorVisible"
+  },
+  {
+    "key": "ctrl+alt+n",
+    "command": "workbench.action.editor.nextChange",
+    "when": "editorTextFocus && !textCompareEditorActive"
+  },
+  {
+    "key": "ctrl+alt+p",
+    "command": "workbench.action.compareEditor.previousChange",
+    "when": "textCompareEditorVisible"
+  },
+  {
+    "key": "ctrl+alt+p",
+    "command": "workbench.action.editor.previousChange",
+    "when": "editorTextFocus && !textCompareEditorActive"
+  },
 ]
