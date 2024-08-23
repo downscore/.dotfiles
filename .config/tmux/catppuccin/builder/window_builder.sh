@@ -98,10 +98,8 @@ build_window_icon() {
     custom_icon_window_silent custom_icon_window_activity custom_icon_window_bell
 
   window_status_icon_enable=$(get_tmux_option "@catppuccin_window_status_icon_enable" "yes")
-  # custom_icon_window_last=$(get_tmux_option "@catppuccin_icon_window_last" "󰖰")
-  custom_icon_window_last=$(get_tmux_option "@catppuccin_icon_window_last" "")
-  # custom_icon_window_current=$(get_tmux_option "@catppuccin_icon_window_current" "󰖯")
-  custom_icon_window_current=$(get_tmux_option "@catppuccin_icon_window_current" "")
+  custom_icon_window_last=$(get_tmux_option "@catppuccin_icon_window_last" "󰖰")
+  custom_icon_window_current=$(get_tmux_option "@catppuccin_icon_window_current" "󰖯")
   custom_icon_window_zoom=$(get_tmux_option "@catppuccin_icon_window_zoom" "󰁌")
   custom_icon_window_mark=$(get_tmux_option "@catppuccin_icon_window_mark" "󰃀")
   custom_icon_window_silent=$(get_tmux_option "@catppuccin_icon_window_silent" "󰂛")
@@ -114,8 +112,9 @@ build_window_icon() {
     show_window_status+="#{?window_activity_flag, ${custom_icon_window_activity},}"
     show_window_status+="#{?window_bell_flag, ${custom_icon_window_bell},}"
     show_window_status+="#{?window_silence_flag, ${custom_icon_window_silent},}"
-    show_window_status+="#{?window_active, ${custom_icon_window_current},}"
-    show_window_status+="#{?window_last_flag, ${custom_icon_window_last},}"
+    # Uncomment to show icons for current and last windows.
+    # show_window_status+="#{?window_active, ${custom_icon_window_current},}"
+    # show_window_status+="#{?window_last_flag, ${custom_icon_window_last},}"
     show_window_status+="#{?window_marked_flag, ${custom_icon_window_mark},}"
     show_window_status+="#{?window_zoomed_flag, ${custom_icon_window_zoom},}"
 
