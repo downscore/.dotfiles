@@ -98,8 +98,10 @@ build_window_icon() {
     custom_icon_window_silent custom_icon_window_activity custom_icon_window_bell
 
   window_status_icon_enable=$(get_tmux_option "@catppuccin_window_status_icon_enable" "yes")
-  custom_icon_window_last=$(get_tmux_option "@catppuccin_icon_window_last" "󰖰")
-  custom_icon_window_current=$(get_tmux_option "@catppuccin_icon_window_current" "󰖯")
+  # custom_icon_window_last=$(get_tmux_option "@catppuccin_icon_window_last" "󰖰")
+  custom_icon_window_last=$(get_tmux_option "@catppuccin_icon_window_last" "")
+  # custom_icon_window_current=$(get_tmux_option "@catppuccin_icon_window_current" "󰖯")
+  custom_icon_window_current=$(get_tmux_option "@catppuccin_icon_window_current" "")
   custom_icon_window_zoom=$(get_tmux_option "@catppuccin_icon_window_zoom" "󰁌")
   custom_icon_window_mark=$(get_tmux_option "@catppuccin_icon_window_mark" "󰃀")
   custom_icon_window_silent=$(get_tmux_option "@catppuccin_icon_window_silent" "󰂛")
