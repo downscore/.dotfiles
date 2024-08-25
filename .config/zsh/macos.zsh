@@ -15,10 +15,10 @@ fi
 # OS-specific fzf setup.
 export FZF_DEFAULT_OPTS="
   ${FZF_DEFAULT_OPTS}
-  --bind 'ctrl-y:execute-silent(echo {} | pbcopy)+abort'
+  --bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort'
   --color header:italic
   --header 'Ctrl-Y: Copy'"
-export FZF_CTRL_R_OPTS="--bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort'"
+export FZF_CTRL_T_OPTS="--bind 'ctrl-y:execute-silent(echo -n {} | pbcopy)+abort'"
 
 # Use bat for man pages if it is available.
 if type bat &>/dev/null; then
