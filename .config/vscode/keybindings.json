@@ -1,5 +1,5 @@
 [
-  // Duplicate line/selection: shift+cmd+d
+  // Duplicate line/selection: shift-cmd-d
   {
     "key": "shift+cmd+d",
     "command": "-workbench.view.debug",
@@ -197,7 +197,7 @@
     "command": "-numberedBookmarks.toggleBookmark9",
     "when": "editorTextFocus"
   },
-  // Navigate splits using ctrl+hjkl.
+  // Navigate splits using ctrl-hjkl.
   // Same behavior as tmux and neovim configs.
   {
     "key": "ctrl+k",
@@ -256,7 +256,7 @@
     "key": "cmd+k cmd+right",
     "command": "-workbench.action.focusRightGroup"
   },
-  // Split editor with ctrl+\ ctrl+| and ctrl+-
+  // Split editor with ctrl-\ ctrl-| and ctrl--
   {
     "key": "ctrl+-",
     "command": "-workbench.action.navigateBack",
@@ -287,7 +287,7 @@
     "key": "cmd+k cmd+\\",
     "command": "-workbench.action.splitEditorRight"
   },
-  // Go to last split using ctrl+p.
+  // Go to last split using ctrl-p.
   {
     "key": "ctrl+p",
     "command": "-workbench.action.quickOpenSelectPrevious",
@@ -322,7 +322,7 @@
     "key": "ctrl+p",
     "command": "workbench.action.focusPreviousGroup"
   },
-  // Focus active editor using ctrl+a.
+  // Focus active editor using ctrl-a.
   {
     "key": "ctrl+a",
     "command": "-cursorLineStart",
@@ -332,13 +332,13 @@
     "key": "ctrl+a",
     "command": "workbench.action.focusActiveEditorGroup"
   },
-  // Toggle maximizing split using ctrl+z.
+  // Toggle maximizing split using ctrl-z.
   {
     "key": "ctrl+z",
     "command": "workbench.action.toggleMaximizeEditorGroup",
     "when": "editorPartMaximizedEditorGroup || editorPartMultipleEditorGroups"
   },
-  // Search local file symbols using ctrl+f.
+  // Search local file symbols using ctrl-f.
   {
     "key": "ctrl+f",
     "command": "-cursorRight",
@@ -349,7 +349,7 @@
     "command": "workbench.action.gotoSymbol",
     "when": "!accessibilityHelpIsShown && !accessibleViewIsShown"
   },
-  // Navigate to next/previous changes with ctrl+[ and ctrl+].
+  // Navigate to next/previous changes with ctrl-[ and ctrl-].
   {
     "key": "ctrl+]",
     "command": "workbench.action.editor.nextChange",
@@ -370,7 +370,7 @@
     "command": "workbench.action.compareEditor.nextChange",
     "when": "textCompareEditorVisible"
   },
-  // Close split using ctrl+x.
+  // Close split using ctrl-x.
   {
     "key": "ctrl+x",
     "command": "workbench.action.closeEditorsAndGroup"
@@ -419,5 +419,27 @@
     "key": "ctrl+alt+p",
     "command": "workbench.action.editor.previousChange",
     "when": "editorTextFocus && !textCompareEditorActive"
+  },
+  // Copy active file path using ctrl-alt-c.
+  {
+    "key": "ctrl+alt+c",
+    "command": "copyFilePath"
+  },
+  // Go to definition with ctrl-alt-k.
+  {
+    "key": "ctrl+alt+k",
+    "command": "editor.action.revealDefinition",
+    "when": "editorHasDefinitionProvider && editorTextFocus"
+  },
+  // Go to bracket with ctrl-alt-a.
+  {
+    "key": "ctrl+alt+a",
+    "command": "editor.action.jumpToBracket",
+    "when": "editorTextFocus"
+  },
+  // Run all tests with ctrl-alt-t.
+  {
+    "key": "ctrl+alt+t",
+    "command": "testing.runAll"
   },
 ]
