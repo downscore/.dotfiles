@@ -78,9 +78,29 @@ fi
 # Pager options.
 export LESSHISTFILE=/dev/null  # Prevent `less` from logging history.
 export LESS='--mouse'  # Enable mouse scrolling in `less`.
-if type bat &>/dev/null; then
+if type batcat &>/dev/null; then
+  # Use `batcat` as the default pager. Try it first to prevent problems with "bat" on linux.
+  export PAGER='batcat --paging=always'
+  export MANPAGER="sh -c 'col -bx | batcat -l man -p'"
+elif type bat &>/dev/null; then
   export PAGER='bat --paging=always'  # Use `bat` as the default pager.
+  export MANPAGER="sh -c 'col -bx | bat -l man -p'"  # Use
 fi
+
+# Get appropriate clipboard command for the system.
+if type xclip &>/dev/null; then
+  export CLIPBOARD_WRITE='xclip -selection clipboard'
+else
+  export CLIPBOARD_WRITE='pbcopy'
+fi
+
+# Zle widget to copy the current command to the clipboard.
+zle_copy_to_clipboard() {
+  local selected_text="${BUFFER}"
+  echo -n "$selected_text" | ${CLIPBOARD_WRITE}
+}
+zle -N zle_copy_to_clipboard
+bindkey '^y' zle_copy_to_clipboard
 
 # fzf integration.
 export FZF_DEFAULT_OPTS="
@@ -88,7 +108,11 @@ export FZF_DEFAULT_OPTS="
   --layout=reverse
   --preview 'echo {}'
   --preview-window down:3:wrap
-  --border"
+  --border
+  --bind 'ctrl-y:execute-silent(echo -n {2..} | ${CLIPBOARD_WRITE})+abort'
+  --color header:italic
+  --header 'Ctrl-Y: Copy'"
+export FZF_CTRL_T_OPTS="--bind 'ctrl-y:execute-silent(echo -n {} | ${CLIPBOARD_WRITE})+abort'"
 export FZF_TMUX_OPTS="-p80%,80%"
 
 # Enable zoxide if it is available.
