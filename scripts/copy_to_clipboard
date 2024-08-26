@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# Check if an argument was provided. If not, read from stdin to handle piped text.
+if [ -n "$1" ]; then
+  str="$1"
+else
+  str=$(cat)
+fi
+
+# Base64 encode the string
+encoded_str=$(printf "%s" "$str" | base64 | tr -d '\n')
+# Send the OSC52 escape sequence
+printf "\033]52;c;%s\007" "$encoded_str"

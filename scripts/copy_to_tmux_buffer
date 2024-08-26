@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# Check if an argument was provided. If not, read from stdin to handle piped text.
+if [ -n "$1" ]; then
+  str="$1"
+else
+  str=$(cat)
+fi
+
+# Send the string to the tmux buffer.
+echo -n "$str" | tmux load-buffer -

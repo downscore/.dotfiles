@@ -1,3 +1,6 @@
+# ctrl-v is a no-op since we can directly access the system clipboard in local sessions.
+bindkey '^v' undefined-key
+
 # Add Homebrew autocompletions if Homebrew is present.
 if type brew &>/dev/null
 then
