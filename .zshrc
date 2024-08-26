@@ -97,7 +97,7 @@ fi
 # Zle widget to copy the current command to the clipboard.
 zle_copy_to_clipboard() {
   local selected_text="${BUFFER}"
-  echo -n "$selected_text" | ${CLIPBOARD_WRITE}
+  eval "echo -n \"$selected_text\" | $CLIPBOARD_WRITE"
 }
 zle -N zle_copy_to_clipboard
 bindkey '^y' zle_copy_to_clipboard
@@ -109,10 +109,10 @@ export FZF_DEFAULT_OPTS="
   --preview 'echo {}'
   --preview-window down:3:wrap
   --border
-  --bind 'ctrl-y:execute-silent(echo -n {2..} | ${CLIPBOARD_WRITE})+abort'
+  --bind 'ctrl-y:execute-silent(echo -n {2..} | $CLIPBOARD_WRITE)+abort'
   --color header:italic
   --header 'Ctrl-Y: Copy'"
-export FZF_CTRL_T_OPTS="--bind 'ctrl-y:execute-silent(echo -n {} | ${CLIPBOARD_WRITE})+abort'"
+export FZF_CTRL_T_OPTS="--bind 'ctrl-y:execute-silent(echo -n {} | $CLIPBOARD_WRITE)+abort'"
 export FZF_TMUX_OPTS="-p80%,80%"
 
 # Enable zoxide if it is available.
