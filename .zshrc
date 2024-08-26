@@ -98,7 +98,7 @@ if type pbcopy &>/dev/null; then
 else
   # Uncomment to use xclip if X11 forwarding works properly.
   # export CLIPBOARD_WRITE='xclip -selection clipboard'
-  export CLIPBOARD_WRITE='copy_to_tmux_buffer'
+  export CLIPBOARD_WRITE='$HOME/.dotfiles/scripts/copy_to_tmux_buffer'
 fi
 
 # Zle widget to copy the current command to the clipboard.
