@@ -87,6 +87,22 @@ elif type bat &>/dev/null; then
   export MANPAGER="sh -c 'col -bx | bat -l man -p'"  # Use
 fi
 
+# Function to copy to clipboard using OSC52. Should work from remote tmux sessions as long as
+# `set-clipboard` is enabled in tmux.
+copy_to_clipboard() {
+  local str
+  # Check if an argument was provided. If not, read from stdin to handled piped text.
+  if [ -n "$1" ]; then
+    str="$1"
+  else
+    str=$(cat)
+  fi
+  # Base64 encode the string
+  local encoded_str=$(printf "%s" "$str" | base64 | tr -d '\n')
+  # Send the OSC52 escape sequence
+  printf "\033]52;c;%s\007" "$encoded_str"
+}
+
 # Get appropriate clipboard command for the system.
 if type xclip &>/dev/null; then
   export CLIPBOARD_WRITE='xclip -selection clipboard'
@@ -96,8 +112,7 @@ fi
 
 # Zle widget to copy the current command to the clipboard.
 zle_copy_to_clipboard() {
-  local selected_text="${BUFFER}"
-  eval "echo -n \"$selected_text\" | $CLIPBOARD_WRITE"
+  copy_to_clipboard "${BUFFER}"
 }
 zle -N zle_copy_to_clipboard
 bindkey '^y' zle_copy_to_clipboard
