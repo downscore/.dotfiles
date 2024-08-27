@@ -62,6 +62,11 @@ setopt nobeep  # No beeping on error.
 setopt autopushd  # Enable auto directory stack.
 setopt interactive_comments  # Allow inline comments in interactive shells.
 
+# Reduce delay after receiving an escape key code (^[). Note that some keys (such as arrow keys)
+# send an escape key code followed by another code, so the terminal waits for a bit to
+# disambiguate. Reducing this from the default 400ms (but not to zero) can help with responsiveness.
+KEYTIMEOUT=10  # In 10ms units.
+
 # Keyboard shortcuts.
 # Navigating by word on remote Linux machine using option+left/right.
 bindkey "^[^[[D" backward-word
