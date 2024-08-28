@@ -458,4 +458,9 @@
     "command": "-workbench.action.terminal.sendSequence",
     "when": "accessibilityModeEnabled && terminalFocus"
   },
+  // Re-run last test with ctrl-alt-x.
+  {
+    "key": "ctrl+alt+x",
+    "command": "testing.reRunLastRun"
+  },
 ]
