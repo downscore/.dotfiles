@@ -211,6 +211,29 @@ require('lazy').setup({
       require("nvim-tree").setup {}
     end,
   },
+
+  -- Integrated lf.
+  {
+    "lmburns/lf.nvim",
+    dependencies = { "nvim-lua/plenary.nvim", "akinsho/toggleterm.nvim" },
+    config = function()
+      -- This feature will not work if the plugin is lazy-loaded.
+      vim.g.lf_netrw = 1
+
+      require("lf").setup({
+        escape_quit = true,
+        winblend = 0,
+        highlights = { NormalFloat = { guibg = "NONE" } },
+        border = "rounded",
+        direction = "float",
+        height = vim.o.lines - 4,
+        width = vim.o.columns - 4,
+      })
+
+      vim.keymap.set("n", "<leader>ff", "<Cmd>Lf<CR>")
+      vim.keymap.set("n", "<M-o>", "<Cmd>Lf<CR>")
+    end
+  },
 })
 
 -- Load the Catppuccin theme.
