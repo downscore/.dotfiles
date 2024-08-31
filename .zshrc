@@ -96,11 +96,11 @@ export LESSHISTFILE=/dev/null  # Prevent `less` from logging history.
 # -R: Allow color and hyperlink escape sequences.
 # -I: Ignore case in all-lowercase searches.
 # -i: Smart case in searches containing uppercase characters.
-# -J: Status column - shows lines with search matches in the gutter.
 # -jn: Show at least n lines above or below search matches.
 # --incsearch: Incremental search.
 # --mouse: Enable mouse scrolling.
-export LESS='-RIiJj10 --incsearch --mouse'
+# -J: Status column (disabled as it messes with bat). Shows lines with search matches in the gutter.
+export LESS='-RIij10 --incsearch --mouse'
 if type batcat &>/dev/null; then
   # Use `batcat` as the default pager. Try it first to prevent problems with "bat" on linux.
   export PAGER='batcat --paging=always'

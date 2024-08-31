@@ -1,10 +1,20 @@
 set hidden  # Show hidden files.
 set drawbox  # Draw borders around panes.
 set icons  # Show icons.
+set mouse  # Enable mouse support.
 set relativenumber  # Show relative line numbers.
+set scrolloff 10  # Keep 10 lines above and below the cursor when searching.
+set shellopts '-eu'  # Exit on error and undefined variables in shell commands.
 
 # Use bat for previews.
 set previewer ~/.config/lf/preview.sh
 
 # Change prompt to just show the current directory and file.
 set promptfmt "\033[34;1m%d\033[0m\033[1m%f\033[0m"
+
+# Key bindings.
+# lf separates files by newlines, so for some commands we need to change the input field separator
+# to a newline. lf has an `ifs` option, but it does not seem to work correctly. lf also has an
+# option to change the file separator, but changing it to a space causes problems with file names
+# that contain spaces.
+map DD ${{export IFS=$'\n' && trash $fx}}  # Move file(s) to the trash.
