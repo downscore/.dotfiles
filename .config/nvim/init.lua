@@ -1,4 +1,4 @@
--- Set the leader key.
+-- Set the leader key. Must be done before any mappings are set or plugins are loaded.
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
@@ -6,7 +6,7 @@ vim.g.maplocalleader = ' '
 vim.o.mouse = 'a'
 
 -- Enable nerd fonts.
-vim.g.have_nerd_font = false
+vim.g.have_nerd_font = true
 
 -- Enable line numbers.
 vim.opt.number = true
@@ -21,16 +21,29 @@ vim.opt.expandtab = true
 
 -- Use system clipboard.
 vim.opt.clipboard = 'unnamedplus'
+-- Prevent d* commands from modifying the system clipboard by remapping them to "_d*.
+vim.api.nvim_set_keymap('n', 'dd', '"_dd', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', 'd$', '"_d$', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', 'd0', '"_d0', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', 'd^', '"_d^', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', 'dgg', '"_dgg', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', 'dG', '"_dG', { noremap = true, silent = true })
+-- Prevent x from modifying the system clipboard by remapping it to "_x.
+vim.api.nvim_set_keymap('n', 'x', '"_x', { noremap = true, silent = true })
 
 -- Save undo history.
 vim.opt.undofile = true
 
--- Smart-case searching.
+-- Search options.
 vim.opt.ignorecase = true
-vim.opt.smartcase = true
+vim.opt.smartcase = true  -- Smart-case searching (ignore case if lowercase).
+vim.opt.incsearch = true  -- Incremental searching.
+vim.opt.hlsearch = true  -- Highlight search results.
+vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')  -- Clear search highlights with <Esc>.
 
--- Keep gutter ("sign") column.
+-- Convfigure gutter ("sign") column.
 vim.opt.signcolumn = 'yes'
+vim.opt.signcolumn="auto:3-9"  -- Make sign column autoresize and allow it to get wider.
 
 -- Decrease update time.
 vim.opt.updatetime = 250
@@ -58,15 +71,8 @@ vim.opt.cursorline = true
 -- Minimum number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 10
 
--- Make sign column autoresize and allow it to get wider.
-vim.opt.signcolumn="auto:9"
-
 -- Uncomment to use a default color scheme.
 -- vim.cmd('colorscheme retrobox')
-
--- Set highlight on search, but clear on pressing <Esc> in normal mode.
-vim.opt.hlsearch = true
-vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
 -- Diagnostic keymaps.
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous [D]iagnostic message' })
@@ -90,16 +96,10 @@ vim.keymap.set('n', '<C-M-j>', ':split<CR>', { noremap = true, desc = 'Open a ho
 vim.keymap.set('n', '<C-x>', ':close<CR>', { noremap = true, desc = 'Close the current split' })
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
--- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
--- is not what someone will guess without a bit more experience.
---
--- NOTE: This won't work in all terminal emulators/tmux/etc. Try your own mapping
--- or just use <C-\><C-n> to exit terminal mode
+-- to discover. You normally need to press <C-\><C-n>.
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
 -- Highlight when yanking (copying) text
---  Try it with `yap` in normal mode
---  See `:help vim.highlight.on_yank()`
 vim.api.nvim_create_autocmd('TextYankPost', {
   desc = 'Highlight when yanking (copying) text',
   group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
