@@ -29,6 +29,11 @@ zstyle ':completion:*' select-prompt '%SMenu: %M (%p)%s'
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'  # Make case-insensitive.
 _comp_options+=(globdots)  # Show hidden files in tab completion.
 
+# Use bash-style globbing -- don't raise an error when * doesn't match anything, and just pass in
+# the glob itself as an argument. This makes it easier to use share commands with people running
+# bash terminals.
+setopt nonomatch
+
 # Colors for use in prompts, ls, tab completion, etc.
 autoload -U colors && colors
 export CLICOLOR=1
