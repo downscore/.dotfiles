@@ -152,6 +152,12 @@ if type zoxide &>/dev/null; then
   alias cd='z'
 fi
 
+# Function for changing the current directory with lf.
+lfcd () {
+  # `command` is needed in case `lfcd` is aliased to `lf`
+  cd "$(command lf -print-last-dir "$@")"
+}
+
 # Command aliases.
 if type eza &>/dev/null; then
   alias ls='eza -a --icons --group-directories-first'  # Replace ls with eza.
@@ -168,7 +174,7 @@ alias print_colors='for i in {0..255}; do print -Pn "%K{$i}  %k%F{$i}${(l:3::0:)
 abbr --force -qq grep='grep --color=auto -in'  # -qq to prevent warning about overriding "grep".
 abbr --force -q ll='ls -al'
 abbr --force -q v='vi'
-abbr --force -q l='lf'
+abbr --force -q l='lfcd'
 abbr --force -q lg='lazygit'
 
 # Load API keys and other private configuration if available.
