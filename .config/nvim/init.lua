@@ -12,7 +12,7 @@ vim.opt.timeoutlen = 500 -- Decrease mapped sequence wait time. Display which-ke
 vim.opt.splitright = true  -- Configure how new splits should be opened.
 vim.opt.splitbelow = true
 vim.opt.signcolumn = 'yes'  -- Enable gutter ("sign column").
-vim.opt.signcolumn="auto:3-9"  -- Make gutter autoresize and allow it to get wider.
+vim.opt.signcolumn="auto:2-9"  -- Make gutter autoresize and allow it to get wider.
 vim.opt.inccommand = 'split'  -- Preview substitutions while typing.
 vim.opt.cursorline = true  -- Highlight the line the cursor is on.
 vim.opt.scrolloff = 10  -- Minimum number of screen lines to keep above and below the cursor.
@@ -603,7 +603,7 @@ vim.cmd.colorscheme "catppuccin"
 -- Configure marks plugin.
 require("marks").setup {
   default_mappings = true,  -- Default keybindings.
-  builtin_marks = { ".", "<", ">", "^" },  -- Which builtin marks to show.
+  -- builtin_marks = { ".", "<", ">", "^" },  -- Uncomment to show built-in marks.
   cyclic = true,  -- Movements cycle back to beginning/end of buffer.
   sign_priority = { lower=10, upper=10, builtin=10, bookmark=10 },
 }
