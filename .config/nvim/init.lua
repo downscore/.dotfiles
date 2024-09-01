@@ -530,7 +530,6 @@ require('lazy').setup({
             autocomplete = new_setting
           }
         }
-        -- Provide feedback to the user
         if new_setting then
           print("Autocomplete enabled")
         else
