@@ -81,7 +81,7 @@ vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' }
 
 -- Allow toggling relative line numbers.
 vim.opt.relativenumber = true  -- Enable relative line numbers by default.
-vim.api.nvim_set_keymap('n', '<Leader>l', ':set relativenumber!<CR>', {
+vim.api.nvim_set_keymap('n', '<leader>tr', ':set relativenumber!<CR>', {
   noremap = true, silent = true })
 
 -- Highlight when yanking (copying) text
@@ -405,7 +405,8 @@ require('lazy').setup({
     end,
   },
 
-  { -- Autoformat.
+  -- Autoformat.
+  {
     'stevearc/conform.nvim',
     event = { 'BufWritePre' },
     cmd = { 'ConformInfo' },
@@ -519,6 +520,24 @@ require('lazy').setup({
           { name = 'path' },
         },
       }
+
+      -- Define a function and keybinding to toggle autocomplete.
+      local function toggle_autocomplete()
+        local current_setting = cmp.get_config().completion.autocomplete
+        local new_setting = not current_setting
+        cmp.setup {
+          completion = {
+            autocomplete = new_setting
+          }
+        }
+        -- Provide feedback to the user
+        if new_setting then
+          print("Autocomplete enabled")
+        else
+          print("Autocomplete disabled")
+        end
+      end
+      vim.keymap.set('n', '<leader>ta', toggle_autocomplete, { noremap = true, silent = true })
     end,
   },
 
