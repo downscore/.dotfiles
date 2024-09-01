@@ -376,6 +376,7 @@ require('lazy').setup({
           },
         },
         pyright = {},
+        zls = {},
       }
 
       -- Ensure the servers and tools above are installed.
