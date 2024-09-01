@@ -84,12 +84,21 @@ vim.opt.relativenumber = true  -- Enable relative line numbers by default.
 vim.api.nvim_set_keymap('n', '<leader>tr', ':set relativenumber!<CR>', {
   noremap = true, silent = true })
 
--- Highlight when yanking (copying) text
+-- Highlight when yanking (copying) text.
 vim.api.nvim_create_autocmd('TextYankPost', {
   desc = 'Highlight when yanking (copying) text',
   group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
   callback = function()
     vim.highlight.on_yank()
+  end,
+})
+
+-- Restore cursor when exiting or suspending neovim.
+vim.api.nvim_create_autocmd({ 'VimLeave', 'VimSuspend' }, {
+  desc = 'Restore cursor shape when exiting or suspending neovim',
+  group = vim.api.nvim_create_augroup('kickstart-restore-cursor', { clear = true }),
+  callback = function()
+    vim.opt.guicursor = "a:ver25"
   end,
 })
 
@@ -486,13 +495,9 @@ require('lazy').setup({
           --  This will auto-import if your LSP supports it.
           --  This will expand snippets if the LSP sent a snippet.
           ['<C-y>'] = cmp.mapping.confirm { select = true },
-          -- Tab to accept completions.
+          -- Tab or enter to accept completions.
           ['<Tab>'] = cmp.mapping.confirm { select = true },
-
-          -- Uncomment for alternative completion keymaps.
-          --['<CR>'] = cmp.mapping.confirm { select = true },
-          --['<Tab>'] = cmp.mapping.select_next_item(),
-          --['<S-Tab>'] = cmp.mapping.select_prev_item(),
+          ['<CR>'] = cmp.mapping.confirm { select = true },
 
           -- Manually trigger a completion from nvim-cmp.
           ['<C-Space>'] = cmp.mapping.complete {},
@@ -612,17 +617,6 @@ require("catppuccin").setup({
   },
 })
 vim.cmd.colorscheme "catppuccin"
-
--- Configure Mason.
--- require("mason").setup({
---   ui = {
---     icons = {
---       package_installed = "✓",
---       package_pending = "➜",
---       package_uninstalled = "✗"
---     }
---   }
--- })
 
 -- Configure marks plugin.
 require("marks").setup {
