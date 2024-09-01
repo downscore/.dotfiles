@@ -357,10 +357,13 @@ require('lazy').setup({
 
       -- Enable the following language servers. They will be automatically installed.
       local servers = {
-        -- clangd = {},
         -- gopls = {},
-        -- pyright = {},
         -- rust_analyzer = {},
+        asm_lsp = {
+          filetypes = { 'asm', 'vmasm', 's' },
+          root_dir = require('lspconfig').util.find_git_ancestor,
+        },
+        clangd = {},
         lua_ls = {
           settings = {
             Lua = {
@@ -372,6 +375,7 @@ require('lazy').setup({
             },
           },
         },
+        pyright = {},
       }
 
       -- Ensure the servers and tools above are installed.
