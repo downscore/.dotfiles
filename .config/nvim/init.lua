@@ -606,14 +606,8 @@ require("catppuccin").setup({
   integrations = {
     gitsigns = true,
     nvimtree = true,
-    -- TODO: Enable more integrations when plugins installed.
-    -- cmp = true,
-    -- treesitter = true,
-    -- notify = false,
-    -- mini = {
-    --   enabled = true,
-    --   indentscope_color = "",
-    -- },
+    cmp = true,
+    treesitter = true,
   },
 })
 vim.cmd.colorscheme "catppuccin"
