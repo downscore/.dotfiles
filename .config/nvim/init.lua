@@ -475,17 +475,18 @@ require('lazy').setup({
         },
         completion = { completeopt = 'menu,menuone,noinsert' },
         mapping = cmp.mapping.preset.insert {
-          -- Select the [n]ext item.
+          -- Select the next/previous items.
           ['<C-n>'] = cmp.mapping.select_next_item(),
-          -- Select the [p]revious item.
           ['<C-p>'] = cmp.mapping.select_prev_item(),
-          -- Scroll the documentation window [b]ack / [f]orward.
+          -- Scroll the documentation window back/forward.
           ['<C-b>'] = cmp.mapping.scroll_docs(-4),
           ['<C-f>'] = cmp.mapping.scroll_docs(4),
           -- Accept ([y]es) the completion.
           --  This will auto-import if your LSP supports it.
           --  This will expand snippets if the LSP sent a snippet.
           ['<C-y>'] = cmp.mapping.confirm { select = true },
+          -- Tab to accept completions.
+          ['<Tab>'] = cmp.mapping.confirm { select = true },
 
           -- Uncomment for alternative completion keymaps.
           --['<CR>'] = cmp.mapping.confirm { select = true },
