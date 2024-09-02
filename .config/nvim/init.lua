@@ -384,7 +384,7 @@ require("lazy").setup({
       capabilities =
         vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
 
-      -- Enable the following language servers. They will be automatically installed.
+      -- Language server configuration. They will not be automatically installed.
       local servers = {
         -- gopls = {},
         -- rust_analyzer = {},
@@ -408,16 +408,8 @@ require("lazy").setup({
         zls = {},
       }
 
-      -- Ensure the servers and tools above are installed.
+      -- Configure servers above.
       require("mason").setup()
-
-      -- Add other tools for Mason to install.
-      local ensure_installed = vim.tbl_keys(servers or {})
-      vim.list_extend(ensure_installed, {
-        "stylua", -- Used to format Lua code
-      })
-      require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
-
       require("mason-lspconfig").setup({
         handlers = {
           function(server_name)
