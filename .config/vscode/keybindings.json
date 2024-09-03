@@ -463,4 +463,32 @@
     "key": "ctrl+alt+x",
     "command": "testing.reRunLastRun"
   },
+  // Move editor between splits with ctrl-shift-hjkl.
+  {
+    "key": "ctrl+shift+k",
+    "command": "workbench.action.moveEditorToAboveGroup"
+  },
+  {
+    "key": "ctrl+shift+j",
+    "command": "workbench.action.moveEditorToBelowGroup"
+  },
+  {
+    "key": "ctrl+shift+h",
+    "command": "workbench.action.moveEditorToLeftGroup"
+  },
+  {
+    "key": "ctrl+shift+l",
+    "command": "workbench.action.moveEditorToRightGroup"
+  },
+  // Go to next/previous problem with ctrl-shift-n/p.
+  {
+    "key": "ctrl+shift+n",
+    "command": "editor.action.marker.nextInFiles",
+    "when": "editorFocus"
+  },
+  {
+    "key": "ctrl+shift+p",
+    "command": "editor.action.marker.prevInFiles",
+    "when": "editorFocus"
+  },
 ]
