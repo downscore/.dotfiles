@@ -491,4 +491,10 @@
     "command": "editor.action.marker.prevInFiles",
     "when": "editorFocus"
   },
+  // Insert a line below with ctrl-alt-o.
+  {
+    "key": "ctrl+alt+o",
+    "command": "editor.action.insertLineAfter",
+    "when": "editorTextFocus && !editorReadonly"
+  },
 ]
