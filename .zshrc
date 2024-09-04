@@ -121,11 +121,18 @@ fi
 
 # Zle widget to copy the current zsh buffer and cursor position to the clipboard.
 # Used for textflow support in the terminal.
-zle_copy_to_clipboard() {
+zle_copy_buffer_and_cursor_location() {
   copy_to_clipboard "${CURSOR},${BUFFER}"
 }
-zle -N zle_copy_to_clipboard
-bindkey '^y' zle_copy_to_clipboard
+zle -N zle_copy_buffer_and_cursor_location
+bindkey '^Xy' zle_copy_buffer_and_cursor_location
+
+# Zle widget to copy the current zsh buffer to the clipboard.
+zle_copy_buffer() {
+  copy_to_clipboard "${CURSOR},${BUFFER}"
+}
+zle -N zle_copy_buffer
+bindkey '^y' zle_copy_buffer
 
 # Zle widget to copy the tmux buffer to the clipboard.
 zle_tmux_buffer_to_clipboard() {
