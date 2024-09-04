@@ -129,7 +129,7 @@ bindkey '^Xy' zle_copy_buffer_and_cursor_location
 
 # Zle widget to copy the current zsh buffer to the clipboard.
 zle_copy_buffer() {
-  copy_to_clipboard "${CURSOR},${BUFFER}"
+  copy_to_clipboard "${BUFFER}"
 }
 zle -N zle_copy_buffer
 bindkey '^y' zle_copy_buffer
