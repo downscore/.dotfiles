@@ -119,9 +119,10 @@ else
   export CLIPBOARD_WRITE='$HOME/.dotfiles/scripts/copy_to_tmux_buffer'
 fi
 
-# Zle widget to copy the current command to the clipboard.
+# Zle widget to copy the current zsh buffer and cursor position to the clipboard.
+# Used for textflow support in the terminal.
 zle_copy_to_clipboard() {
-  copy_to_clipboard "${BUFFER}"
+  copy_to_clipboard "${CURSOR},${BUFFER}"
 }
 zle -N zle_copy_to_clipboard
 bindkey '^y' zle_copy_to_clipboard
