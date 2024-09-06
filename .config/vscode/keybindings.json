@@ -497,4 +497,30 @@
     "command": "editor.action.insertLineAfter",
     "when": "editorTextFocus && !editorReadonly"
   },
+  // Source control commands using ctrl-shift.
+  {
+    "key": "ctrl+shift+c",
+    "command": "git.checkout"
+  },
+  {
+    "key": "ctrl+shift+s",
+    "command": "git.pull"
+  },
+  {
+    "key": "ctrl+shift+u",
+    "command": "git.push"
+  },
+  {
+    "key": "ctrl+shift+q",
+    "command": "-workbench.action.quickOpenNavigatePreviousInViewPicker",
+    "when": "inQuickOpen && inViewsPicker"
+  },
+  {
+    "key": "ctrl+shift+q",
+    "command": "git.revealFileInOS.mac"
+  },
+  {
+    "key": "ctrl+shift+b",
+    "command": "git.rebase"
+  },
 ]
