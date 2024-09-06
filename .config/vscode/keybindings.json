@@ -523,4 +523,71 @@
     "key": "ctrl+shift+b",
     "command": "git.rebase"
   },
+  // Toggle block comment with ctrl-alt-/.
+  {
+    "key": "ctrl+alt+/",
+    "command": "editor.action.blockComment",
+    "when": "editorTextFocus && !editorReadonly"
+  },
+  // Shortcuts for working with anchors with ctrl-shift-cmd.
+  {
+    "key": "ctrl+shift+cmd+m",
+    "command": "editor.action.setSelectionAnchor",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+shift+cmd+v",
+    "command": "editor.action.selectFromAnchorToCursor",
+    "when": "editorTextFocus && selectionAnchorSet"
+  },
+  {
+    "key": "ctrl+shift+cmd+j",
+    "command": "editor.action.goToSelectionAnchor"
+  },
+  // Select to bracket with ctrl-shift-cmd-a.
+  {
+    "key": "ctrl+shift+cmd+a",
+    "command": "editor.action.selectToBracket"
+  },
+  // Remove brackets with ctrl-shift-cmd-d.
+  {
+    "key": "ctrl+shift+cmd+d",
+    "command": "editor.action.removeBrackets",
+    "when": "editorTextFocus"
+  },
+  // Insert a line above with ctrl-shift-cmd-o.
+  {
+    "key": "ctrl+shift+cmd+o",
+    "command": "editor.action.insertLineBefore",
+    "when": "editorTextFocus && !editorReadonly"
+  },
+  // Shortcuts for changing text case with ctrl-shift-cmd.
+  {
+    "key": "ctrl+shift+cmd+c",
+    "command": "editor.action.transformToCamelcase"
+  },
+  {
+    "key": "ctrl+shift+cmd+p",
+    "command": "editor.action.transformToPascalcase"
+  },
+  {
+    "key": "ctrl+shift+cmd+s",
+    "command": "editor.action.transformToSnakecase"
+  },
+  {
+    "key": "ctrl+shift+cmd+k",
+    "command": "editor.action.transformToKebabcase"
+  },
+  {
+    "key": "ctrl+shift+cmd+l",
+    "command": "editor.action.transformToLowercase"
+  },
+  {
+    "key": "ctrl+shift+cmd+t",
+    "command": "editor.action.transformToTitlecase"
+  },
+  {
+    "key": "ctrl+shift+cmd+u",
+    "command": "editor.action.transformToUppercase"
+  },
 ]
