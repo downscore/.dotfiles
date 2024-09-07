@@ -12,6 +12,16 @@ set -euf -o pipefail
 CACHE_DIR="${HOME}/.local/share/chtfzf"
 openMode="bash"
 
+FZF_DEFAULT_OPTS="
+  --height 100%
+  --layout=reverse
+  --preview 'echo {}'
+  --preview-window=70%
+  --border
+  --bind 'ctrl-y:execute-silent(echo -n {} | $CLIPBOARD_WRITE)+abort'
+  --color header:italic
+  --header 'Ctrl-Y: Copy'"
+
 function main {
     # Read Command Line Arguments
     for i in "$@"; do
