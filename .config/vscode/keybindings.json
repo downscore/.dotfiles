@@ -590,4 +590,9 @@
     "key": "ctrl+shift+cmd+u",
     "command": "editor.action.transformToUppercase"
   },
+  // Make all splits the same size with ctrl-alt-m.
+  {
+    "key": "ctrl+alt+m",
+    "command": "workbench.action.evenEditorWidths"
+  },
 ]
