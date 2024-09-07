@@ -147,10 +147,10 @@ export FZF_DEFAULT_OPTS="
   --preview 'echo {}'
   --preview-window down:3:wrap
   --border
-  --bind 'ctrl-y:execute-silent(echo -n {2..} | $CLIPBOARD_WRITE)+abort'
+  --bind 'ctrl-y:execute-silent(echo -n {} | $CLIPBOARD_WRITE)+abort'
   --color header:italic
   --header 'Ctrl-Y: Copy'"
-export FZF_CTRL_T_OPTS="--bind 'ctrl-y:execute-silent(echo -n {} | $CLIPBOARD_WRITE)+abort'"
+export FZF_CTRL_R_OPTS="--bind 'ctrl-y:execute-silent(echo -n {2..} | $CLIPBOARD_WRITE)+abort'"
 export FZF_TMUX_OPTS="-p80%,80%"
 
 # Function for searching man pages with fzf.
