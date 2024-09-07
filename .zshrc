@@ -153,6 +153,34 @@ export FZF_DEFAULT_OPTS="
 export FZF_CTRL_T_OPTS="--bind 'ctrl-y:execute-silent(echo -n {} | $CLIPBOARD_WRITE)+abort'"
 export FZF_TMUX_OPTS="-p80%,80%"
 
+# Function for searching man pages with fzf.
+manfzf() {
+  # Get command for listing man pages with optional section number.
+  local list_cmd="man -k ."
+  if [ -n "$1" ]; then
+    list_cmd="man -k -S $1 ."
+  fi
+
+  # - List all man pages.
+  # - Take the page names before the hypen-separated description.
+  # - Split comma-separated elements onto separate lines (needs its own sed command).
+  # - Remove whitespace, and remove strings in parentheses.
+  # - Eliminate duplicates.
+  # - Feed to fzf and get the chosen item.
+  local cmd=$(eval "$list_cmd" | awk -F ' - ' '{print $1}' | sed 's/, /\n/g' | \
+              sed 's/[[:space:]]*//g; s/(.*)//g' | sort -u | fzf)
+
+  # If a command was selected, open the corresponding man page.
+  if [[ -n "$cmd" ]]; then
+    # Open with section if specified.
+    if [ -n "$1" ]; then
+      man "$1" "$cmd"
+    else
+      man "$cmd"
+    fi
+  fi
+}
+
 # Enable zoxide if it is available.
 if type zoxide &>/dev/null; then
   eval "$(zoxide init zsh)"
@@ -166,7 +194,7 @@ lfcd () {
   cd "$(command lf -print-last-dir "$@")"
 }
 
-# Command aliases.
+# Command aliases and abbreviations.
 if type eza &>/dev/null; then
   alias ls='eza -a --icons --group-directories-first'  # Replace ls with eza.
 fi
@@ -176,14 +204,13 @@ fi
 alias python=python3  # Set default python version.
 alias pip=pip3  # Set default pip version.
 alias print_colors='for i in {0..255}; do print -Pn "%K{$i}  %k%F{$i}${(l:3::0:)i}%f " ${${(M)$((i%6)):#3}:+$'\''\n'\''}; done'
-
-# Expanding abbreviations.
-# Set grep options. Colour, case-insensitive, show line numbers.
-abbr --force -qq grep='grep --color=auto -in'  # -qq to prevent warning about overriding "grep".
+alias mansyscall='manfzf 2'
+alias manlib='manfzf 3'
 abbr --force -q ll='ls -al'
 abbr --force -q v='vi'
 abbr --force -q l='lfcd'
 abbr --force -q lg='lazygit'
+abbr --force -q cpy='tmux capture-pane -pS -10000 | copy_to_clipboard'
 
 # Load API keys and other private configuration if available.
 test -f ~/.api_keys.zsh && source ~/.api_keys.zsh
