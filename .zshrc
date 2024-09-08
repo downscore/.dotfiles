@@ -3,21 +3,6 @@
 source ~/.powerlevel10k/powerlevel10k.zsh-theme
 test -f ~/.p10k.zsh && source ~/.p10k.zsh
 
-# Add ~/.bin to PATH if it exists.
-if test -d "$HOME/.bin"; then
-  export PATH="$HOME/.bin:$PATH"
-fi
-
-# Add neovim to PATH if it exists in .bin.
-if test -d "$HOME/.bin/nvim/bin"; then
-  export PATH="$HOME/.bin/nvim/bin:$PATH"
-fi
-
-# Add ~/.dotfiles/scripts to PATH if it exists.
-if test -d "$HOME/.dotfiles/scripts"; then
-  export PATH="$HOME/.dotfiles/scripts:$PATH"
-fi
-
 # Fish-style autocomplete and abbreviations.
 source ~/.config/zsh/zsh-autosuggestions.zsh
 source ~/.config/zsh/zsh-abbr/zsh-abbr.zsh

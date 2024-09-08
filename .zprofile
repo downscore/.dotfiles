@@ -6,6 +6,21 @@ if test "$(uname)" = "Darwin"; then
   fi
 fi
 
+# Add ~/.bin to PATH if it exists.
+if test -d "$HOME/.bin"; then
+  export PATH="$HOME/.bin:$PATH"
+fi
+
+# Add neovim to PATH if it exists in .bin.
+if test -d "$HOME/.bin/nvim/bin"; then
+  export PATH="$HOME/.bin/nvim/bin:$PATH"
+fi
+
+# Add ~/.dotfiles/scripts to PATH if it exists.
+if test -d "$HOME/.dotfiles/scripts"; then
+  export PATH="$HOME/.dotfiles/scripts:$PATH"
+fi
+
 # Set default editor to neovim if it is available.
 if type nvim &>/dev/null; then
   export EDITOR=nvim
