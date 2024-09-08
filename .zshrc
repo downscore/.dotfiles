@@ -84,44 +84,6 @@ bindkey "^[[B" history-search-forward
 bindkey "^O" backward-kill-line  # Delete from cursor to beginning of line.
 bindkey "^P" kill-line  # Delete from cursor to end of line.
 
-# Set default editor to neovim if it is available.
-if type nvim &>/dev/null; then
-  export EDITOR=nvim
-  export VISUAL=nvim
-fi
-
-# Pager options.
-export LESSHISTFILE=/dev/null  # Prevent `less` from logging history.
-# Less options:
-# -R: Allow color and hyperlink escape sequences.
-# -I: Ignore case in all-lowercase searches.
-# -i: Smart case in searches containing uppercase characters.
-# -jn: Show at least n lines above or below search matches.
-# --incsearch: Incremental search.
-# --mouse: Enable mouse scrolling.
-# -J: Status column (disabled as it messes with bat). Shows lines with search matches in the gutter.
-export LESS='-RIij10 --incsearch --mouse'
-if type batcat &>/dev/null; then
-  # Use `batcat` as the default pager. Try it first to prevent problems with "bat" on linux.
-  export PAGER='batcat --paging=always'
-  # Note: The -p option messes with --paging=always, but --style=plain does not.
-  export MANPAGER="sh -c 'col -bx | batcat -l man --paging=always --style=plain'"
-elif type bat &>/dev/null; then
-  export PAGER='bat --paging=always'  # Use `bat` as the default pager.
-  # Note: The -p option messes with --paging=always, but --style=plain does not.
-  export MANPAGER="sh -c 'col -bx | bat -l man --paging=always --style=plain'"
-fi
-export BAT_STYLE=changes,numbers,snip
-
-# Get appropriate clipboard command for the system.
-if type pbcopy &>/dev/null; then
-  export CLIPBOARD_WRITE='pbcopy'
-else
-  # Uncomment to use xclip if X11 forwarding works properly.
-  # export CLIPBOARD_WRITE='xclip -selection clipboard'
-  export CLIPBOARD_WRITE='$HOME/.dotfiles/scripts/copy_to_tmux_buffer'
-fi
-
 # Zle widget to copy the current zsh buffer and cursor position to the clipboard.
 # Used for textflow support in the terminal.
 zle_copy_buffer_and_cursor_location() {
