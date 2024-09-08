@@ -12,16 +12,6 @@ set -euf -o pipefail
 CACHE_DIR="${HOME}/.local/share/chtfzf"
 openMode="bash"
 
-FZF_DEFAULT_OPTS="
-  --height 100%
-  --layout=reverse
-  --preview 'echo {}'
-  --preview-window=70%
-  --border
-  --bind 'ctrl-y:execute-silent(echo -n {} | $CLIPBOARD_WRITE)+abort'
-  --color header:italic
-  --header 'Ctrl-Y: Copy'"
-
 function main {
     # Read Command Line Arguments
     for i in "$@"; do
@@ -44,7 +34,7 @@ function main {
     while :; do # do while
         search=$(curl -sg "cht.sh/$(getPath):list" |
             grep -v ":list" |
-            fzf --bind "ctrl-d:print-query" --preview="${BASH_SOURCE[0]} preview "$(getPath){}"")
+            fzf --bind "ctrl-d:print-query" --height=100% --preview-window=right:70% --preview="${BASH_SOURCE[0]} preview "$(getPath){}"")
 
         if [[ "$search" == "" ]]; then # go up a level on ctrl-d
             popd -n > /dev/null 2>&1
@@ -81,9 +71,9 @@ function openSheet {
 function searchMain {
     if [ -f "$CACHE_DIR/main.list" ]; then
         # Use cached list if it exists
-        echo "$(grep -v ":list" "$CACHE_DIR/main.list" | fzf --query="$*" --preview="${BASH_SOURCE[0]} preview '{}'")"
+        echo "$(grep -v ":list" "$CACHE_DIR/main.list" | fzf  --height=100% --preview-window=right:70% --query="$*" --preview="${BASH_SOURCE[0]} preview '{}'")"
     else
-        echo "$(curl -sg "cht.sh/:list" | grep -v ":list" | fzf --query="$*" --preview="${BASH_SOURCE[0]} preview '{}'")"
+        echo "$(curl -sg "cht.sh/:list" | grep -v ":list" | fzf  --height=100% --preview-window=right:70% --query="$*" --preview="${BASH_SOURCE[0]} preview '{}'")"
     fi
 }
 

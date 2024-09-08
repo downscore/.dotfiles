@@ -104,10 +104,10 @@ export LESS='-RIij10 --incsearch --mouse'
 if type batcat &>/dev/null; then
   # Use `batcat` as the default pager. Try it first to prevent problems with "bat" on linux.
   export PAGER='batcat --paging=always'
-  export MANPAGER="sh -c 'col -bx | batcat -l man -p'"
+  export MANPAGER="sh -c 'col -bx | batcat -l man --paging=always --style=plain'"
 elif type bat &>/dev/null; then
   export PAGER='bat --paging=always'  # Use `bat` as the default pager.
-  export MANPAGER="sh -c 'col -bx | bat -l man -p'"  # Use
+  export MANPAGER="sh -c 'col -bx | bat -l man --paging=always --style=plain'"
 fi
 
 # Get appropriate clipboard command for the system.
@@ -139,47 +139,6 @@ zle_tmux_buffer_to_clipboard() {
   tmux save-buffer - | copy_to_clipboard
 }
 zle -N zle_tmux_buffer_to_clipboard
-
-# fzf integration.
-export FZF_DEFAULT_OPTS="
-  --height 75%
-  --layout=reverse
-  --preview 'echo {}'
-  --preview-window down:3:wrap
-  --border
-  --bind 'ctrl-y:execute-silent(echo -n {} | $CLIPBOARD_WRITE)+abort'
-  --color header:italic
-  --header 'Ctrl-Y: Copy'"
-export FZF_CTRL_R_OPTS="--bind 'ctrl-y:execute-silent(echo -n {2..} | $CLIPBOARD_WRITE)+abort'"
-export FZF_TMUX_OPTS="-p80%,80%"
-
-# Function for searching man pages with fzf.
-manfzf() {
-  # Get command for listing man pages with optional section number.
-  local list_cmd="man -k ."
-  if [ -n "$1" ]; then
-    list_cmd="man -k -S $1 ."
-  fi
-
-  # - List all man pages.
-  # - Take the page names before the hypen-separated description.
-  # - Split comma-separated elements onto separate lines (needs its own sed command).
-  # - Remove whitespace, and remove strings in parentheses.
-  # - Eliminate duplicates.
-  # - Feed to fzf and get the chosen item.
-  local cmd=$(eval "$list_cmd" | awk -F ' - ' '{print $1}' | sed 's/, /\n/g' | \
-              sed 's/[[:space:]]*//g; s/(.*)//g' | sort -u | fzf)
-
-  # If a command was selected, open the corresponding man page.
-  if [[ -n "$cmd" ]]; then
-    # Open with section if specified.
-    if [ -n "$1" ]; then
-      man "$1" "$cmd"
-    else
-      man "$cmd"
-    fi
-  fi
-}
 
 # Enable zoxide if it is available.
 if type zoxide &>/dev/null; then

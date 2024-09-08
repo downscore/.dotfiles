@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# Get command for listing and previewing man pages with optional section number.
+list_cmd="man -k ."
+preview_cmd="man {}"
+if [ -n "$1" ]; then
+  list_cmd="man -k -S $1 ."
+  preview_cmd="man $1 {}"
+fi
+
+# - List all man pages.
+# - Take the page names before the hypen-separated description.
+# - Split comma-separated elements onto separate lines (needs its own sed command).
+# - Remove whitespace, and remove strings in parentheses.
+# - Eliminate duplicates.
+# - Feed to fzf and get the chosen item.
+cmd=$(eval "$list_cmd" | awk -F ' - ' '{print $1}' | sed 's/, /\n/g' | \
+            sed 's/[[:space:]]*//g; s/(.*)//g' | sort -u | \
+            fzf --height=100% --preview-window=right:70% --preview="$preview_cmd")
+
+# If a command was selected, open the corresponding man page.
+if [[ -n "$cmd" ]]; then
+  # Open with section if specified.
+  if [ -n "$1" ]; then
+    man "$1" "$cmd"
+  else
+    man "$cmd"
+  fi
+fi
