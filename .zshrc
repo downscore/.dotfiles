@@ -111,6 +111,7 @@ elif type bat &>/dev/null; then
   # Note: The -p option messes with --paging=always, but --style=plain does not.
   export MANPAGER="sh -c 'col -bx | bat -l man --paging=always --style=plain'"
 fi
+export BAT_STYLE=changes,numbers,snip
 
 # Get appropriate clipboard command for the system.
 if type pbcopy &>/dev/null; then
