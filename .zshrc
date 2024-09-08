@@ -6,6 +6,8 @@ test -f ~/.p10k.zsh && source ~/.p10k.zsh
 # Fish-style autocomplete and abbreviations.
 source ~/.config/zsh/zsh-autosuggestions.zsh
 source ~/.config/zsh/zsh-abbr/zsh-abbr.zsh
+# Allow placing the cursor inside an abbreviation.
+ABBR_SET_EXPANSION_CURSOR=1
 
 # Tab completion options.
 zstyle ':completion:*' menu select
@@ -119,7 +121,7 @@ abbr --force -q ll='ls -al'
 abbr --force -q v='vi'
 abbr --force -q l='lfcd'
 abbr --force -q lg='lazygit'
-abbr --force -q cpy='tmux capture-pane -pS -10000 | copy_to_clipboard'
+abbr --force -q cpy='tmux capture-pane -pS -10000% | copy_to_clipboard'  # Cursor after num lines.
 
 # Load API keys and other private configuration if available.
 test -f ~/.api_keys.zsh && source ~/.api_keys.zsh
