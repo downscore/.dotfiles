@@ -104,9 +104,11 @@ export LESS='-RIij10 --incsearch --mouse'
 if type batcat &>/dev/null; then
   # Use `batcat` as the default pager. Try it first to prevent problems with "bat" on linux.
   export PAGER='batcat --paging=always'
+  # Note: The -p option messes with --paging=always, but --style=plain does not.
   export MANPAGER="sh -c 'col -bx | batcat -l man --paging=always --style=plain'"
 elif type bat &>/dev/null; then
   export PAGER='bat --paging=always'  # Use `bat` as the default pager.
+  # Note: The -p option messes with --paging=always, but --style=plain does not.
   export MANPAGER="sh -c 'col -bx | bat -l man --paging=always --style=plain'"
 fi
 
