@@ -590,6 +590,10 @@
     "key": "ctrl+shift+cmd+u",
     "command": "editor.action.transformToUppercase"
   },
+  {
+    "key": "ctrl+shift+cmd+e",
+    "command": "editor.action.transformToUppercase"
+  },
   // Make all splits the same size with ctrl-alt-m.
   {
     "key": "ctrl+alt+m",
