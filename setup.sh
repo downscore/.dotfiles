@@ -28,12 +28,11 @@ create_symlink() {
     print_red "ERROR Exists and is symlinked to a different path"
     return 1
   fi
-  print_green "OK Successfully created symlink"
-  # if ln -s "$target" "$file"; then
-  #   print_green "OK Successfully created symlink"
-  # else
-  #   print_red "ERROR Failed to create symlink"
-  # fi
+  if ln -s "$target" "$file"; then
+    print_green "OK Successfully created symlink"
+  else
+    print_red "ERROR Failed to create symlink"
+  fi
 }
 
 local DF="$HOME/.dotfiles"
