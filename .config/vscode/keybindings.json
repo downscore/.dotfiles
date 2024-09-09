@@ -595,4 +595,14 @@
     "key": "ctrl+alt+m",
     "command": "workbench.action.evenEditorWidths"
   },
+  // Join lines with cmd-shift-j.
+  {
+    "key": "shift+cmd+j",
+    "command": "-workbench.action.search.toggleQueryDetails",
+    "when": "inSearchEditor || searchViewletFocus"
+  },
+  {
+    "key": "shift+cmd+j",
+    "command": "editor.action.joinLines"
+  },
 ]
