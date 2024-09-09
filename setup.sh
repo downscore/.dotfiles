@@ -42,6 +42,7 @@ local APP_SUPPORT="$HOME/Library/Application Support"
 
 create_symlink "$HOME/.zshrc" "$DF/.zshrc"
 create_symlink "$HOME/.zprofile" "$DF/.zprofile"
+create_symlink "$HOME/.zshenv" "$DF/.zshenv"
 create_symlink "$HOME/.p10k.zsh" "$DF/.p10k.zsh"
 create_symlink "$CFG/alacritty" "$DFCFG/alacritty"
 create_symlink "$CFG/bat" "$DFCFG/bat"
