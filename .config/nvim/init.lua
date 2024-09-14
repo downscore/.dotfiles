@@ -18,6 +18,10 @@ vim.opt.cursorline = true -- Highlight the line the cursor is on.
 vim.opt.scrolloff = 10 -- Minimum number of screen lines to keep above and below the cursor.
 vim.opt.colorcolumn = "101" -- Ruler just after line length limit.
 
+-- Configure the terminal window title.
+vim.opt.title = true
+vim.opt.titlestring = "%F - neovim"
+
 -- Set tabs to use 2 spaces.
 vim.opt.tabstop = 2
 vim.opt.softtabstop = 2
