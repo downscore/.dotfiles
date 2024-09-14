@@ -16,6 +16,7 @@ vim.opt.signcolumn = "auto:2-9" -- Make gutter autoresize and allow it to get wi
 vim.opt.inccommand = "split" -- Preview substitutions while typing.
 vim.opt.cursorline = true -- Highlight the line the cursor is on.
 vim.opt.scrolloff = 10 -- Minimum number of screen lines to keep above and below the cursor.
+vim.opt.colorcolumn = "101" -- Ruler just after line length limit.
 
 -- Set tabs to use 2 spaces.
 vim.opt.tabstop = 2
@@ -92,6 +93,51 @@ vim.api.nvim_set_keymap("n", "<leader>tr", ":set relativenumber!<CR>", {
   silent = true,
 })
 
+-- Functionality for implementing textflow.
+-- Copy the current mode and surrounding lines to the system clipboard.
+function CopyModeAndSurroundingLines()
+  local current_mode = vim.api.nvim_get_mode().mode
+  local cursor_line = vim.fn.line(".") -- 1-based
+  local cursor_col = vim.fn.col(".") -- 1-based
+  local cursor_line_length = vim.fn.col("$") - 1
+  local doc_lines = vim.fn.line("$")
+  local context_num_lines = 5 -- Returns this many lines before and after the cursor.
+
+  -- Get text before the cusor.
+  local line_before = math.max(1, cursor_line - context_num_lines)
+  ---@diagnostic disable-next-line: param-type-mismatch
+  local text_before = table.concat(vim.fn.getline(line_before, cursor_line), "\n")
+
+  -- Compute the cursor position in the text we will return.
+  -- Account for cusor position being 1-based.
+  local text_cursor_pos = #text_before - (cursor_line_length - cursor_col + 1)
+
+  -- Get text after the cursor.
+  local text_after = ""
+  if cursor_line < doc_lines then
+    local line_after = math.min(doc_lines, cursor_line + context_num_lines)
+    ---@diagnostic disable-next-line: param-type-mismatch
+    text_after = table.concat(vim.fn.getline(cursor_line + 1, line_after), "\n")
+  end
+
+  -- Combine mode and lines into a single string.
+  ---@diagnostic disable-next-line: param-type-mismatch
+  local result = current_mode .. "\n" .. text_cursor_pos .. "\n" .. text_before
+  if #text_after > 0 then
+    result = result .. "\n" .. text_after
+  end
+
+  -- Copy to system clipboard.
+  vim.fn.setreg("+", result)
+end
+-- Shortcut to copy the mode and surrounding lines to the clipboard.
+vim.api.nvim_set_keymap(
+  "n",
+  "<C-s>",
+  ":lua CopyModeAndSurroundingLines()<CR>",
+  { noremap = true, silent = true }
+)
+
 -- Highlight when yanking (copying) text.
 vim.api.nvim_create_autocmd("TextYankPost", {
   desc = "Highlight when yanking (copying) text",
@@ -129,6 +175,14 @@ require("lazy").setup({
 
   -- Visualize marks.
   { "chentoast/marks.nvim" },
+
+  -- Use custom character for colorcolumn.
+  {
+    "lukas-reineke/virt-column.nvim",
+    config = function()
+      require("virt-column").setup()
+    end,
+  },
 
   -- Git gutter.
   {
@@ -507,9 +561,10 @@ require("lazy").setup({
           --  This will auto-import if your LSP supports it.
           --  This will expand snippets if the LSP sent a snippet.
           ["<C-y>"] = cmp.mapping.confirm({ select = true }),
-          -- Tab or enter to accept completions.
+          -- Tab to accept completions.
           ["<Tab>"] = cmp.mapping.confirm({ select = true }),
-          ["<CR>"] = cmp.mapping.confirm({ select = true }),
+          -- Uncomment to use enter to accept completions.
+          -- ["<CR>"] = cmp.mapping.confirm({ select = true }),
 
           -- Manually trigger a completion from nvim-cmp.
           ["<C-Space>"] = cmp.mapping.complete({}),
