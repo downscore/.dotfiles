@@ -121,7 +121,6 @@ function CopyModeAndSurroundingLines()
   end
 
   -- Combine mode and lines into a single string.
-  ---@diagnostic disable-next-line: param-type-mismatch
   local result = current_mode .. "\n" .. text_cursor_pos .. "\n" .. text_before
   if #text_after > 0 then
     result = result .. "\n" .. text_after
