@@ -98,34 +98,79 @@ vim.api.nvim_set_keymap("n", "<leader>tr", ":set relativenumber!<CR>", {
 })
 
 -- Functionality for implementing textflow.
+-- Helper function for getting the cursor index in the text.
+function GetCursorIndex(text_before_length, cursor_line_length, cursor_col)
+  -- Account for cursor column being 1-based.
+  return text_before_length - (cursor_line_length - cursor_col + 1)
+end
 -- Copy the current mode and surrounding lines to the system clipboard.
-function CopyModeAndSurroundingLines()
-  local current_mode = vim.api.nvim_get_mode().mode
-  local cursor_line = vim.fn.line(".") -- 1-based
-  local cursor_col = vim.fn.col(".") -- 1-based
-  local cursor_line_length = vim.fn.col("$") - 1
+function CopyTextflowContext(current_mode)
+  -- Get the current selection. Outside of visual mode, we just use the cursor position as the start
+  -- and end of the selection.
+  local cursor_line_from
+  local cursor_line_to
+  local cursor_col_from
+  local cursor_col_to
+  local cursor_line_length_from
+  local cursor_line_length_to
+  if current_mode == "v" then
+    -- Get the visual selection range (1-based indices).
+    cursor_line_from = vim.fn.line("'<")
+    cursor_line_to = vim.fn.line("'>")
+    cursor_col_from = vim.fn.col("'<")
+    -- In insert mode, the cursor is before the character, but in visual mode the character is
+    -- included in the selection, so we need to add 1 here.
+    cursor_col_to = vim.fn.col("'>") + 1
+    -- Swap the start and end if the selection is backwards.
+    if
+      cursor_line_from > cursor_line_to
+      or (cursor_line_from == cursor_line_to and cursor_col_from > cursor_col_to)
+    then
+      cursor_line_from, cursor_line_to = cursor_line_to, cursor_line_from
+      cursor_col_from, cursor_col_to = cursor_col_to, cursor_col_from
+    end
+    cursor_line_length_from = #vim.fn.getline(cursor_line_from)
+    cursor_line_length_to = #vim.fn.getline(cursor_line_to)
+  else
+    cursor_line_from = vim.fn.line(".") -- 1-based.
+    cursor_line_to = cursor_line_from
+    cursor_col_from = vim.fn.col(".") -- 1-based.
+    cursor_col_to = cursor_col_from
+    cursor_line_length_from = vim.fn.col("$") - 1
+    cursor_line_length_to = cursor_line_length_from
+  end
+
   local doc_lines = vim.fn.line("$")
   local context_num_lines = 5 -- Returns this many lines before and after the cursor.
 
-  -- Get text before the cusor.
-  local line_before = math.max(1, cursor_line - context_num_lines)
+  -- Get text before the beginning and end of the selection.
+  local line_before = math.max(1, cursor_line_from - context_num_lines)
   ---@diagnostic disable-next-line: param-type-mismatch
-  local text_before = table.concat(vim.fn.getline(line_before, cursor_line), "\n")
+  local text_before_from = table.concat(vim.fn.getline(line_before, cursor_line_from), "\n")
+  ---@diagnostic disable-next-line: param-type-mismatch
+  local text_before_to = table.concat(vim.fn.getline(line_before, cursor_line_to), "\n")
 
-  -- Compute the cursor position in the text we will return.
-  -- Account for cusor position being 1-based.
-  local text_cursor_pos = #text_before - (cursor_line_length - cursor_col + 1)
+  -- Compute the cursor positions in the text we will return.
+  local cursor_index_from =
+    GetCursorIndex(#text_before_from, cursor_line_length_from, cursor_col_from)
+  local cursor_index_to = GetCursorIndex(#text_before_to, cursor_line_length_to, cursor_col_to)
 
   -- Get text after the cursor.
   local text_after = ""
-  if cursor_line < doc_lines then
-    local line_after = math.min(doc_lines, cursor_line + context_num_lines)
+  if cursor_line_to < doc_lines then
+    local line_after = math.min(doc_lines, cursor_line_to + context_num_lines)
     ---@diagnostic disable-next-line: param-type-mismatch
-    text_after = table.concat(vim.fn.getline(cursor_line + 1, line_after), "\n")
+    text_after = table.concat(vim.fn.getline(cursor_line_to + 1, line_after), "\n")
   end
 
   -- Combine mode and lines into a single string.
-  local result = current_mode .. "\n" .. text_cursor_pos .. "\n" .. text_before
+  local result = current_mode
+    .. "\n"
+    .. cursor_index_from
+    .. ","
+    .. cursor_index_to
+    .. "\n"
+    .. text_before_to
   if #text_after > 0 then
     result = result .. "\n" .. text_after
   end
@@ -133,11 +178,23 @@ function CopyModeAndSurroundingLines()
   -- Copy to system clipboard.
   vim.fn.setreg("+", result)
 end
--- Shortcut to copy the mode and surrounding lines to the clipboard.
+-- Shortcuts in different modes to copy the mode and surrounding lines to the clipboard.
 vim.api.nvim_set_keymap(
   "n",
   "<C-s>",
-  ":lua CopyModeAndSurroundingLines()<CR>",
+  ':lua CopyTextflowContext("n")<CR>',
+  { noremap = true, silent = true }
+)
+vim.api.nvim_set_keymap(
+  "v",
+  "<C-s>",
+  ':<C-u>lua CopyTextflowContext("v")<CR>gv',
+  { noremap = true, silent = true }
+)
+vim.api.nvim_set_keymap(
+  "i",
+  "<C-s>",
+  '<C-o>:lua CopyTextflowContext("i")<CR>',
   { noremap = true, silent = true }
 )
 
@@ -696,7 +753,7 @@ vim.cmd.colorscheme("catppuccin")
 -- Configure marks plugin.
 require("marks").setup({
   default_mappings = true, -- Default keybindings.
-  -- builtin_marks = { ".", "<", ">", "^" },  -- Uncomment to show built-in marks.
+  -- builtin_marks = { ".", "<", ">", "^" }, -- Uncomment to show built-in marks.
   cyclic = true, -- Movements cycle back to beginning/end of buffer.
   sign_priority = { lower = 10, upper = 10, builtin = 10, bookmark = 10 },
 })
