@@ -167,7 +167,7 @@ function CopyTextflowContext(current_mode)
   local result = current_mode
     .. "\n"
     .. cursor_index_from
-    .. ","
+    .. "\n"
     .. cursor_index_to
     .. "\n"
     .. text_before_to
