@@ -250,8 +250,8 @@ require("lazy").setup({
     opts = {
       sign_priority = 6,
       signs = {
-        change = { text = "󰜛" },
-        changedelete = { text = "󰜛" },
+        change = { text = "▋" },
+        changedelete = { text = "▋" },
       },
       current_line_blame = true,
       current_line_blame_opts = {
