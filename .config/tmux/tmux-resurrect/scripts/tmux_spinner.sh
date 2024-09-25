@@ -14,7 +14,7 @@
 
 MESSAGE="$1"
 END_MESSAGE="$2"
-SPIN='-\|/'
+SPIN='⠉⠛⠿⣿'
 
 trap "tmux display-message '$END_MESSAGE'; exit" SIGINT SIGTERM
 
