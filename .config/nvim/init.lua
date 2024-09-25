@@ -11,8 +11,7 @@ vim.opt.updatetime = 250 -- Decrease update time.
 vim.opt.timeoutlen = 500 -- Decrease mapped sequence wait time. Display which-key popup sooner.
 vim.opt.splitright = true -- Configure how new splits should be opened.
 vim.opt.splitbelow = true
-vim.opt.signcolumn = "yes" -- Enable gutter ("sign column").
-vim.opt.signcolumn = "auto:2-9" -- Make gutter autoresize and allow it to get wider.
+vim.opt.signcolumn = "auto:1-4" -- Make gutter autoresize and allow it to get wider.
 vim.opt.inccommand = "split" -- Preview substitutions while typing.
 vim.opt.cursorline = true -- Highlight the line the cursor is on.
 vim.opt.scrolloff = 10 -- Minimum number of screen lines to keep above and below the cursor.
@@ -91,7 +90,7 @@ vim.keymap.set("n", "<C-x>", ":close<CR>", { noremap = true, desc = "Close the c
 vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
 
 -- Allow toggling relative line numbers.
-vim.opt.relativenumber = true -- Enable relative line numbers by default.
+vim.opt.relativenumber = false -- Default relative line numbers setting.
 vim.api.nvim_set_keymap("n", "<leader>tr", ":set relativenumber!<CR>", {
   noremap = true,
   silent = true,
