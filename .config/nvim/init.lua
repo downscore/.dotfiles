@@ -101,6 +101,22 @@ vim.api.nvim_set_keymap("n", "<leader>tr", ":set relativenumber!<CR>", {
   silent = true,
 })
 
+-- Add keybinding for toggling copilot.
+local copilot_enabled = true
+vim.api.nvim_create_user_command("CopilotToggle", function()
+	if copilot_enabled then
+		vim.cmd("Copilot disable")
+	else
+		vim.cmd("Copilot enable")
+	end
+	copilot_enabled = not copilot_enabled
+  print("Copilot Enabled: " .. tostring(copilot_enabled))
+end, { nargs = 0 })
+vim.keymap.set("n", "<leader>tc", ":CopilotToggle<CR>", {noremap = true, silent = true })
+
+-- Completion shortcuts.
+vim.keymap.set("n", "<leader>cp", ":Copilot panel<CR>", {noremap = true, silent = true })
+
 -- Functionality for getting the editor context.
 -- Helper function for getting the cursor index in the text.
 function GetCursorIndex(text_before_length, cursor_line_length, cursor_col)
@@ -326,7 +342,7 @@ local main_plugins = {
         })
       end, { desc = "[S]earch [/] in Open Files" })
 
-      -- Shortcut for searching your Neovim configuration files
+      -- Shortcut for searching Neovim configuration files.
       vim.keymap.set("n", "<leader>sn", function()
         builtin.find_files({ cwd = vim.fn.stdpath("config") })
       end, { desc = "[S]earch [N]eovim files" })
@@ -364,7 +380,7 @@ local main_plugins = {
         width = vim.o.columns - 4,
       })
 
-      vim.keymap.set("n", "<leader>ff", "<Cmd>Lf<CR>")
+      vim.keymap.set("n", "<leader>l", "<Cmd>Lf<CR>")
       vim.keymap.set("n", "<M-o>", "<Cmd>Lf<CR>")
     end,
   },
