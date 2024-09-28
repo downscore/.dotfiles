@@ -85,6 +85,15 @@ vim.keymap.set("n", "<C-M-l>", ":vsplit<CR>", { noremap = true, desc = "Open a v
 vim.keymap.set("n", "<C-M-j>", ":split<CR>", { noremap = true, desc = "Open a horizontal split" })
 vim.keymap.set("n", "<C-x>", ":close<CR>", { noremap = true, desc = "Close the current split" })
 
+-- Navigate by word using option-left/right.
+vim.keymap.set("n", "<M-Left>", "b", { noremap = true, silent = true })
+vim.keymap.set("n", "<M-Right>", "w", { noremap = true, silent = true })
+vim.keymap.set("i", "<M-Left>", "<C-o>b", { noremap = true, silent = true })
+vim.keymap.set("i", "<M-Right>", "<C-o>w", { noremap = true, silent = true })
+-- By default, option-up/down change from insert to normal mode. Make them stay in insert mode.
+vim.keymap.set("i", "<M-Up>", "<C-o>k", { noremap = true, silent = true })
+vim.keymap.set("i", "<M-Down>", "<C-o>j", { noremap = true, silent = true })
+
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- to discover. You normally need to press <C-\><C-n>.
 vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
@@ -96,14 +105,14 @@ vim.api.nvim_set_keymap("n", "<leader>tr", ":set relativenumber!<CR>", {
   silent = true,
 })
 
--- Functionality for implementing textflow.
+-- Functionality for getting the editor context.
 -- Helper function for getting the cursor index in the text.
 function GetCursorIndex(text_before_length, cursor_line_length, cursor_col)
   -- Account for cursor column being 1-based.
   return text_before_length - (cursor_line_length - cursor_col + 1)
 end
 -- Copy the current mode and surrounding lines to the system clipboard.
-function CopyTextflowContext(current_mode)
+function CopyEditorContext(current_mode)
   -- Get the current selection. Outside of visual mode, we just use the cursor position as the start
   -- and end of the selection.
   local cursor_line_from
@@ -181,19 +190,19 @@ end
 vim.api.nvim_set_keymap(
   "n",
   "<C-s>",
-  ':lua CopyTextflowContext("n")<CR>',
+  ':lua CopyEditorContext("n")<CR>',
   { noremap = true, silent = true }
 )
 vim.api.nvim_set_keymap(
   "v",
   "<C-s>",
-  ':<C-u>lua CopyTextflowContext("v")<CR>gv',
+  ':<C-u>lua CopyEditorContext("v")<CR>gv',
   { noremap = true, silent = true }
 )
 vim.api.nvim_set_keymap(
   "i",
   "<C-s>",
-  '<C-o>:lua CopyTextflowContext("i")<CR>',
+  '<C-o>:lua CopyEditorContext("i")<CR>',
   { noremap = true, silent = true }
 )
 
@@ -224,8 +233,8 @@ if not vim.loop.fs_stat(lazypath) then
 end ---@diagnostic disable-next-line: undefined-field
 vim.opt.rtp:prepend(lazypath)
 
--- Load `lazy.nvim` and install plugins.
-require("lazy").setup({
+-- Configure lazy.nvim plugins.
+local main_plugins = {
   -- Allows seamless navigation between tmux and nvim panes.
   { "christoomey/vim-tmux-navigator" },
 
@@ -593,9 +602,10 @@ require("lazy").setup({
       "L3MON4D3/LuaSnip",
       "saadparwaiz1/cmp_luasnip",
 
-      -- Adds other completion capabilities.
+      -- Other completion capabilities.
       "hrsh7th/cmp-nvim-lsp",
-      "hrsh7th/cmp-path",
+      "hrsh7th/cmp-path", -- Source for file paths.
+      "hrsh7th/cmp-buffer", -- Source for text in the current buffer.
     },
     config = function()
       local cmp = require("cmp")
@@ -609,24 +619,14 @@ require("lazy").setup({
           end,
         },
         completion = { completeopt = "menu,menuone,noinsert" },
-        mapping = cmp.mapping.preset.insert({
-          -- Select the next/previous items.
+        mapping = {
           ["<C-n>"] = cmp.mapping.select_next_item(),
           ["<C-p>"] = cmp.mapping.select_prev_item(),
-          -- Scroll the documentation window back/forward.
-          ["<C-b>"] = cmp.mapping.scroll_docs(-4),
+          ["<C-b>"] = cmp.mapping.scroll_docs(-4), -- Scroll the documentation window.
           ["<C-f>"] = cmp.mapping.scroll_docs(4),
-          -- Accept ([y]es) the completion.
-          --  This will auto-import if your LSP supports it.
-          --  This will expand snippets if the LSP sent a snippet.
           ["<C-y>"] = cmp.mapping.confirm({ select = true }),
-          -- Tab to accept completions.
-          ["<Tab>"] = cmp.mapping.confirm({ select = true }),
-          -- Uncomment to use enter to accept completions.
-          -- ["<CR>"] = cmp.mapping.confirm({ select = true }),
-
-          -- Manually trigger a completion from nvim-cmp.
-          ["<C-Space>"] = cmp.mapping.complete({}),
+          ["<C-Space>"] = cmp.mapping.complete({}), -- Manually trigger a completion from nvim-cmp.
+          ["<C-e>"] = cmp.mapping.abort(), -- Abort completion.
 
           -- Move to the right and left of snippet expansions.
           ["<C-l>"] = cmp.mapping(function()
@@ -639,7 +639,7 @@ require("lazy").setup({
               luasnip.jump(-1)
             end
           end, { "i", "s" }),
-        }),
+        },
         sources = {
           {
             name = "lazydev",
@@ -649,6 +649,7 @@ require("lazy").setup({
           { name = "nvim_lsp" },
           { name = "luasnip" },
           { name = "path" },
+          { name = "buffer" },
         },
       })
 
@@ -702,7 +703,25 @@ require("lazy").setup({
       indent = { enable = true, disable = { "ruby" } },
     },
   },
-}) -- require('lazy').setup()
+}
+
+-- Load private plugin configuration if available.
+local private_plugins = {}
+local private_init = os.getenv("HOME") .. "/.private_init.lua"
+local function file_exists(file)
+  local f = io.open(file, "r")
+  if f then
+    f:close()
+  end
+  return f ~= nil
+end
+if file_exists(private_init) then
+  private_plugins = dofile(private_init)
+end
+
+-- Load the plugins.
+local plugins = vim.tbl_extend("force", main_plugins, private_plugins)
+require("lazy").setup(plugins)
 
 -- Load the Catppuccin theme.
 require("catppuccin").setup({
