@@ -16,6 +16,7 @@ vim.opt.inccommand = "split" -- Preview substitutions while typing.
 vim.opt.cursorline = true -- Highlight the line the cursor is on.
 vim.opt.scrolloff = 10 -- Minimum number of screen lines to keep above and below the cursor.
 vim.opt.colorcolumn = "101" -- Ruler just after line length limit.
+vim.opt.wrap = false -- Disable line wrapping.
 
 -- Configure the terminal window title.
 vim.opt.title = true
@@ -27,17 +28,12 @@ vim.opt.softtabstop = 2
 vim.opt.shiftwidth = 2
 vim.opt.expandtab = true
 
--- Use system clipboard.
-vim.opt.clipboard = "unnamedplus"
--- Prevent d* commands from modifying the system clipboard by remapping them to "_d*.
-vim.api.nvim_set_keymap("n", "dd", '"_dd', { noremap = true, silent = true })
-vim.api.nvim_set_keymap("n", "d$", '"_d$', { noremap = true, silent = true })
-vim.api.nvim_set_keymap("n", "d0", '"_d0', { noremap = true, silent = true })
-vim.api.nvim_set_keymap("n", "d^", '"_d^', { noremap = true, silent = true })
-vim.api.nvim_set_keymap("n", "dgg", '"_dgg', { noremap = true, silent = true })
-vim.api.nvim_set_keymap("n", "dG", '"_dG', { noremap = true, silent = true })
--- Prevent x from modifying the system clipboard by remapping it to "_x.
-vim.api.nvim_set_keymap("n", "x", '"_x', { noremap = true, silent = true })
+-- Keybindings for interacting with the system clipboard.
+vim.keymap.set("n", "<leader>y", '"+y', { noremap = true, silent = true })
+vim.keymap.set({ "v", "x" }, "<leader>y", '"+y', { noremap = true, silent = true })
+vim.keymap.set({ "n", "v", "x" }, "<leader>yy", '"+yy', { noremap = true, silent = true })
+vim.keymap.set({ "n", "v", "x" }, "<leader>Y", '"+yy', { noremap = true, silent = true })
+vim.keymap.set({ "n", "v", "x" }, "<leader>p", '"+p', { noremap = true, silent = true })
 
 -- Search options.
 vim.opt.ignorecase = true
@@ -764,6 +760,15 @@ require("catppuccin").setup({
     nvimtree = true,
     cmp = true,
     treesitter = true,
+    native_lsp = {
+      enabled = true,
+      underlines = {
+        errors = { "undercurl" },
+        hints = { "undercurl" },
+        warnings = { "undercurl" },
+        information = { "undercurl" },
+      },
+    },
   },
 })
 vim.cmd.colorscheme("catppuccin")
