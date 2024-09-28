@@ -609,4 +609,13 @@
     "key": "shift+cmd+j",
     "command": "editor.action.joinLines"
   },
+  // Reset zoom with cmd-0.
+  {
+    "key": "cmd+0",
+    "command": "-workbench.action.focusSideBar"
+  },
+  {
+    "key": "cmd+0",
+    "command": "workbench.action.zoomReset"
+  },
 ]
