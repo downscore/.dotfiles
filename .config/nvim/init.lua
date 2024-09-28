@@ -715,8 +715,14 @@ if file_exists(private_init) then
   private_plugins = dofile(private_init)
 end
 
--- Load the plugins.
-local plugins = vim.tbl_extend("force", main_plugins, private_plugins)
+-- Load all plugins.
+function TableConcat(t1,t2)
+    for i=1,#t2 do
+        t1[#t1+1] = t2[i]
+    end
+    return t1
+end
+local plugins = TableConcat(main_plugins, private_plugins)
 require("lazy").setup(plugins)
 
 -- Load the Catppuccin theme.
