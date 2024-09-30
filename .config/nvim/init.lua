@@ -17,6 +17,7 @@ vim.opt.cursorline = true -- Highlight the line the cursor is on.
 vim.opt.scrolloff = 10 -- Minimum number of screen lines to keep above and below the cursor.
 vim.opt.colorcolumn = "101" -- Ruler just after line length limit.
 vim.opt.wrap = false -- Disable line wrapping.
+vim.opt.textwidth = 100 -- Set the maximum text width.
 
 -- Configure the terminal window title.
 vim.opt.title = true
@@ -104,18 +105,18 @@ vim.api.nvim_set_keymap("n", "<leader>tr", ":set relativenumber!<CR>", {
 -- Add keybinding for toggling copilot.
 local copilot_enabled = true
 vim.api.nvim_create_user_command("CopilotToggle", function()
-	if copilot_enabled then
-		vim.cmd("Copilot disable")
-	else
-		vim.cmd("Copilot enable")
-	end
-	copilot_enabled = not copilot_enabled
+  if copilot_enabled then
+    vim.cmd("Copilot disable")
+  else
+    vim.cmd("Copilot enable")
+  end
+  copilot_enabled = not copilot_enabled
   print("Copilot Enabled: " .. tostring(copilot_enabled))
 end, { nargs = 0 })
-vim.keymap.set("n", "<leader>tc", ":CopilotToggle<CR>", {noremap = true, silent = true })
+vim.keymap.set("n", "<leader>tc", ":CopilotToggle<CR>", { noremap = true, silent = true })
 
 -- Completion shortcuts.
-vim.keymap.set("n", "<leader>cp", ":Copilot panel<CR>", {noremap = true, silent = true })
+vim.keymap.set("n", "<leader>cp", ":Copilot panel<CR>", { noremap = true, silent = true })
 
 -- Functionality for getting the editor context.
 -- Helper function for getting the cursor index in the text.
@@ -732,11 +733,11 @@ if file_exists(private_init) then
 end
 
 -- Load all plugins.
-function TableConcat(t1,t2)
-    for i=1,#t2 do
-        t1[#t1+1] = t2[i]
-    end
-    return t1
+function TableConcat(t1, t2)
+  for i = 1, #t2 do
+    t1[#t1 + 1] = t2[i]
+  end
+  return t1
 end
 local plugins = TableConcat(main_plugins, private_plugins)
 require("lazy").setup(plugins)
