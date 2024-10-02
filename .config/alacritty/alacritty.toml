@@ -25,6 +25,7 @@ bindings = [
   { key = "F", mods = "Command", chars = "\u0002[/" },  # cmd-f searches in tmux (^b [/).
   { key = "G", mods = "Command", chars = "\u0002g" },  # cmd-g opens lazygit (^b g).
   { key = "P", mods = "Command", chars = "\u0014" },  # cmd-p opens file search (^t).
+  { key = "S", mods = "Command", chars = "\u001b:w\n"},  # cmd-s saves in vim (escape :w enter).
   { key = "T", mods = "Command", chars = "\u0002c"},  # cmd-u opens new window (^b c).
   { key = "U", mods = "Command", chars = "\u0002u"},  # cmd-u opens url search window (^b u).
   { key = "W", mods = "Command", chars = "\u0002x"},  # cmd-w closes the current window (^b x).

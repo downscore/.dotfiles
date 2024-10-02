@@ -29,19 +29,26 @@ vim.opt.softtabstop = 2
 vim.opt.shiftwidth = 2
 vim.opt.expandtab = true
 
+-- Helper function for setting up keybindings.
+function KB(mode, key, action, desc, noremap, silent)
+  noremap = noremap or true
+  silent = silent or true
+  desc = desc or ""
+  vim.keymap.set(mode, key, action, { noremap = noremap, silent = silent, desc = desc })
+end
+
 -- Keybindings for interacting with the system clipboard.
-vim.keymap.set("n", "<leader>y", '"+y', { noremap = true, silent = true })
-vim.keymap.set({ "v", "x" }, "<leader>y", '"+y', { noremap = true, silent = true })
-vim.keymap.set({ "n", "v", "x" }, "<leader>yy", '"+yy', { noremap = true, silent = true })
-vim.keymap.set({ "n", "v", "x" }, "<leader>Y", '"+yy', { noremap = true, silent = true })
-vim.keymap.set({ "n", "v", "x" }, "<leader>p", '"+p', { noremap = true, silent = true })
+KB({ "n", "v", "x" }, "<leader>y", '"+y', "[Y]ank to system clipboard")
+KB({ "n", "v", "x" }, "<leader>yy", '"+yy', "[Y]ank line to system clipboard")
+KB({ "n", "v", "x" }, "<leader>Y", '"+Y', "[Y]ank line to system clipboard")
+KB({ "n", "v", "x" }, "<leader>p", '"+p', "[P]aste from system clipboard")
 
 -- Search options.
 vim.opt.ignorecase = true
 vim.opt.smartcase = true -- Smart-case searching (ignore case if lowercase).
 vim.opt.incsearch = true -- Incremental searching.
 vim.opt.hlsearch = true -- Highlight search results.
-vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>") -- Clear search highlights with <Esc>.
+KB("n", "<Esc>", "<cmd>nohlsearch<CR>", "[Esc] clears search highlights")
 
 -- Sets how neovim will display certain whitespace characters in the editor.
 vim.opt.list = true
@@ -51,56 +58,42 @@ vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
 -- vim.cmd('colorscheme retrobox')
 
 -- Diagnostic keymaps.
-vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, {
-  desc = "Go to previous [D]iagnostic message",
-})
-vim.keymap.set("n", "]d", vim.diagnostic.goto_next, {
-  desc = "Go to next [D]iagnostic message",
-})
-vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, {
-  desc = "Show diagnostic [E]rror messages",
-})
-vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, {
-  desc = "Open diagnostic [Q]uickfix list",
-})
+KB("n", "[d", "<cmd>lua vim.diagnostic.goto_prev()<CR>", "[D]iagnostic: Go to previous")
+KB("n", "]d", "<cmd>lua vim.diagnostic.goto_next()<CR>", "[D]iagnostic: Go to next")
+KB("n", "<leader>e", "<cmd>lua vim.diagnostic.open_float()<CR>", "Diagnostic: [E]rrors")
+KB("n", "<leader>q", "<cmd>lua vim.diagnostic.setloclist()<CR>", "Diagnostic: [Q]uickfix list")
 
 -- Split keymaps.
 -- Disable the default key bindings of vim-tmux-navigator so they don't overwrite our keybindings.
 vim.g.tmux_navigator_no_mappings = 1
-vim.api.nvim_set_keymap("n", "<C-h>", ":TmuxNavigateLeft<cr>", { noremap = true, silent = true })
-vim.api.nvim_set_keymap("n", "<C-j>", ":TmuxNavigateDown<cr>", { noremap = true, silent = true })
-vim.api.nvim_set_keymap("n", "<C-k>", ":TmuxNavigateUp<cr>", { noremap = true, silent = true })
-vim.api.nvim_set_keymap("n", "<C-l>", ":TmuxNavigateRight<cr>", { noremap = true, silent = true })
-vim.api.nvim_set_keymap("n", "<C-p>", ":TmuxNavigatePrevious<cr>", {
-  noremap = true,
-  silent = true,
-})
-vim.keymap.set("n", "<C-BSlash>", ":vsplit<CR>", { noremap = true, desc = "Open a vertical split" })
+KB("n", "<C-h>", "<cmd>TmuxNavigateLeft<CR>", "Go to left split")
+KB("n", "<C-j>", "<cmd>TmuxNavigateDown<CR>", "Go to bottom split")
+KB("n", "<C-k>", "<cmd>TmuxNavigateUp<CR>", "Go to top split")
+KB("n", "<C-l>", "<cmd>TmuxNavigateRight<CR>", "Go to right split")
+KB("n", "<C-p>", "<cmd>TmuxNavigatePrevious<CR>", "Go to previous split")
+KB("n", "<C-BSlash>", "<cmd>vsplit<CR>", "Open a vertical split")
 -- The following keymap allows using - without pressing shift.
-vim.keymap.set("n", "<C-_>", ":split<CR>", { noremap = true, desc = "Open a horizontal split" })
-vim.keymap.set("n", "<C-M-l>", ":vsplit<CR>", { noremap = true, desc = "Open a vertical split" })
-vim.keymap.set("n", "<C-M-j>", ":split<CR>", { noremap = true, desc = "Open a horizontal split" })
-vim.keymap.set("n", "<C-x>", ":close<CR>", { noremap = true, desc = "Close the current split" })
+KB("n", "<C-_>", "<cmd>split<CR>", "Open a horizontal split")
+KB("n", "<C-M-l>", "<cmd>vsplit<CR>", "Open a vertical split")
+KB("n", "<C-M-j>", "<cmd>split<CR>", "Open a horizontal split")
+KB("n", "<C-x>", "<cmd>close<CR>", "Close the current split")
 
 -- Navigate by word using option-left/right.
-vim.keymap.set("n", "<M-Left>", "b", { noremap = true, silent = true })
-vim.keymap.set("n", "<M-Right>", "w", { noremap = true, silent = true })
-vim.keymap.set("i", "<M-Left>", "<C-o>b", { noremap = true, silent = true })
-vim.keymap.set("i", "<M-Right>", "<C-o>w", { noremap = true, silent = true })
+KB("n", "<M-Left>", "b", "Go to left one word")
+KB("n", "<M-Right>", "w", "Go to right one word")
+KB("i", "<M-Left>", "<C-o>b", "Go to left one word in insert mode")
+KB("i", "<M-Right>", "<C-o>w", "Go to right one word in insert mode")
 -- By default, option-up/down change from insert to normal mode. Make them stay in insert mode.
-vim.keymap.set("i", "<M-Up>", "<C-o>k", { noremap = true, silent = true })
-vim.keymap.set("i", "<M-Down>", "<C-o>j", { noremap = true, silent = true })
+KB("i", "<M-Up>", "<Up>", "Move up in insert mode")
+KB("i", "<M-Down>", "<Down>", "Move down in insert mode")
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- to discover. You normally need to press <C-\><C-n>.
-vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
+KB("t", "<Esc><Esc>", "<C-\\><C-n>", "Exit terminal mode")
 
 -- Allow toggling relative line numbers.
 vim.opt.relativenumber = false -- Default relative line numbers setting.
-vim.api.nvim_set_keymap("n", "<leader>tr", ":set relativenumber!<CR>", {
-  noremap = true,
-  silent = true,
-})
+KB("n", "<leader>tr", ":set relativenumber!<CR>", "[T]oggle [R]elative line numbers")
 
 -- Add keybinding for toggling copilot.
 local copilot_enabled = true
@@ -113,10 +106,10 @@ vim.api.nvim_create_user_command("CopilotToggle", function()
   copilot_enabled = not copilot_enabled
   print("Copilot Enabled: " .. tostring(copilot_enabled))
 end, { nargs = 0 })
-vim.keymap.set("n", "<leader>tc", ":CopilotToggle<CR>", { noremap = true, silent = true })
+KB("n", "<leader>tc", ":CopilotToggle<CR>", "[T]oggle [C]opilot")
 
 -- Completion shortcuts.
-vim.keymap.set("n", "<leader>cp", ":Copilot panel<CR>", { noremap = true, silent = true })
+KB("n", "<leader>cp", ":Copilot panel<CR>", "[C]opilot [P]anel")
 
 -- Functionality for getting the editor context.
 -- Helper function for getting the cursor index in the text.
@@ -200,24 +193,9 @@ function CopyEditorContext(current_mode)
   vim.fn.setreg("+", result)
 end
 -- Shortcuts in different modes to copy the mode and surrounding lines to the clipboard.
-vim.api.nvim_set_keymap(
-  "n",
-  "<C-s>",
-  ':lua CopyEditorContext("n")<CR>',
-  { noremap = true, silent = true }
-)
-vim.api.nvim_set_keymap(
-  "v",
-  "<C-s>",
-  ':<C-u>lua CopyEditorContext("v")<CR>gv',
-  { noremap = true, silent = true }
-)
-vim.api.nvim_set_keymap(
-  "i",
-  "<C-s>",
-  '<C-o>:lua CopyEditorContext("i")<CR>',
-  { noremap = true, silent = true }
-)
+KB("n", "<C-s>", ':lua CopyEditorContext("n")<CR>', "Copy editor context to clipboard")
+KB("v", "<C-s>", ':<C-u>lua CopyEditorContext("v")<CR>gv', "Copy editor context to clipboard")
+KB("i", "<C-s>", '<C-o>:lua CopyEditorContext("i")<CR>', "Copy editor context to clipboard")
 
 -- Highlight when yanking (copying) text.
 vim.api.nvim_create_autocmd("TextYankPost", {
@@ -256,6 +234,9 @@ local main_plugins = {
 
   -- Visualize marks.
   { "chentoast/marks.nvim" },
+
+  -- Show keymaps.
+  { "folke/which-key.nvim", event = "VeryLazy" },
 
   -- Use custom character for colorcolumn.
   {
@@ -316,20 +297,16 @@ local main_plugins = {
 
       -- See `:help telescope.builtin`
       local builtin = require("telescope.builtin")
-      vim.keymap.set("n", "<leader>sh", builtin.help_tags, { desc = "[S]earch [H]elp" })
-      vim.keymap.set("n", "<leader>sk", builtin.keymaps, { desc = "[S]earch [K]eymaps" })
-      vim.keymap.set("n", "<leader>sf", builtin.find_files, { desc = "[S]earch [F]iles" })
-      vim.keymap.set("n", "<leader>ss", builtin.builtin, { desc = "[S]earch [S]elect Telescope" })
-      vim.keymap.set("n", "<leader>sw", builtin.grep_string, { desc = "[S]earch current [W]ord" })
-      vim.keymap.set("n", "<leader>sg", builtin.live_grep, { desc = "[S]earch by [G]rep" })
-      vim.keymap.set("n", "<leader>sd", builtin.diagnostics, { desc = "[S]earch [D]iagnostics" })
-      vim.keymap.set("n", "<leader>sr", builtin.resume, { desc = "[S]earch [R]esume" })
-      vim.keymap.set("n", "<leader>s.", builtin.oldfiles, {
-        desc = '[S]earch Recent Files ("." for repeat)',
-      })
-      vim.keymap.set("n", "<leader><leader>", builtin.buffers, {
-        desc = "[ ] Find existing buffers",
-      })
+      KB("n", "<leader>sh", builtin.help_tags, "[S]earch [H]elp")
+      KB("n", "<leader>sk", builtin.keymaps, "[S]earch [K]eymaps")
+      KB("n", "<leader>sf", builtin.find_files, "[S]earch [F]iles")
+      KB("n", "<leader>ss", builtin.builtin, "[S]earch [S]elect Telescope")
+      KB("n", "<leader>sw", builtin.grep_string, "[S]earch current [W]ord")
+      KB("n", "<leader>sg", builtin.live_grep, "[S]earch by [G]rep")
+      KB("n", "<leader>sd", builtin.diagnostics, "[S]earch [D]iagnostics")
+      KB("n", "<leader>sr", builtin.resume, "[S]earch [R]esume")
+      KB("n", "<leader>s.", builtin.oldfiles, '[S]earch Recent Files ("." for repeat)')
+      KB("n", "<leader><leader>", builtin.buffers, { desc = "[ ] Find existing buffers" })
       vim.keymap.set("n", "<leader>/", function()
         builtin.current_buffer_fuzzy_find(require("telescope.themes").get_dropdown({
           winblend = 10,
@@ -381,8 +358,8 @@ local main_plugins = {
         width = vim.o.columns - 4,
       })
 
-      vim.keymap.set("n", "<leader>l", "<Cmd>Lf<CR>")
-      vim.keymap.set("n", "<M-o>", "<Cmd>Lf<CR>")
+      KB("n", "<leader>l", "<Cmd>Lf<CR>", "Integrated [L]f")
+      KB("n", "<M-o>", "<Cmd>Lf<CR>", "Integrated Lf")
     end,
   },
 
@@ -681,7 +658,12 @@ local main_plugins = {
           print("Autocomplete disabled")
         end
       end
-      vim.keymap.set("n", "<leader>ta", toggle_autocomplete, { noremap = true, silent = true })
+      vim.keymap.set(
+        "n",
+        "<leader>ta",
+        toggle_autocomplete,
+        { noremap = true, silent = true, desc = "[T]oggle [A]utocomplete" }
+      )
     end,
   },
 
