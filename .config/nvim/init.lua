@@ -246,6 +246,16 @@ local main_plugins = {
     end,
   },
 
+  -- Visible indentation lines.
+  {
+    "lukas-reineke/indent-blankline.nvim",
+    main = "ibl",
+    opts = {
+      indent = { char = "▏" },
+      scope = { enabled = false },
+    },
+  },
+
   -- Git gutter.
   {
     "lewis6991/gitsigns.nvim",
@@ -306,7 +316,7 @@ local main_plugins = {
       KB("n", "<leader>sd", builtin.diagnostics, "[S]earch [D]iagnostics")
       KB("n", "<leader>sr", builtin.resume, "[S]earch [R]esume")
       KB("n", "<leader>s.", builtin.oldfiles, '[S]earch Recent Files ("." for repeat)')
-      KB("n", "<leader><leader>", builtin.buffers, { desc = "[ ] Find existing buffers" })
+      KB("n", "<leader><leader>", builtin.buffers, "[ ] Find existing buffers")
       vim.keymap.set("n", "<leader>/", function()
         builtin.current_buffer_fuzzy_find(require("telescope.themes").get_dropdown({
           winblend = 10,
@@ -489,6 +499,13 @@ local main_plugins = {
           end
         end,
       })
+
+      -- Change the Diagnostic symbols.
+      local diagnostic_signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
+      for type, icon in pairs(diagnostic_signs) do
+        local hl = "DiagnosticSign" .. type
+        vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
+      end
 
       -- LSP servers and clients are able to communicate to each other what features they support.
       -- Create new capabilities with nvim cmp, and then broadcast that to the servers.
