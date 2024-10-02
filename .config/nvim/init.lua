@@ -74,8 +74,6 @@ KB("n", "<C-p>", "<cmd>TmuxNavigatePrevious<CR>", "Go to previous split")
 KB("n", "<C-BSlash>", "<cmd>vsplit<CR>", "Open a vertical split")
 -- The following keymap allows using - without pressing shift.
 KB("n", "<C-_>", "<cmd>split<CR>", "Open a horizontal split")
-KB("n", "<C-M-l>", "<cmd>vsplit<CR>", "Open a vertical split")
-KB("n", "<C-M-j>", "<cmd>split<CR>", "Open a horizontal split")
 KB("n", "<C-x>", "<cmd>close<CR>", "Close the current split")
 
 -- Navigate by word using option-left/right.
