@@ -717,7 +717,7 @@ local main_plugins = {
 
 -- Load private plugin configuration if available.
 local private_plugins = {}
-local private_init = os.getenv("HOME") .. "/.private_init.lua"
+local private_plugins_path = os.getenv("HOME") .. "/.private_plugins.lua"
 local function file_exists(file)
   local f = io.open(file, "r")
   if f then
@@ -725,8 +725,8 @@ local function file_exists(file)
   end
   return f ~= nil
 end
-if file_exists(private_init) then
-  private_plugins = dofile(private_init)
+if file_exists(private_plugins_path) then
+  private_plugins = dofile(private_plugins_path)
 end
 
 -- Load all plugins.
