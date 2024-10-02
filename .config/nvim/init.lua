@@ -800,3 +800,9 @@ require("marks").setup({
   cyclic = true, -- Movements cycle back to beginning/end of buffer.
   sign_priority = { lower = 10, upper = 10, builtin = 10, bookmark = 10 },
 })
+
+-- Load external configuration file if it exists.
+local private_init_path = os.getenv("HOME") .. "/.private_init.lua"
+if file_exists(private_init_path) then
+  private_plugins = dofile(private_init_path)
+end
