@@ -29,6 +29,10 @@ vim.opt.softtabstop = 2
 vim.opt.shiftwidth = 2
 vim.opt.expandtab = true
 
+-- Do not continue comments when pressing 'o' in normal mode.
+vim.cmd("autocmd BufEnter * set formatoptions-=o")
+vim.cmd("autocmd BufEnter * setlocal formatoptions-=o")
+
 -- Helper function for setting up keybindings.
 function KB(mode, key, action, desc, noremap, silent)
   noremap = noremap or true
@@ -514,7 +518,6 @@ local main_plugins = {
       -- Language server configuration. They will not be automatically installed.
       local servers = {
         -- gopls = {},
-        -- rust_analyzer = {},
         asm_lsp = {
           filetypes = { "asm", "vmasm", "s" },
           root_dir = require("lspconfig").util.find_git_ancestor,
@@ -532,6 +535,17 @@ local main_plugins = {
           },
         },
         pyright = {},
+        rust_analyzer = {
+          settings = {
+            ["rust-analyzer"] = {
+              diagnostics = {
+                disabled = {
+                  "unlinked-file",
+                },
+              },
+            },
+          },
+        },
         zls = {},
       }
 
