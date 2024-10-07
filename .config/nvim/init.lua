@@ -240,6 +240,9 @@ local main_plugins = {
   -- Show keymaps.
   { "folke/which-key.nvim", event = "VeryLazy" },
 
+  -- Easily changing brackets and surrounding text.
+  { "tpope/vim-surround" },
+
   -- Use custom character for colorcolumn.
   {
     "lukas-reineke/virt-column.nvim",
@@ -637,7 +640,7 @@ local main_plugins = {
             luasnip.lsp_expand(args.body)
           end,
         },
-        completion = { completeopt = "menu,menuone,noinsert" },
+        completion = { completeopt = "menu,menuone,noinsert,noselect" },
         mapping = {
           ["<C-n>"] = cmp.mapping.select_next_item(),
           ["<C-p>"] = cmp.mapping.select_prev_item(),
