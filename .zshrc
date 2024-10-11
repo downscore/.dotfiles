@@ -43,7 +43,7 @@ setopt inc_append_history
 setopt share_history  # Share history between all sessions.
 setopt extended_history  # Save command timestamp and duration.
 setopt hist_expire_dups_first  # Delete oldest dupes first.
-setopt hist_ignore_dups  # Do not write duped to history.
+setopt hist_ignore_dups  # Do not write dupes to history.
 setopt hist_ignore_space  # If first char is a space, command is not written to history.
 setopt hist_find_no_dups  # Don't display dupes while searching through history.
 setopt hist_reduce_blanks  # Remove extra blanks from commands added to history.
