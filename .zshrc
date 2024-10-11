@@ -47,7 +47,7 @@ setopt hist_ignore_dups  # Do not write dupes to history.
 setopt hist_ignore_space  # If first char is a space, command is not written to history.
 setopt hist_find_no_dups  # Don't display dupes while searching through history.
 setopt hist_reduce_blanks  # Remove extra blanks from commands added to history.
-setopt hist_verify  # Don't execute when pressing enter, just expand.
+setopt hist_verify  # Don't execute when pressing enter for commands like `!!`, just expand.
 
 # Other terminal options.
 setopt nobeep  # No beeping on error.
