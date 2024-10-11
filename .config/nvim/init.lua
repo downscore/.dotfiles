@@ -525,7 +525,11 @@ local main_plugins = {
           filetypes = { "asm", "vmasm", "s" },
           root_dir = require("lspconfig").util.find_git_ancestor,
         },
-        clangd = {},
+        clangd = {
+          capabilities = {
+            offsetEncoding = { "utf-16" },
+          },
+        },
         lua_ls = {
           settings = {
             Lua = {
@@ -643,20 +647,23 @@ local main_plugins = {
         completion = { completeopt = "menu,menuone,noinsert,noselect" },
         mapping = {
           ["<C-n>"] = cmp.mapping.select_next_item(),
-          ["<C-p>"] = cmp.mapping.select_prev_item(),
-          ["<C-b>"] = cmp.mapping.scroll_docs(-4), -- Scroll the documentation window.
-          ["<C-f>"] = cmp.mapping.scroll_docs(4),
+          ["<C-b>"] = cmp.mapping.select_prev_item(),
           ["<C-y>"] = cmp.mapping.confirm({ select = true }),
           ["<C-Space>"] = cmp.mapping.complete({}), -- Manually trigger a completion from nvim-cmp.
           ["<C-e>"] = cmp.mapping.abort(), -- Abort completion.
 
+          -- Bindings for scrolling the documentation window.
+          -- TODO: Find unused keys for these mappings.
+          -- ["<C-b>"] = cmp.mapping.scroll_docs(-4),
+          -- ["<C-f>"] = cmp.mapping.scroll_docs(4),
+
           -- Move to the right and left of snippet expansions.
-          ["<C-l>"] = cmp.mapping(function()
+          ["<C-f>"] = cmp.mapping(function() --TODO
             if luasnip.expand_or_locally_jumpable() then
               luasnip.expand_or_jump()
             end
           end, { "i", "s" }),
-          ["<C-h>"] = cmp.mapping(function()
+          ["<C-d>"] = cmp.mapping(function()
             if luasnip.locally_jumpable(-1) then
               luasnip.jump(-1)
             end
