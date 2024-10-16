@@ -1,6 +1,6 @@
 #!/bin/sh
 
-filetype=$(file -b --mime-type "$1")
+filetype=$(file -b -L --mime-type "$1")
 
 if echo "$filetype" | grep -qvE 'text|json'; then
     echo "File: $filetype"
