@@ -18,6 +18,7 @@ vim.opt.scrolloff = 10 -- Minimum number of screen lines to keep above and below
 vim.opt.colorcolumn = "101" -- Ruler just after line length limit.
 vim.opt.wrap = false -- Disable line wrapping.
 vim.opt.textwidth = 100 -- Set the maximum text width.
+vim.g.python_recommended_style = false -- Disable Python recommended style.
 
 -- Configure the terminal window title.
 vim.opt.title = true
@@ -46,6 +47,12 @@ KB({ "n", "v", "x" }, "<leader>y", '"+y', "[Y]ank to system clipboard")
 KB({ "n", "v", "x" }, "<leader>yy", '"+yy', "[Y]ank line to system clipboard")
 KB({ "n", "v", "x" }, "<leader>Y", '"+Y', "[Y]ank line to system clipboard")
 KB({ "n", "v", "x" }, "<leader>p", '"+p', "[P]aste from system clipboard")
+
+-- Keybindings for inserting empty lines.
+KB("n", "<leader>o", "o<Esc>", "Insert line below")
+KB("n", "<leader>O", "O<Esc>", "Insert line above")
+KB({ "n", "v", "x" }, "<C-M-o>", "o", "Insert line below")
+KB("i", "<C-M-o>", "<C-o>o", "Insert line below in insert mode")
 
 -- Search options.
 vim.opt.ignorecase = true
