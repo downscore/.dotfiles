@@ -22,6 +22,10 @@ vi_mode_style = "Beam"
 
 [keyboard]
 bindings = [
+  # Bind cmd-left/right to line beginning/end.
+  { key = "Left", mods = "Command", chars = "\u001b[1~" },
+  { key = "Right", mods = "Command", chars = "\u001b[4~" },
+
   { key = "F", mods = "Command", chars = "\u0002[/" },  # cmd-f searches in tmux (^b [/).
   { key = "G", mods = "Command", chars = "\u0002g" },  # cmd-g opens lazygit (^b g).
   { key = "P", mods = "Command", chars = "\u0014" },  # cmd-p opens file search (^t).
@@ -30,7 +34,6 @@ bindings = [
   { key = "U", mods = "Command", chars = "\u0002u"},  # cmd-u opens url search window (^b u).
   { key = "W", mods = "Command", chars = "\u0002x"},  # cmd-w closes the current window (^b x).
   { key = "Tab", mods = "Control", chars = "\u0002o"},  # ctrl-tab to change to last tmux window.
-
   { key = "P", mods = "Command|Shift", chars = "\u0012" },  # cmd-shift-p opens command search (^r).
 
   # cmd-1 through cmd-9 change tmux windows (^b #).
