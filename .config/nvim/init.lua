@@ -650,7 +650,8 @@ local main_plugins = {
         completion = { completeopt = "menu,menuone,noinsert,noselect" },
         mapping = {
           ["<C-n>"] = cmp.mapping.select_next_item(),
-          ["<C-b>"] = cmp.mapping.select_prev_item(),
+          -- Note: <C-p> is also used for moving to the previous split in normal mode.
+          ["<C-p>"] = cmp.mapping.select_prev_item(),
           ["<C-y>"] = cmp.mapping.confirm({ select = true }),
           ["<C-Space>"] = cmp.mapping.complete({}), -- Manually trigger a completion from nvim-cmp.
           ["<C-e>"] = cmp.mapping.abort(), -- Abort completion.
