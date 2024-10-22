@@ -250,6 +250,13 @@ local main_plugins = {
   -- Easily changing brackets and surrounding text.
   { "tpope/vim-surround" },
 
+  -- Auto-insert closing brackets, etc.
+  {
+    "windwp/nvim-autopairs",
+    event = "InsertEnter",
+    config = true,
+  },
+
   -- Use custom character for colorcolumn.
   {
     "lukas-reineke/virt-column.nvim",
