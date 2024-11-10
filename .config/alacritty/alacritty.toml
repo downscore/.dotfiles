@@ -1,8 +1,5 @@
-import = [
-  "~/.config/alacritty/catppuccin-mocha.toml"
-]
 
-[shell]
+[terminal.shell]
 args = ["--login"]
 program = "/bin/zsh"
 
@@ -53,6 +50,13 @@ size = 14.0
 [font.normal]
 family = "MesloLGL Nerd Font"
 
+[general]
+import = [
+  "~/.config/alacritty/catppuccin-mocha.toml"
+]
+
+[terminal]
+
 # Uncomment below for custom, colorblind-friendly theme.
 #
 # [colors.primary]
@@ -62,23 +66,23 @@ family = "MesloLGL Nerd Font"
 # [colors.cursor]
 # text = "#30363d"
 # cursor = "#e6edf3"
-#
-# [colors.normal]
-# black = "#101010"
-# red = "#ff1111"
-# green = "#30d158"
-# yellow = "#ffd60a"
-# blue = "#58a6ff"
-# magenta = "#ff37f2"
-# cyan = "#53c2c5"
-# white= "#b1bac4"
-#
-# [colors.bright]
-# black = "#6e7681"
-# red = "#ff4d3d"
-# green = "#56d364"
-# yellow = "#e3b341"
-# blue = "#79c0ff"
-# magenta = "#ff2dde"
-# cyan = "#22e5ef"
-# white = "#d0dae6"
+
+[colors.normal]
+black = "#101010"
+red = "#ff1111"
+green = "#30d158"
+yellow = "#ffd60a"
+blue = "#58a6ff"
+magenta = "#ff37f2"
+cyan = "#53c2c5"
+white= "#b1bac4"
+
+[colors.bright]
+black = "#6e7681"
+red = "#ff4d3d"
+green = "#56d364"
+yellow = "#e3b341"
+blue = "#79c0ff"
+magenta = "#ff2dde"
+cyan = "#22e5ef"
+white = "#d0dae6"

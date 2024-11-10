@@ -15,3 +15,14 @@ thm_yellow="#f9e2af"
 thm_blue="#89b4fa"
 thm_orange="#fab387"
 thm_black4="#585b70"
+
+# Custom colours that are more colourblind-friendly.
+thm_black="#101010"
+thm_red="#ff1111"
+thm_green="#30d158"
+thm_yellow="#ffd60a"
+thm_blue="#58a6ff"
+thm_magenta="#ff37f2"
+thm_cyan="#53c2c5"
+# thm_white="#b1bac4"
+

@@ -257,6 +257,14 @@ local main_plugins = {
     config = true,
   },
 
+  -- Make scrolloff also apply to the last line in a file so there is always space under the line
+  -- being edited.
+  {
+    "Aasim-A/scrollEOF.nvim",
+    event = { "CursorMoved", "WinScrolled" },
+    opts = {},
+  },
+
   -- Use custom character for colorcolumn.
   {
     "lukas-reineke/virt-column.nvim",
@@ -640,6 +648,7 @@ local main_plugins = {
 
       -- Other completion capabilities.
       "hrsh7th/cmp-nvim-lsp",
+      "hrsh7th/cmp-nvim-lsp-signature-help",
       "hrsh7th/cmp-path", -- Source for file paths.
       "hrsh7th/cmp-buffer", -- Source for text in the current buffer.
     },
@@ -687,6 +696,7 @@ local main_plugins = {
             group_index = 0,
           },
           { name = "nvim_lsp" },
+          { name = "nvim_lsp_signature_help" },
           { name = "luasnip" },
           { name = "path" },
           { name = "buffer" },
@@ -778,7 +788,7 @@ require("lazy").setup(plugins)
 require("catppuccin").setup({
   flavour = "mocha", -- auto, latte, frappe, macchiato, mocha
   background = { -- :h background
-    light = "latte",
+    light = "mocha",
     dark = "mocha",
   },
   transparent_background = false, -- Disables setting the background color.
