@@ -413,6 +413,103 @@ local main_plugins = {
   },
   { "Bilal2453/luvit-meta", lazy = true },
 
+  -- Multiple cursors.
+  -- Uses <leader>m as prefix for most shortcuts.
+  {
+    "jake-stewart/multicursor.nvim",
+    branch = "1.0",
+    config = function()
+      local mc = require("multicursor-nvim")
+      mc.setup()
+      local set = vim.keymap.set
+
+      -- Clear multiple cursors with <esc>.
+      set("n", "<esc>", function()
+        if not mc.cursorsEnabled() then
+          mc.enableCursors()
+        elseif mc.hasCursors() then
+          mc.clearCursors()
+        else
+          -- Default <esc> handler.
+        end
+      end)
+
+      -- Add or skip cursor above/below the main cursor.
+      KB({ "n", "v" }, "<leader><up>", function()
+        mc.lineAddCursor(-1)
+      end, "Add cursor above")
+      KB({ "n", "v" }, "<leader><down>", function()
+        mc.lineAddCursor(1)
+      end, "Add cursor below")
+
+      -- Add or skip adding a new cursor by matching word/selection
+      KB({ "n", "v" }, "<leader>mm", function()
+        mc.matchAddCursor(1)
+      end, "Add cursor to next match")
+      KB({ "n", "v" }, "<leader>ms", function()
+        mc.matchSkipCursor(1)
+      end, "Skip over next match")
+      KB({ "n", "v" }, "<leader>mM", function()
+        mc.matchAddCursor(-1)
+      end, "Add cursor to previous match")
+      KB({ "n", "v" }, "<leader>mS", function()
+        mc.matchSkipCursor(-1)
+      end, "Skip over previous match")
+
+      -- Add all matches in the document
+      KB({ "n", "v" }, "<leader>ma", mc.matchAllAddCursors, "Add all matches")
+
+      -- Delete the main cursor.
+      KB({ "n", "v" }, "<leader>mx", mc.deleteCursor, "Delete main cursor")
+
+      -- Add and remove cursors with control + left click.
+      KB("n", "<c-leftmouse>", mc.handleMouse, "Add or remove cursors with control + left click")
+
+      -- Easy way to add and remove cursors using the main cursor.
+      KB({ "n", "v" }, "<c-q>", mc.toggleCursor, "Toggle cursor")
+
+      -- Clone every cursor and disable the originals.
+      KB({ "n", "v" }, "<leader><c-q>", mc.duplicateCursors, "Duplicate cursors")
+
+      -- Bring back cursors if they are accidentally cleared.
+      KB("n", "<leader>mu", mc.restoreCursors, "Restore cursors")
+
+      -- Align cursor columns.
+      KB("n", "<leader>mc", mc.alignCursors, "Align cursor columns")
+
+      -- Split visual selections by regex.
+      set("v", "S", mc.splitCursors)
+
+      -- Append/insert for each line of visual selections.
+      set("v", "I", mc.insertVisual)
+      set("v", "A", mc.appendVisual)
+
+      -- match new cursors within visual selections by regex.
+      set("v", "M", mc.matchCursors)
+
+      -- Rotate visual selection contents.
+      set("v", "<leader>mt", function()
+        mc.transposeCursors(1)
+      end)
+      set("v", "<leader>mT", function()
+        mc.transposeCursors(-1)
+      end)
+
+      -- Jumplist support
+      set({ "v", "n" }, "<c-i>", mc.jumpForward)
+      set({ "v", "n" }, "<c-o>", mc.jumpBackward)
+
+      -- Customize how cursors look.
+      local hl = vim.api.nvim_set_hl
+      hl(0, "MultiCursorCursor", { link = "Cursor" })
+      hl(0, "MultiCursorVisual", { link = "Visual" })
+      hl(0, "MultiCursorSign", { link = "SignColumn" })
+      hl(0, "MultiCursorDisabledCursor", { link = "Visual" })
+      hl(0, "MultiCursorDisabledVisual", { link = "Visual" })
+      hl(0, "MultiCursorDisabledSign", { link = "SignColumn" })
+    end,
+  },
+
   -- LSP configuration.
   {
     "neovim/nvim-lspconfig",

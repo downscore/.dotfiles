@@ -29,6 +29,7 @@ bindings = [
   { key = "T", mods = "Command", chars = "\u0002c"},  # cmd-u opens new window (^b c).
   { key = "U", mods = "Command", chars = "\u0002u"},  # cmd-u opens url search window (^b u).
   { key = "W", mods = "Command", chars = "\u0002x"},  # cmd-w closes the current window (^b x).
+  { key = "D", mods = "Command", chars = "\u0020mm"},  # cmd-d adds a cursor at the next match.
   { key = "Tab", mods = "Control", chars = "\u0002o"},  # ctrl-tab to change to last tmux window.
   { key = "P", mods = "Command|Shift", chars = "\u0012" },  # cmd-shift-p opens command search (^r).
 
