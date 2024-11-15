@@ -478,26 +478,26 @@ local main_plugins = {
       KB("n", "<leader>mc", mc.alignCursors, "Align cursor columns")
 
       -- Split visual selections by regex.
-      set("v", "S", mc.splitCursors)
+      KB("v", "S", mc.splitCursors)
 
       -- Append/insert for each line of visual selections.
-      set("v", "I", mc.insertVisual)
-      set("v", "A", mc.appendVisual)
+      KB("v", "I", mc.insertVisual)
+      KB("v", "A", mc.appendVisual)
 
       -- match new cursors within visual selections by regex.
-      set("v", "M", mc.matchCursors)
+      KB("v", "M", mc.matchCursors)
 
       -- Rotate visual selection contents.
-      set("v", "<leader>mt", function()
+      KB("v", "<leader>mt", function()
         mc.transposeCursors(1)
       end)
-      set("v", "<leader>mT", function()
+      KB("v", "<leader>mT", function()
         mc.transposeCursors(-1)
       end)
 
-      -- Jumplist support
-      set({ "v", "n" }, "<c-i>", mc.jumpForward)
-      set({ "v", "n" }, "<c-o>", mc.jumpBackward)
+      -- Jumplist support.
+      KB({ "v", "n" }, "<c-i>", mc.jumpForward)
+      KB({ "v", "n" }, "<c-o>", mc.jumpBackward)
 
       -- Customize how cursors look.
       local hl = vim.api.nvim_set_hl
