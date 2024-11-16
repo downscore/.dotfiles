@@ -105,6 +105,17 @@ lfcd () {
   cd "$(command lf -print-last-dir "$@")"
 }
 
+# Watch for file changes then compile and run the program.
+entrcc() {
+  ls $1 | entr -s "g++ -std=c++20 -o \"${1%.*}\" \"$1\" && \"./${1%.*}\""
+}
+entrc() {
+  ls $1 | entr -s "gcc -std=c11 -o \"${1%.*}\" \"$1\" && \"./${1%.*}\""
+}
+entrpy() {
+  ls $1 | entr -s "python3 \"$1\""
+}
+
 # Command aliases and abbreviations.
 if type eza &>/dev/null; then
   alias ls='eza -a --icons --group-directories-first'  # Replace ls with eza.
