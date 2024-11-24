@@ -107,13 +107,21 @@ lfcd () {
 
 # Watch for file changes then compile and run the program.
 entrcc() {
-  ls $1 | entr -s "g++ -std=c++20 -o \"${1%.*}\" \"$1\" && \"./${1%.*}\""
+  ls $1 | entr -s "g++ -std=c++20 -o \"${1%.*}\" \"$1\" && \
+    echo \"*** START [$(date +'%Y-%m-%d %H:%M:%S')] ***\" && \
+    \"./${1%.*}\" && \
+    echo \"*** END [$(date +'%Y-%m-%d %H:%M:%S')] ***\""
 }
 entrc() {
-  ls $1 | entr -s "gcc -std=c11 -o \"${1%.*}\" \"$1\" && \"./${1%.*}\""
+  ls $1 | entr -s "gcc -std=c11 -o \"${1%.*}\" \"$1\" && \
+    echo \"*** START [$(date +'%Y-%m-%d %H:%M:%S')] ***\" && \
+    \"./${1%.*}\" && \
+    echo \"*** END [$(date +'%Y-%m-%d %H:%M:%S')] ***\""
 }
 entrpy() {
-  ls $1 | entr -s "python3 \"$1\""
+  ls $1 | entr -s "echo \"*** START [$(date +'%Y-%m-%d %H:%M:%S')] ***\" && \
+    python \"$1\" && \
+    echo \"*** END [$(date +'%Y-%m-%d %H:%M:%S')] ***\""
 }
 
 # Command aliases and abbreviations.
