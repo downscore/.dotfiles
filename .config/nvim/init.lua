@@ -361,6 +361,12 @@ local main_plugins = {
       vim.keymap.set("n", "<leader>sn", function()
         builtin.find_files({ cwd = vim.fn.stdpath("config") })
       end, { desc = "[S]earch [N]eovim files" })
+
+      -- Special shortcut: cmd-p is mapped to ctrl-t for searchingi files in the terminal emulator.
+      -- Use it here to search for files in telescope.
+      -- TODO: Overwrites shortcut for jumping to previous tag in tag list. Use something besides
+      -- ctrl-t in the terminal emulator as well
+      KB("n", "<C-t>", builtin.find_files, "[S]earch [F]iles")
     end,
   },
 
