@@ -124,6 +124,17 @@ entrpy() {
     echo \"*** END [$(date +'%Y-%m-%d %H:%M:%S')] ***\""
 }
 
+# Replace some substring in command output with ellipses.
+ellipses() {
+  local pattern="$1"
+  if [[ -z "$pattern" ]]; then
+    echo "Usage: ellipses <pattern>" >&2
+    return 1
+  fi
+  pattern=$(echo "$pattern" | sed 's/[\/&]/\\&/g') # Escape `/` and `&` for sed
+  sed -E "s/$pattern/…/"
+}
+
 # Command aliases and abbreviations.
 if type eza &>/dev/null; then
   alias ls='eza -a --icons --group-directories-first'  # Replace ls with eza.
