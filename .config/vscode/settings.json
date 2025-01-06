@@ -32,60 +32,6 @@
     "editor.defaultFormatter": "vscode.json-language-features"
   },
   "terminal.integrated.fontSize": 14,
-  "accessibility.signals.lineHasError": {
-    "sound": "off"
-  },
-  "accessibility.signals.lineHasFoldedArea": {
-    "sound": "off"
-  },
-  "accessibility.signals.lineHasBreakpoint": {
-    "sound": "off",
-    "announcement": "off"
-  },
-  "accessibility.signals.lineHasInlineSuggestion": {
-    "sound": "off"
-  },
-  "accessibility.signals.terminalQuickFix": {
-    "sound": "off",
-    "announcement": "off"
-  },
-  "accessibility.signals.onDebugBreak": {
-    "sound": "off"
-  },
-  "accessibility.signals.noInlayHints": {
-    "sound": "off",
-    "announcement": "off"
-  },
-  "accessibility.signals.taskCompleted": {
-    "sound": "off",
-    "announcement": "off"
-  },
-  "accessibility.signals.taskFailed": {
-    "sound": "off"
-  },
-  "accessibility.signals.terminalCommandFailed": {
-    "sound": "on"
-  },
-  "accessibility.signals.notebookCellCompleted": {
-    "sound": "off",
-    "announcement": "off"
-  },
-  "accessibility.signals.notebookCellFailed": {
-    "sound": "off"
-  },
-  "accessibility.signals.diffLineInserted": {
-    "sound": "off"
-  },
-  "accessibility.signals.diffLineDeleted": {
-    "sound": "off"
-  },
-  "accessibility.signals.diffLineModified": {
-    "sound": "off"
-  },
-  "accessibility.signals.lineHasWarning": {
-    "sound": "off",
-    "announcement": "off"
-  },
   "files.insertFinalNewline": true,
   "files.trimTrailingWhitespace": true,
   "[python]": {
@@ -99,22 +45,7 @@
   "[json]": {
     "editor.defaultFormatter": "vscode.json-language-features"
   },
-  "accessibility.signals.chatRequestSent": {
-    "sound": "off"
-  },
-  "accessibility.signals.clear": {
-    "sound": "off"
-  },
-  "accessibility.signals.chatResponseReceived": {
-    "sound": "off"
-  },
-  "accessibility.signals.terminalBell": {
-    "sound": "off"
-  },
   "diffEditor.ignoreTrimWhitespace": false,
-  "accessibility.signals.progress": {
-    "sound": "off"
-  },
   "github.copilot.editor.enableAutoCompletions": true,
   "workbench.editor.showTabs": "single",
   "python.analysis.inlayHints.functionReturnTypes": true,
@@ -133,9 +64,6 @@
   "typescript.inlayHints.variableTypes.enabled": true,
   "editor.fontFamily": "Menlo, IosevkaTerm Nerd Font, Monaco, 'Courier New', monospace",
   "editor.fontSize": 13,
-  "editor.quickSuggestions": {
-    "other": "off"
-  },
   "numberedBookmarks.gutterIconFillColor": "#00aaff",
   "numberedBookmarks.navigateThroughAllFiles": "replace",
   "git.confirmSync": false,
