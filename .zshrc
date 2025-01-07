@@ -54,6 +54,11 @@ setopt nobeep  # No beeping on error.
 setopt autopushd  # Enable auto directory stack.
 setopt interactive_comments  # Allow inline comments in interactive shells.
 
+# GhosTTY terminfo is not widely available. For now, use `xterm-256color`.
+if [[ "$TERM_PROGRAM" == "ghostty" ]]; then
+  export TERM=xterm-256color
+fi
+
 # Reduce delay after receiving an escape key code (^[). Note that some keys (such as arrow keys)
 # send an escape key code followed by another code, so the terminal waits for a bit to
 # disambiguate. Reducing this from the default 400ms (but not to zero) can help with responsiveness.
