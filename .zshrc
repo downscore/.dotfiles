@@ -17,8 +17,8 @@ zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'  # Make case-insensiti
 _comp_options+=(globdots)  # Show hidden files in tab completion.
 
 # Use bash-style globbing -- don't raise an error when * doesn't match anything, and just pass in
-# the glob itself as an argument. This makes it easier to use share commands with people running
-# bash terminals.
+# the glob itself as an argument. This makes it easier to use commands shared by people running
+# bash.
 setopt nonomatch
 
 # Colors for use in prompts, ls, tab completion, etc.
