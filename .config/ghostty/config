@@ -1,0 +1,69 @@
+window-decoration = false
+window-save-state = always
+macos-option-as-alt = true
+
+font-family = MesloLGL Nerd Font
+font-thicken = true
+font-size = 14.0
+cursor-style = bar
+
+theme = catppuccin-mocha
+palette = 0=101010
+palette = 1=ff1111
+palette = 2=30d158
+palette = 3=ffd60a
+palette = 4=58a6ff
+palette = 5=ff37f2
+palette = 6=53c2c5
+palette = 7=b1bac4
+palette = 8=6e7681
+palette = 9=ff4d3d
+palette = 10=56d364
+palette = 11=e3b341
+palette = 12=79c0ff
+palette = 13=ff2dde
+palette = 14=22e5ef
+palette = 15=d0dae6
+
+# Go to line beginning/ending.
+keybind = cmd+left=esc:[1~
+keybind = cmd+right=esc:[4~
+# Delete a word (ctrl-w).
+keybind = alt+backspace=text:\x17
+# Search in tmux (^b [/).
+keybind = cmd+f=text:\x02[/
+# Open file search (^t).
+keybind = cmd+p=text:\x14
+# Open command search (^r).
+keybind = cmd+shift+p=text:\x12
+# Open new window (^b c).
+keybind = cmd+t=text:\x02c
+# Close the current window (^b x).
+keybind = cmd+w=text:\x02x
+# Change to last tmux window.
+keybind = ctrl+tab=text:\x02o
+# Open url search window (^b u).
+keybind = cmd+u=text:\x02u
+# Open lazygit (^b g).
+keybind = cmd+g=text:\x02g
+
+# Save in vim (escape :w enter).
+keybind = cmd+s=text:\x1b:w\n
+# Add a new line below in vim (escape shift-a enter). Note: Using 'o' instead of 'shift-a enter'
+# causes problems with a weird escape sequence in normal mode.
+keybind = cmd+enter=text:\x1bA\n
+# Add a cursor at the next match in vim.
+keybind = cmd+d=text:\x20mm
+
+# cmd-1 through cmd-9 change tmux windows (^b #).
+keybind = cmd+1=text:\x021
+keybind = cmd+2=text:\x022
+keybind = cmd+3=text:\x023
+keybind = cmd+4=text:\x024
+keybind = cmd+5=text:\x025
+keybind = cmd+6=text:\x026
+keybind = cmd+7=text:\x027
+keybind = cmd+8=text:\x028
+keybind = cmd+9=text:\x029
+
+custom-shader = shaders/eam-crt.glsl
