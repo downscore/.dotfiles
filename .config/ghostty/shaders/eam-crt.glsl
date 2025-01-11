@@ -7,6 +7,17 @@ const float scanline_speed = 4.0;  // Higher is faster.
 const float bloom_spread = 1.25;  // Larger is more spread out.
 const float bloom_strength = 0.03;  // [0, 1]
 
+// Vsync line params.
+const float line_thickness = 0.01;
+const float line_speed = 0.15;  // Higher is faster.
+const float line_opacity = 0.02;  // [0, 1]
+const float line_asymmetry = 10; // Higher value increases brightness falloff difference.
+const float horizontal_distortion = 0.0005;  // Horizontal offset over the line. [0,1]
+// Multiple of "screens" the vsync line moves over.
+// - If this is 3.0, the line is visible 1/3rd of the time.
+// - If this is 1.0, the line is always visible (immediately loops back to the beginning).
+const float line_frequency = 10.0;
+
 // Golden spiral samples used for bloom.
 //   [x, y, weight] weight is inverse of distance.
 const vec3[24] bloom_samples = {
@@ -55,7 +66,18 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord)
     return;
   }
 
-  // Get source colour after warping.
+  // Compute vsync line so we can apply distortion to uv coordinates.
+  float line_y = mod(iTime * line_speed, line_frequency);
+  // Asymmetric brightness falloff.
+  float distance = uv.y - line_y;
+  float scaled_distance = distance < 0.0 ? distance / line_asymmetry : distance;
+  // Line thickness and smooth transition (fade edges).
+  float line_glow = smoothstep(line_thickness, 0.0, abs(scaled_distance));
+
+  // Apply horizontal distortion over the vsync line.
+  uv.x -= line_glow * horizontal_distortion;
+
+  // Get source colour after warping and distortion.
   vec3 source_color = texture(iChannel0, uv).rgb;
 
   // Scanline effect.
@@ -77,6 +99,10 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord)
   // Combine effects.
   vec3 final_color = bloom_color;
   final_color *= scanline;
+
+  // Compute final color with the vsync line.
+  vec3 line_color = vec3(1.0, 1.0, 1.0);
+  final_color = mix(final_color, line_color, line_glow * line_opacity);
 
   // Output to screen.
   fragColor = vec4(final_color, 1.0);
