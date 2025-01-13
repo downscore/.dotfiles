@@ -3,7 +3,6 @@ window-save-state = always
 macos-option-as-alt = true
 
 font-family = MesloLGL Nerd Font
-font-thicken = true
 font-size = 14.0
 cursor-style = bar
 
