@@ -117,6 +117,18 @@ vim.api.nvim_create_user_command("CopilotToggle", function()
 end, { nargs = 0 })
 KB("n", "<leader>tc", ":CopilotToggle<CR>", "[T]oggle [C]opilot")
 
+-- Toggle automatic line wrapping.
+vim.keymap.set("n", "<leader>tw", function()
+  local format_options = vim.opt.formatoptions:get()
+  if format_options.t then
+    vim.opt.formatoptions:remove("t")
+    print("'t' removed from formatoptions")
+  else
+    vim.opt.formatoptions:append("t")
+    print("'t' added to formatoptions")
+  end
+end, { desc = "[T]oggle automatic line [W]rapping" })
+
 -- Completion shortcuts.
 KB("n", "<leader>cp", ":Copilot panel<CR>", "[C]opilot [P]anel")
 
