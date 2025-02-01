@@ -1,11 +1,11 @@
 const float curvature_amount = 0.15; // Unusable outside approx [0, 1].
 
-const float scanline_intensity = 0.15;  // [0, 1]. Higher is darker.
+const float scanline_intensity = 0.1;  // [0, 1]. Higher is darker.
 const float scanline_width = 1.9;  // Lower is bigger.
 const float scanline_speed = 4.0;  // Higher is faster.
 
 const float bloom_spread = 1.25;  // Larger is more spread out.
-const float bloom_strength = 0.035;  // [0, 1]
+const float bloom_strength = 0.033;  // [0, 1]
 
 // Vsync line params.
 const float line_thickness = 0.01;
