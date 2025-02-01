@@ -4,7 +4,7 @@ macos-option-as-alt = true
 confirm-close-surface = false
 
 font-family = MesloLGL Nerd Font
-font-size = 14.0
+font-size = 16.0
 cursor-style = bar
 
 theme = catppuccin-mocha
