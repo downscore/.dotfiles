@@ -56,14 +56,15 @@ keybind = cmd+enter=text:\x1bA\n
 keybind = cmd+d=text:\x20mm
 
 # cmd-1 through cmd-9 change tmux windows (^b #).
-keybind = cmd+1=text:\x021
-keybind = cmd+2=text:\x022
-keybind = cmd+3=text:\x023
-keybind = cmd+4=text:\x024
-keybind = cmd+5=text:\x025
-keybind = cmd+6=text:\x026
-keybind = cmd+7=text:\x027
-keybind = cmd+8=text:\x028
-keybind = cmd+9=text:\x029
+keybind = cmd+one=text:\x021
+keybind = cmd+two=text:\x022
+keybind = cmd+three=text:\x023
+keybind = cmd+four=text:\x024
+keybind = cmd+five=text:\x025
+keybind = cmd+six=text:\x026
+keybind = cmd+seven=text:\x027
+keybind = cmd+eight=text:\x028
+keybind = cmd+nine=text:\x029
 
+# Animated CRT effect
 custom-shader = shaders/eam-crt.glsl
