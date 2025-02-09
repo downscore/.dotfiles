@@ -40,6 +40,7 @@ local DFCFG="$DF/.config"
 local CFG="$HOME/.config"
 local APP_SUPPORT="$HOME/Library/Application Support"
 
+create_symlink "$HOME/.hammerspoon" "$DFCFG/hammerspoon"
 create_symlink "$HOME/.zshrc" "$DF/.zshrc"
 create_symlink "$HOME/.zprofile" "$DF/.zprofile"
 create_symlink "$HOME/.zshenv" "$DF/.zshenv"
