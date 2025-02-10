@@ -1,4 +1,5 @@
 require("browser")
+require("ghostty")
 require("notifications")
 require("window_management")
 hs.loadSpoon("RecursiveBinder")
@@ -45,10 +46,12 @@ BindAppFocusKey("a", "Google Chat")
 BindAppFocusKey("b", "Safari")
 BindAppFocusKey("c", "Visual Studio Code")
 BindBrowserTabFocusKey("d", "docs.google.com")
+BindAppFocusKey("e", "Reminders")
 BindAppFocusKey("f", "Finder")
 BindBrowserTabFocusKey("g", "mail.google.com")
 BindBrowserTabFocusKey("l", "calendar.google.com")
 BindAppFocusKey("m", "Messages")
+BindAppFocusKey("n", "Notes")
 BindAppFocusKey("o", "Obsidian")
 BindAppFocusKey("p", "ChatGPT")
 BindAppFocusKey("t", "Ghostty")
@@ -57,14 +60,32 @@ BindBrowserTabFocusKey("y", "youtube.com")
 -- Add switcher shortcuts using a leader key.
 local singleKey = spoon.RecursiveBinder.singleKey
 local switcherKeyMap = {
-  [singleKey("a", "Anki")] = function()
-    hs.application.launchOrFocus("Anki")
+  [singleKey("a", "Slack")] = function()
+    hs.application.launchOrFocus("Slack")
+  end,
+  [singleKey("b", "Books")] = function()
+    hs.application.launchOrFocus("Books")
   end,
   [singleKey("c", "Claude")] = function()
     hs.application.launchOrFocus("Claude")
   end,
+  [singleKey("d", "Discord")] = function()
+    hs.application.launchOrFocus("Discord")
+  end,
+  [singleKey("e", "Elgato SD")] = function()
+    hs.application.launchOrFocus("Elgato Stream Deck")
+  end,
+  [singleKey("f", "FaceTime")] = function()
+    hs.application.launchOrFocus("FaceTime")
+  end,
+  [singleKey("g", "Google Chrome")] = function()
+    hs.application.launchOrFocus("Google Chrome")
+  end,
   [singleKey("i", "IINA")] = function()
     hs.application.launchOrFocus("IINA")
+  end,
+  [singleKey("j", "Anki")] = function()
+    hs.application.launchOrFocus("Anki")
   end,
   [singleKey("k", "KeePassXC")] = function()
     hs.application.launchOrFocus("KeePassXC")
@@ -72,14 +93,14 @@ local switcherKeyMap = {
   [singleKey("m", "Act. Monitor")] = function()
     hs.application.launchOrFocus("Activity Monitor")
   end,
-  [singleKey("n", "Notes")] = function()
-    hs.application.launchOrFocus("Notes")
+  [singleKey("n", "Night PDF")] = function()
+    hs.application.launchOrFocus("nightPDF")
   end,
   [singleKey("p", "ProtonVPN")] = function()
     hs.application.launchOrFocus("ProtonVPN")
   end,
-  [singleKey("r", "Reminders")] = function()
-    hs.application.launchOrFocus("Reminders")
+  [singleKey("r", "Kap")] = function()
+    hs.application.launchOrFocus("Kap")
   end,
   [singleKey("s", "Settings+")] = {
     [singleKey("a", "Apple Pay")] = function()
@@ -119,5 +140,31 @@ local switcherKeyMap = {
   [singleKey("t", "Steam")] = function()
     hs.application.launchOrFocus("Steam")
   end,
+  [singleKey("v", "Preview")] = function()
+    hs.application.launchOrFocus("Preview")
+  end,
 }
 hs.hotkey.bind({ "cmd", "ctrl" }, "s", spoon.RecursiveBinder.recursiveBind(switcherKeyMap))
+
+-- Set up app-specific behavior.
+local appEvents = {
+  { "Ghostty", GhosttyOnFocus, GhosttyOnFocusLost },
+}
+local appWatcher = hs.application.watcher.new(function(appName, eventType)
+  if eventType == hs.application.watcher.activated then
+    for _, event in ipairs(appEvents) do
+      if appName == event[1] then
+        event[2]() -- Focus event
+      else
+        event[3]() -- Focus lost event
+      end
+    end
+  elseif eventType == hs.application.watcher.deactivated then
+    for _, event in ipairs(appEvents) do
+      if appName == event[1] then
+        event[3]() -- Focus lost event
+      end
+    end
+  end
+end)
+appWatcher:start()
