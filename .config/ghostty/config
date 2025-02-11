@@ -41,7 +41,9 @@ keybind = cmd+t=text:\x02c
 # Close the current window (^b x).
 keybind = cmd+w=text:\x02x
 # Change to last tmux window.
-keybind = ctrl+tab=text:\x02o
+# Note: Binding ctrl+tab doesn't appear to work in Ghostty. This is implemented with a Hammerspoon
+# keybinding instead.
+# keybind = ctrl+tab=text:\x02o
 # Open url search window (^b u).
 keybind = cmd+u=text:\x02u
 # Open lazygit (^b g).
@@ -67,4 +69,4 @@ keybind = cmd+eight=text:\x028
 keybind = cmd+nine=text:\x029
 
 # Animated CRT effect
-custom-shader = shaders/eam-crt.glsl
+# custom-shader = shaders/eam-crt.glsl
