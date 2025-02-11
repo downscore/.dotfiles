@@ -1,3 +1,4 @@
+require("annotations")
 require("browser")
 require("ghostty")
 require("notifications")
@@ -145,6 +146,17 @@ local switcherKeyMap = {
   end,
 }
 hs.hotkey.bind({ "cmd", "ctrl" }, "s", spoon.RecursiveBinder.recursiveBind(switcherKeyMap))
+
+-- Bind keys for drawing annotations.
+hs.hotkey.bind({ "ctrl", "shift" }, "w", AnnotationsClearAll)
+hs.hotkey.bind({ "ctrl", "shift" }, "z", AnnotationsDrawRectangle)
+hs.hotkey.bind({ "ctrl", "shift" }, "x", AnnotationsDrawArrow)
+hs.hotkey.bind({ "ctrl", "shift" }, "c", function()
+  AnnotationsDrawCircle(50)
+end)
+hs.hotkey.bind({ "ctrl", "shift" }, "v", function()
+  AnnotationsDrawCircle(100)
+end)
 
 -- Set up app-specific behavior.
 local appEvents = {
