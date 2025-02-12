@@ -2,6 +2,7 @@ require("annotations")
 require("browser")
 require("ghostty")
 require("notifications")
+require("obsidian")
 require("window_management")
 hs.loadSpoon("RecursiveBinder")
 
@@ -149,6 +150,22 @@ local switcherKeyMap = {
   end,
 }
 hs.hotkey.bind({ "cmd", "ctrl" }, "s", spoon.RecursiveBinder.recursiveBind(switcherKeyMap))
+
+local jumpKeyMap = {
+  [singleKey("d", "Daily")] = function()
+    ObsidianOpenDailyNote()
+  end,
+  [singleKey("j", "TODO")] = function()
+    ObsidianOpenDoc("TODO")
+  end,
+  [singleKey("k", "Keybindings")] = function()
+    ObsidianOpenDoc("Keybindings")
+  end,
+  [singleKey("w", "Workflow")] = function()
+    ObsidianOpenDoc("Workflow")
+  end,
+}
+hs.hotkey.bind({ "cmd", "ctrl" }, "j", spoon.RecursiveBinder.recursiveBind(jumpKeyMap))
 
 -- Bind keys for drawing annotations.
 hs.hotkey.bind({ "ctrl", "shift" }, "w", AnnotationsClearAll)
