@@ -83,3 +83,12 @@ function FocusBrowserTabByHostname(targetHostname)
     FocusSafariTabByHostname(targetHostname)
   end
 end
+
+-- Launch or focus the active browser.
+function FocusBrowser()
+  if UseChrome then
+    hs.application.launchOrFocus("Google Chrome")
+  else
+    hs.application.launchOrFocus("Safari")
+  end
+end

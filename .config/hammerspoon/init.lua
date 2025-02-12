@@ -31,12 +31,15 @@ hs.hotkey.bind({ "cmd", "ctrl" }, "z", MaximizeCurrentWindow)
 -- Bind keys to move the focused window between screens.
 hs.hotkey.bind({ "cmd", "ctrl" }, "1", function()
   MoveCurrentWindowToScreen(1)
+  MaximizeCurrentWindow()
 end)
 hs.hotkey.bind({ "cmd", "ctrl" }, "2", function()
   MoveCurrentWindowToScreen(2)
+  MaximizeCurrentWindow()
 end)
 hs.hotkey.bind({ "cmd", "ctrl" }, "3", function()
   MoveCurrentWindowToScreen(3)
+  MaximizeCurrentWindow()
 end)
 
 -- Bind a key to close all OS notifications.
@@ -44,7 +47,7 @@ hs.hotkey.bind({ "ctrl", "alt" }, "w", CloseAllSystemNotifications)
 
 -- Bind app/tab switching shortcuts.
 BindAppFocusKey("a", "Google Chat")
-BindAppFocusKey("b", "Safari")
+hs.hotkey.bind({ "cmd", "ctrl" }, "b", FocusBrowser)
 BindAppFocusKey("c", "Visual Studio Code")
 BindBrowserTabFocusKey("d", "docs.google.com")
 BindAppFocusKey("e", "Reminders")
