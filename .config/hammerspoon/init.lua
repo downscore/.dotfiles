@@ -155,16 +155,14 @@ local jumpKeyMap = {
   [singleKey("d", "Daily")] = function()
     ObsidianOpenDailyNote()
   end,
-  [singleKey("j", "TODO")] = function()
-    ObsidianOpenDoc("TODO")
-  end,
-  [singleKey("k", "Keybindings")] = function()
-    ObsidianOpenDoc("Keybindings")
-  end,
-  [singleKey("w", "Workflow")] = function()
-    ObsidianOpenDoc("Workflow")
-  end,
 }
+local obsidianDocs = ObsidianGetJumpDocsFromFile()
+for _, doc in ipairs(obsidianDocs) do
+  local key = singleKey(doc[1], doc[2])
+  jumpKeyMap[key] = function()
+    ObsidianOpenDoc(doc[2])
+  end
+end
 hs.hotkey.bind({ "cmd", "ctrl" }, "j", spoon.RecursiveBinder.recursiveBind(jumpKeyMap))
 
 -- Bind keys for drawing annotations.
