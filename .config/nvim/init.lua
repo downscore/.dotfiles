@@ -48,12 +48,6 @@ KB({ "n", "v", "x" }, "<leader>yy", '"+yy', "[Y]ank line to system clipboard")
 KB({ "n", "v", "x" }, "<leader>Y", '"+Y', "[Y]ank line to system clipboard")
 KB({ "n", "v", "x" }, "<leader>p", '"+p', "[P]aste from system clipboard")
 
--- Keybindings for inserting empty lines.
-KB("n", "<leader>o", "o<Esc>", "Insert line below")
-KB("n", "<leader>O", "O<Esc>", "Insert line above")
-KB({ "n", "v", "x" }, "<C-M-o>", "o", "Insert line below")
-KB("i", "<C-M-o>", "<C-o>o", "Insert line below in insert mode")
-
 -- Search options.
 vim.opt.ignorecase = true
 vim.opt.smartcase = true -- Smart-case searching (ignore case if lowercase).

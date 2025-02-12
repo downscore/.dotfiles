@@ -56,6 +56,8 @@ keybind = cmd+s=text:\x1b:w\n
 keybind = cmd+enter=text:\x1bA\n
 # Add a cursor at the next match in vim.
 keybind = cmd+d=text:\x20mm
+# Duplicate the current line in vim.
+keybind = cmd+shift+d=text:\x1byyp
 
 # cmd-1 through cmd-9 change tmux windows (^b #).
 keybind = cmd+one=text:\x021
