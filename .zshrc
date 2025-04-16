@@ -157,6 +157,7 @@ abbr --force -q v='vi'
 abbr --force -q l='lfcd'
 abbr --force -q lg='lazygit'
 abbr --force -q cpy='tmux capture-pane -pS -10000% | copy_to_clipboard'  # Cursor after num lines.
+abbr --force -q a2=' aria2c "%"'
 
 # Load API keys and other private configuration if available.
 test -f ~/.api_keys.zsh && source ~/.api_keys.zsh
