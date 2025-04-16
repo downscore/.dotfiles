@@ -86,6 +86,9 @@ local switcherKeyMap = {
   [singleKey("g", "Google Chrome")] = function()
     hs.application.launchOrFocus("Google Chrome")
   end,
+  [singleKey("h", "Photos")] = function()
+    hs.application.launchOrFocus("Photos")
+  end,
   [singleKey("i", "IINA")] = function()
     hs.application.launchOrFocus("IINA")
   end,
@@ -140,6 +143,9 @@ local switcherKeyMap = {
     end,
     [singleKey("w", "Wi-Fi")] = function()
       hs.execute('open "x-apple.systempreferences:com.apple.preference.network"')
+    end,
+    [singleKey("x", "Security")] = function()
+      hs.execute('open "x-apple.systempreferences:com.apple.preference.security"')
     end,
   },
   [singleKey("t", "Steam")] = function()
