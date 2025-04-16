@@ -59,7 +59,7 @@ BindAppFocusKey("m", "Messages")
 BindAppFocusKey("n", "Notes")
 BindAppFocusKey("o", "Obsidian")
 BindAppFocusKey("p", "ChatGPT")
-BindAppFocusKey("t", "Ghostty")
+BindAppFocusKey("t", "Alacritty")
 BindBrowserTabFocusKey("y", "youtube.com")
 
 -- Add switcher shortcuts using a leader key.
