@@ -5,6 +5,7 @@ set mouse  # Enable mouse support.
 set relativenumber  # Show relative line numbers.
 set scrolloff 10  # Keep 10 lines above and below the cursor when searching.
 set shellopts '-eu'  # Exit on error and undefined variables in shell commands.
+set period 2  # Refresh directory every 2 seconds.
 
 # Use bat for previews.
 set previewer ~/.config/lf/preview.sh
@@ -13,6 +14,7 @@ set previewer ~/.config/lf/preview.sh
 set promptfmt "\033[34;1m%d\033[0m\033[1m%f\033[0m"
 
 # Key bindings.
+map <esc> quit
 # lf separates files by newlines, so for some commands we need to change the input field separator
 # to a newline. lf has an `ifs` option, but it does not seem to work correctly. lf also has an
 # option to change the file separator, but changing it to a space causes problems with file names
@@ -21,3 +23,22 @@ map DD ${{export IFS=$'\n' && trash $fx}}  # Move file(s) to the trash.
 
 # Map enter to be the same as pressing right arrow.
 map <enter> open
+
+# Use fzf to search for a file to open in the default editor.
+map <c-t> $$EDITOR $(fzf)
+
+# zoxide integration.
+cmd zoxide-jump %{{
+    result="$(zoxide query --exclude "$PWD" "$@" | sed 's/\\/\\\\/g;s/"/\\"/g')"
+    lf -remote "send $id cd \"$result\""
+}}
+cmd zoxide-jump-interactive ${{
+    result="$(zoxide query -i | sed 's/\\/\\\\/g;s/"/\\"/g')"
+    lf -remote "send $id cd \"$result\""
+}}
+cmd zoxide-update &{{
+    zoxide add "$PWD"
+}}
+map Z :zoxide-jump-interactive
+map zu :zoxide-update
+

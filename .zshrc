@@ -125,7 +125,7 @@ entrc() {
 }
 entrpy() {
   ls $1 | entr -s "echo \"*** START [$(date +'%Y-%m-%d %H:%M:%S')] ***\" && \
-    python \"$1\" && \
+    python3 \"$1\" && \
     echo \"*** END [$(date +'%Y-%m-%d %H:%M:%S')] ***\""
 }
 
