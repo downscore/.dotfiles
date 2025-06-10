@@ -635,6 +635,7 @@ local main_plugins = {
 
       -- Change the Diagnostic symbols.
       vim.diagnostic.config({
+        virtual_text = true,
         signs = {
           text = {
             [vim.diagnostic.severity.ERROR] = " ",
