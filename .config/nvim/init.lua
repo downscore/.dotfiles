@@ -634,11 +634,22 @@ local main_plugins = {
       })
 
       -- Change the Diagnostic symbols.
-      local diagnostic_signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
-      for type, icon in pairs(diagnostic_signs) do
-        local hl = "DiagnosticSign" .. type
-        vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
-      end
+      vim.diagnostic.config({
+        signs = {
+          text = {
+            [vim.diagnostic.severity.ERROR] = " ",
+            [vim.diagnostic.severity.WARN] = " ",
+            [vim.diagnostic.severity.INFO] = " ",
+            [vim.diagnostic.severity.HINT] = "󰠠 ",
+          },
+          linehl = {
+            [vim.diagnostic.severity.ERROR] = "Error",
+            [vim.diagnostic.severity.WARN] = "Warn",
+            [vim.diagnostic.severity.INFO] = "Info",
+            [vim.diagnostic.severity.HINT] = "Hint",
+          },
+        },
+      })
 
       -- LSP servers and clients are able to communicate to each other what features they support.
       -- Create new capabilities with nvim cmp, and then broadcast that to the servers.
