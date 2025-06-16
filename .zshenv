@@ -21,6 +21,17 @@ if test -d "$HOME/.dotfiles/scripts"; then
   export PATH="$HOME/.dotfiles/scripts:$PATH"
 fi
 
+# Add custom C++ includes to the compiler's include path. Colon separated paths.
+if test -d "$HOME/Documents/Code/IncludeCPP"; then
+  # Check if CPLUS_INCLUDE_PATH is already set, if not, set it.
+  if [[ -z "$CPLUS_INCLUDE_PATH" ]]; then
+    export CPLUS_INCLUDE_PATH="$HOME/Documents/Code/IncludeCPP"
+  else
+    # Append to existing CPLUS_INCLUDE_PATH.
+    export CPLUS_INCLUDE_PATH="$HOME/Documents/Code/IncludeCPP:$CPLUS_INCLUDE_PATH"
+  fi
+fi
+
 # Set default editor to neovim if it is available.
 if type nvim &>/dev/null; then
   export EDITOR=nvim
