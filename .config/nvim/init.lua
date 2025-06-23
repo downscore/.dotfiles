@@ -676,9 +676,6 @@ local main_plugins = {
               completion = {
                 callSnippet = "Replace",
               },
-              diagnostics = {
-                globals = { "hs" }, -- Tell LSP to recognize `hs` (Hammersoon) as a global
-              },
               workspace = {
                 -- Make the server aware of the Hammerspoon runtime
                 library = {
