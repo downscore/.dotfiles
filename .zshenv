@@ -16,6 +16,11 @@ if test -d "$HOME/.bin/nvim/bin"; then
   export PATH="$HOME/.bin/nvim/bin:$PATH"
 fi
 
+# Add doom emacs to PATH if it exists.
+if test -d "$HOME/.config/emacs/bin"; then
+  export PATH="$HOME/.config/emacs/bin:$PATH"
+fi
+
 # Add ~/.dotfiles/scripts to PATH if it exists.
 if test -d "$HOME/.dotfiles/scripts"; then
   export PATH="$HOME/.dotfiles/scripts:$PATH"
