@@ -30,9 +30,22 @@ vim.opt.softtabstop = 2
 vim.opt.shiftwidth = 2
 vim.opt.expandtab = true
 
--- Do not continue comments when pressing 'o' in normal mode.
-vim.cmd("autocmd BufEnter * set formatoptions-=o")
-vim.cmd("autocmd BufEnter * setlocal formatoptions-=o")
+-- Do not continue comments when pressing 'o' in normal mode or enter in insert mode.
+vim.cmd("autocmd BufEnter * set formatoptions-=or")
+vim.cmd("autocmd BufEnter * setlocal formatoptions-=or")
+
+-- Search options.
+vim.opt.ignorecase = true
+vim.opt.smartcase = true -- Smart-case searching (ignore case if lowercase).
+vim.opt.incsearch = true -- Incremental searching.
+vim.opt.hlsearch = true -- Highlight search results.
+
+-- Sets how neovim will display certain whitespace characters in the editor.
+vim.opt.list = true
+vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
+
+-- Uncomment to use a default color scheme.
+-- vim.cmd('colorscheme retrobox')
 
 -- Helper function for setting up keybindings.
 function KB(mode, key, action, desc, noremap, silent)
@@ -42,25 +55,16 @@ function KB(mode, key, action, desc, noremap, silent)
   vim.keymap.set(mode, key, action, { noremap = noremap, silent = silent, desc = desc })
 end
 
+KB("t", "<Esc><Esc>", "<C-\\><C-n>", "Exit terminal mode") -- Default: <C-\><C-n>
+KB("n", "<leader><leader>", "<C-^>", "Switch to last active buffer")
+KB("n", "<Esc>", "<cmd>nohlsearch<CR>", "[Esc] clears search highlights")
+KB("n", "<leader>cp", ":Copilot panel<CR>", "[C]opilot [P]anel")
+
 -- Keybindings for interacting with the system clipboard.
 KB({ "n", "v", "x" }, "<leader>y", '"+y', "[Y]ank to system clipboard")
 KB({ "n", "v", "x" }, "<leader>yy", '"+yy', "[Y]ank line to system clipboard")
 KB({ "n", "v", "x" }, "<leader>Y", '"+Y', "[Y]ank line to system clipboard")
 KB({ "n", "v", "x" }, "<leader>p", '"+p', "[P]aste from system clipboard")
-
--- Search options.
-vim.opt.ignorecase = true
-vim.opt.smartcase = true -- Smart-case searching (ignore case if lowercase).
-vim.opt.incsearch = true -- Incremental searching.
-vim.opt.hlsearch = true -- Highlight search results.
-KB("n", "<Esc>", "<cmd>nohlsearch<CR>", "[Esc] clears search highlights")
-
--- Sets how neovim will display certain whitespace characters in the editor.
-vim.opt.list = true
-vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
-
--- Uncomment to use a default color scheme.
--- vim.cmd('colorscheme retrobox')
 
 -- Diagnostic keymaps.
 KB("n", "[d", "<cmd>lua vim.diagnostic.goto_prev()<CR>", "[D]iagnostic: Go to previous")
@@ -90,10 +94,6 @@ KB("i", "<M-Right>", "<C-o>w", "Go to right one word in insert mode")
 KB("i", "<M-Up>", "<Up>", "Move up in insert mode")
 KB("i", "<M-Down>", "<Down>", "Move down in insert mode")
 
--- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
--- to discover. You normally need to press <C-\><C-n>.
-KB("t", "<Esc><Esc>", "<C-\\><C-n>", "Exit terminal mode")
-
 -- Allow toggling relative line numbers.
 vim.opt.relativenumber = false -- Default relative line numbers setting.
 KB("n", "<leader>tr", ":set relativenumber!<CR>", "[T]oggle [R]elative line numbers")
@@ -122,9 +122,6 @@ vim.keymap.set("n", "<leader>tw", function()
     print("'t' added to formatoptions")
   end
 end, { desc = "[T]oggle automatic line [W]rapping" })
-
--- Completion shortcuts.
-KB("n", "<leader>cp", ":Copilot panel<CR>", "[C]opilot [P]anel")
 
 -- Functionality for getting the editor context.
 -- Helper function for getting the cursor index in the text.
@@ -349,7 +346,7 @@ local main_plugins = {
       KB("n", "<leader>sd", builtin.diagnostics, "[S]earch [D]iagnostics")
       KB("n", "<leader>sr", builtin.resume, "[S]earch [R]esume")
       KB("n", "<leader>s.", builtin.oldfiles, '[S]earch Recent Files ("." for repeat)')
-      KB("n", "<leader><leader>", builtin.buffers, "[ ] Find existing buffers")
+      KB("n", "<leader>sb", builtin.buffers, "[S]earch [B]uffers")
       vim.keymap.set("n", "<leader>/", function()
         builtin.current_buffer_fuzzy_find(require("telescope.themes").get_dropdown({
           winblend = 10,
@@ -625,7 +622,7 @@ local main_plugins = {
 
           -- The following code creates a keymap to toggle inlay hints, if the current language
           -- server supports them.
-          if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
+          if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
             map("<leader>th", function()
               vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = event.buf }))
             end, "[T]oggle Inlay [H]ints")
@@ -663,7 +660,7 @@ local main_plugins = {
         -- gopls = {},
         asm_lsp = {
           filetypes = { "asm", "vmasm", "s" },
-          root_dir = require("lspconfig").util.find_git_ancestor,
+          root_dir = vim.fs.dirname(vim.fs.find({ ".git" }, { upward = true })[1]),
         },
         clangd = {
           capabilities = {
@@ -705,6 +702,8 @@ local main_plugins = {
       -- Configure servers above.
       require("mason").setup()
       require("mason-lspconfig").setup({
+        ensure_installed = {},
+        automatic_enable = true,
         handlers = {
           function(server_name)
             local server = servers[server_name] or {}
@@ -727,12 +726,12 @@ local main_plugins = {
     cmd = { "ConformInfo" },
     keys = {
       {
-        "<leader>fd",
+        "<leader>df",
         function()
           require("conform").format({ async = true, lsp_format = "fallback" })
         end,
         mode = "",
-        desc = "Format buffer",
+        desc = "[D]ocument [F]ormat",
       },
     },
     opts = {
