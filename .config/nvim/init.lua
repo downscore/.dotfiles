@@ -346,6 +346,7 @@ local main_plugins = {
       KB("n", "<leader>sd", builtin.diagnostics, "[S]earch [D]iagnostics")
       KB("n", "<leader>sr", builtin.resume, "[S]earch [R]esume")
       KB("n", "<leader>s.", builtin.oldfiles, '[S]earch Recent Files ("." for repeat)')
+      KB("n", "<leader>.", builtin.oldfiles, 'Search Recent Files ("." for repeat)')
       KB("n", "<leader>sb", builtin.buffers, "[S]earch [B]uffers")
       vim.keymap.set("n", "<leader>/", function()
         builtin.current_buffer_fuzzy_find(require("telescope.themes").get_dropdown({
