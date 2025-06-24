@@ -61,6 +61,21 @@ KB("n", "<leader><leader>", "<C-^>", "Switch to last active buffer")
 KB("n", "<Esc>", "<cmd>nohlsearch<CR>", "[Esc] clears search highlights")
 KB("n", "<leader>cp", ":Copilot panel<CR>", "[C]opilot [P]anel")
 
+-- Alias <leader>w to C-w for some common panel management commands.
+-- C-w is close to Cmd-w, which will close the window.
+KB("n", "<leader>wv", "<C-w>v", "[W]indow [V]ertical split")
+KB("n", "<leader>ws", "<C-w>s", "[W]indow horizontal [S]plit")
+KB("n", "<leader>wo", "<C-w>o", "[W]indow [O]ne: Close all other windows")
+KB("n", "<leader>wq", "<C-w>q", "[W]indow [Q]uit")
+KB("n", "<leader>wh", "<C-w>h", "Go to left window")
+KB("n", "<leader>wj", "<C-w>j", "Go to bottom window")
+KB("n", "<leader>wk", "<C-w>k", "Go to top window")
+KB("n", "<leader>wl", "<C-w>l", "Go to right window")
+KB("n", "<leader>wH", "<C-w>H", "Move window left")
+KB("n", "<leader>wJ", "<C-w>J", "Move window down")
+KB("n", "<leader>wK", "<C-w>K", "Move window up")
+KB("n", "<leader>wL", "<C-w>L", "Move window right")
+
 -- Keybindings for interacting with the system clipboard.
 KB({ "n", "v", "x" }, "<leader>y", '"+y', "[Y]ank to system clipboard")
 KB({ "n", "v", "x" }, "<leader>yy", '"+yy', "[Y]ank line to system clipboard")
@@ -575,9 +590,9 @@ local main_plugins = {
 
           -- Fuzzy find all the symbols in your current workspace.
           map(
-            "<leader>ws",
+            "<leader>gs",
             require("telescope.builtin").lsp_dynamic_workspace_symbols,
-            "[W]orkspace [S]ymbols"
+            "[G]lobal [S]ymbols"
           )
 
           -- Rename the variable under your cursor.
