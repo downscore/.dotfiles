@@ -19,6 +19,7 @@ vim.opt.colorcolumn = "101" -- Ruler just after line length limit.
 vim.opt.wrap = false -- Disable line wrapping.
 vim.opt.textwidth = 100 -- Set the maximum text width.
 vim.g.python_recommended_style = false -- Disable Python recommended style.
+vim.opt.commentstring = "# %s" -- Default to Python-style comments.
 
 -- Configure the terminal window title.
 vim.opt.title = true
