@@ -326,7 +326,7 @@ local main_plugins = {
           },
         },
         defaults = {
-          file_ignore_patterns = { "node_modules", ".DS_Store", ".git" },
+          file_ignore_patterns = { "node_modules", ".DS_Store", ".git", "venv" },
         },
         pickers = {
           find_files = {
