@@ -32,8 +32,12 @@ vim.opt.shiftwidth = 2
 vim.opt.expandtab = true
 
 -- Do not continue comments when pressing 'o' in normal mode or enter in insert mode.
-vim.cmd("autocmd BufEnter * set formatoptions-=or")
-vim.cmd("autocmd BufEnter * setlocal formatoptions-=or")
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "*",
+  callback = function()
+    vim.opt_local.formatoptions:remove({ "r", "o" })
+  end,
+})
 
 -- Search options.
 vim.opt.ignorecase = true
