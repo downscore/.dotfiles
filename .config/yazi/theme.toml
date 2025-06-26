@@ -1,0 +1,3 @@
+[flavor]
+# Need to run `ya pkg add yazi-rs/flavors:catppuccin-mocha`
+dark = "catppuccin-mocha"

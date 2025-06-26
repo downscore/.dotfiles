@@ -394,39 +394,35 @@ local main_plugins = {
     end,
   },
 
-  -- nvim-tree
+  -- Integrated yazi.
   {
-    "nvim-tree/nvim-tree.lua",
-    version = "*",
-    lazy = false,
-    dependencies = {
-      "nvim-tree/nvim-web-devicons",
+    "mikavilpas/yazi.nvim",
+    event = "VeryLazy",
+    dependencies = { "folke/snacks.nvim" },
+    keys = {
+      {
+        "<leader>l",
+        mode = { "n", "v" },
+        "<cmd>Yazi<cr>",
+        desc = "Open yazi at the current [L]ocation",
+      },
+      {
+        "<leader>cw",
+        "<cmd>Yazi cwd<cr>",
+        desc = "Open yazi at the [C]urrent [W]orking directory",
+      },
     },
-    config = function()
-      require("nvim-tree").setup({})
-    end,
-  },
-
-  -- Integrated lf.
-  {
-    "lmburns/lf.nvim",
-    dependencies = { "nvim-lua/plenary.nvim", "akinsho/toggleterm.nvim" },
-    config = function()
-      -- This feature will not work if the plugin is lazy-loaded.
-      vim.g.lf_netrw = 1
-
-      require("lf").setup({
-        escape_quit = true,
-        winblend = 0,
-        highlights = { NormalFloat = { guibg = "NONE" } },
-        border = "rounded",
-        direction = "float",
-        height = vim.o.lines - 4,
-        width = vim.o.columns - 4,
-      })
-
-      KB("n", "<leader>l", "<Cmd>Lf<CR>", "Integrated [L]f")
-      KB("n", "<M-o>", "<Cmd>Lf<CR>", "Integrated Lf")
+    opts = {
+      -- Open yazi instead of netrw. Init function below is required for this to work.
+      open_for_directories = true,
+      -- Don't highlight buffers in the same directory. Still highlights open buffers.
+      highlight_hovered_buffers_in_same_directory = false,
+    },
+    -- Init function for replacing netrw with yazi.
+    init = function()
+      -- More details: https://github.com/mikavilpas/yazi.nvim/issues/802
+      -- vim.g.loaded_netrw = 1
+      vim.g.loaded_netrwPlugin = 1
     end,
   },
 
