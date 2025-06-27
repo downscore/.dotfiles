@@ -104,10 +104,13 @@ if type zoxide &>/dev/null; then
   alias cd='z'
 fi
 
-# Function for changing the current directory with lf.
-lfcd () {
-  # `command` is needed in case `lfcd` is aliased to `lf`
-  cd "$(command lf -print-last-dir "$@")"
+# Function for changing the current directory with yazi.
+yazicd() {
+  local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+  yazi "$@" --cwd-file="$tmp"
+  IFS= read -r -d '' cwd < "$tmp"
+  [ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && builtin cd -- "$cwd"
+  rm -f -- "$tmp"
 }
 
 # Watch for file changes then compile and run the program.
@@ -129,7 +132,8 @@ entrpy() {
     echo \"*** END [$(date +'%Y-%m-%d %H:%M:%S')] ***\""
 }
 
-# Replace some substring in command output with ellipses.
+# Replace some substring in command output with ellipses. Pipe to this to make output more readable
+# when it contains long paths or other strings that are repeated many times.
 ellipses() {
   local pattern="$1"
   if [[ -z "$pattern" ]]; then
@@ -154,10 +158,10 @@ alias mansyscall='manfzf 2'
 alias manlib='manfzf 3'
 abbr --force -q ll='ls -al'
 abbr --force -q v='vi'
-abbr --force -q l='lfcd'
-abbr --force -q lg='lazygit'
+abbr --force -q l='yazicd'
 abbr --force -q cpy='tmux capture-pane -pS -10000% | copy_to_clipboard'  # Cursor after num lines.
 abbr --force -q a2=' aria2c "%"'
+abbr --force -q cdi='cd $HOME/Library/Mobile Documents/com~apple~CloudDocs'
 abbr --force -q cdo='cd $HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents/Notes'
 
 # Load API keys and other private configuration if available.
