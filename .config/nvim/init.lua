@@ -114,9 +114,10 @@ KB("i", "<M-Right>", "<C-o>w", "Go to right one word in insert mode")
 KB("i", "<M-Up>", "<Up>", "Move up in insert mode")
 KB("i", "<M-Down>", "<Down>", "Move down in insert mode")
 
--- Allow toggling relative line numbers.
+-- Toggling features.
 vim.opt.relativenumber = false -- Default relative line numbers setting.
 KB("n", "<leader>tr", ":set relativenumber!<CR>", "[T]oggle [R]elative line numbers")
+KB("n", "<leader>tb", ":Gitsigns toggle_current_line_blame<CR>", "[T]oggle Git [B]lame")
 
 -- Add keybinding for toggling copilot.
 local copilot_enabled = true
@@ -315,7 +316,7 @@ local main_plugins = {
         change = { text = "▋" },
         changedelete = { text = "▋" },
       },
-      current_line_blame = true,
+      current_line_blame = false,
       current_line_blame_opts = {
         virt_text = true,
         virt_text_pos = "right_align", -- 'eol' | 'overlay' | 'right_align'
