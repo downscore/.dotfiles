@@ -307,6 +307,19 @@ local main_plugins = {
     },
   },
 
+  -- Undo tree visualizer.
+  {
+    "mbbill/undotree",
+    cmd = "UndotreeToggle",
+    keys = {
+      {
+        "<leader>u",
+        "<cmd>UndotreeToggle<cr>",
+        desc = "[U]ndo tree toggle",
+      },
+    },
+  },
+
   -- Git gutter.
   {
     "lewis6991/gitsigns.nvim",
