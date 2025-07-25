@@ -127,8 +127,9 @@ entrc() {
     echo \"*** END [$(date +'%Y-%m-%d %H:%M:%S')] ***\""
 }
 entrpy() {
+  local python_bin=$(which python3)
   ls $1 | entr -s "echo \"*** START [$(date +'%Y-%m-%d %H:%M:%S')] ***\" && \
-    python3 \"$1\" && \
+    $python_bin \"$1\" && \
     echo \"*** END [$(date +'%Y-%m-%d %H:%M:%S')] ***\""
 }
 
