@@ -62,6 +62,7 @@ BindAppFocusKey("o", "Obsidian")
 BindAppFocusKey("p", "ChatGPT")
 BindAppFocusKey("t", "Alacritty")
 BindBrowserTabFocusKey("y", "youtube.com")
+BindAppFocusKey(";", "Claude")
 
 -- Add switcher shortcuts using a leader key.
 local singleKey = spoon.RecursiveBinder.singleKey
