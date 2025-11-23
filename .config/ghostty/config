@@ -1,4 +1,4 @@
-window-decoration = false
+window-decoration = none
 window-save-state = always
 macos-option-as-alt = true
 confirm-close-surface = false
@@ -7,7 +7,7 @@ font-family = MesloLGL Nerd Font
 font-size = 16.0
 cursor-style = bar
 
-theme = catppuccin-mocha
+theme = catppuccin-mocha.conf
 palette = 0=101010
 palette = 1=ff1111
 palette = 2=30d158
@@ -60,15 +60,15 @@ keybind = cmd+d=text:\x20mm
 keybind = cmd+shift+d=text:\x1byyp
 
 # cmd-1 through cmd-9 change tmux windows (^b #).
-keybind = cmd+one=text:\x021
-keybind = cmd+two=text:\x022
-keybind = cmd+three=text:\x023
-keybind = cmd+four=text:\x024
-keybind = cmd+five=text:\x025
-keybind = cmd+six=text:\x026
-keybind = cmd+seven=text:\x027
-keybind = cmd+eight=text:\x028
-keybind = cmd+nine=text:\x029
+keybind = cmd+digit_1=text:\x021
+keybind = cmd+digit_2=text:\x022
+keybind = cmd+digit_3=text:\x023
+keybind = cmd+digit_4=text:\x024
+keybind = cmd+digit_5=text:\x025
+keybind = cmd+digit_6=text:\x026
+keybind = cmd+digit_7=text:\x027
+keybind = cmd+digit_8=text:\x028
+keybind = cmd+digit_9=text:\x029
 
 # Animated CRT effect
 # custom-shader = shaders/eam-crt.glsl

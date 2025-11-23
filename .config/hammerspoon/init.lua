@@ -60,7 +60,7 @@ BindAppFocusKey("m", "Messages")
 BindAppFocusKey("n", "Notes")
 BindAppFocusKey("o", "Obsidian")
 BindAppFocusKey("p", "ChatGPT")
-BindAppFocusKey("t", "Alacritty")
+BindAppFocusKey("t", "Ghostty")
 BindBrowserTabFocusKey("y", "youtube.com")
 BindAppFocusKey(";", "Claude")
 
