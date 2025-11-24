@@ -54,8 +54,8 @@ vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
 
 -- Helper function for setting up keybindings.
 function KB(mode, key, action, desc, noremap, silent)
-  noremap = noremap or true
-  silent = silent or true
+  if noremap == nil then noremap = true end
+  if silent == nil then silent = true end
   desc = desc or ""
   vim.keymap.set(mode, key, action, { noremap = noremap, silent = silent, desc = desc })
 end
@@ -251,7 +251,7 @@ vim.api.nvim_create_autocmd({ "VimLeave", "VimSuspend" }, {
 -- Install `lazy.nvim` plugin manager.
 -- See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info.
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
+if not vim.uv.fs_stat(lazypath) then
   local lazyrepo = "https://github.com/folke/lazy.nvim.git"
   vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
 end ---@diagnostic disable-next-line: undefined-field
@@ -470,7 +470,8 @@ local main_plugins = {
         elseif mc.hasCursors() then
           mc.clearCursors()
         else
-          -- Default <esc> handler.
+          -- Default <esc> handler: clear search highlights.
+          vim.cmd("nohlsearch")
         end
       end)
 
@@ -858,19 +859,24 @@ local main_plugins = {
       })
 
       -- Define a function and keybinding to toggle autocomplete.
+      local autocomplete_enabled = true
       local function toggle_autocomplete()
-        local current_setting = cmp.get_config().completion.autocomplete
-        local new_setting = not current_setting
-        cmp.setup({
-          completion = {
-            autocomplete = new_setting,
-          },
-        })
-        if new_setting then
-          print("Autocomplete enabled")
-        else
+        if autocomplete_enabled then
+          cmp.setup({
+            completion = {
+              autocomplete = false,
+            },
+          })
           print("Autocomplete disabled")
+        else
+          cmp.setup({
+            completion = {
+              autocomplete = { require("cmp.types").cmp.TriggerEvent.TextChanged },
+            },
+          })
+          print("Autocomplete enabled")
         end
+        autocomplete_enabled = not autocomplete_enabled
       end
       vim.keymap.set(
         "n",

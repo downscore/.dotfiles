@@ -38,9 +38,8 @@ SAVEHIST=200000
 # Only include `cd` commands containing a slash in history.
 HISTORY_IGNORE='(ls|cd [^/]*|pwd|exit)'
 setopt append_history  # Append commands to the history file, rather than overwriting it.
-# Append commands as soon as they are executed, rather than at the end of the session.
-setopt inc_append_history
 setopt share_history  # Share history between all sessions.
+setopt inc_append_history # Append commands immediately. Implied by share_history. 
 setopt extended_history  # Save command timestamp and duration.
 setopt hist_expire_dups_first  # Delete oldest dupes first.
 setopt hist_ignore_dups  # Do not write dupes to history.
@@ -52,6 +51,7 @@ setopt hist_verify  # Don't execute when pressing enter for commands like `!!`, 
 # Other terminal options.
 setopt nobeep  # No beeping on error.
 setopt autopushd  # Enable auto directory stack.
+setopt pushd_ignore_dups  # Don't add duplicate dirs to directory stack.
 setopt interactive_comments  # Allow inline comments in interactive shells.
 
 # GhosTTY terminfo is not widely available. For now, use `xterm-256color`.
@@ -115,20 +115,20 @@ yazicd() {
 
 # Watch for file changes then compile and run the program.
 entrcc() {
-  ls $1 | entr -s "g++ -std=c++20 -o \"${1%.*}\" \"$1\" && \
+  ls "$1" | entr -s "g++ -std=c++20 -o \"${1%.*}\" \"$1\" && \
     echo \"*** START [$(date +'%Y-%m-%d %H:%M:%S')] ***\" && \
     \"./${1%.*}\" && \
     echo \"*** END [$(date +'%Y-%m-%d %H:%M:%S')] ***\""
 }
 entrc() {
-  ls $1 | entr -s "gcc -std=c11 -o \"${1%.*}\" \"$1\" && \
+  ls "$1" | entr -s "gcc -std=c11 -o \"${1%.*}\" \"$1\" && \
     echo \"*** START [$(date +'%Y-%m-%d %H:%M:%S')] ***\" && \
     \"./${1%.*}\" && \
     echo \"*** END [$(date +'%Y-%m-%d %H:%M:%S')] ***\""
 }
 entrpy() {
   local python_bin=$(which python3)
-  ls $1 | entr -s "echo \"*** START [$(date +'%Y-%m-%d %H:%M:%S')] ***\" && \
+  ls "$1" | entr -s "echo \"*** START [$(date +'%Y-%m-%d %H:%M:%S')] ***\" && \
     $python_bin \"$1\" && \
     echo \"*** END [$(date +'%Y-%m-%d %H:%M:%S')] ***\""
 }
@@ -142,7 +142,7 @@ ellipses() {
     return 1
   fi
   pattern=$(echo "$pattern" | sed 's/[\/&]/\\&/g') # Escape `/` and `&` for sed
-  sed -E "s/$pattern/…/"
+  sed -E "s/$pattern/…/g"
 }
 
 # Command aliases and abbreviations.
@@ -176,7 +176,13 @@ else
 fi
 
 # Load completion scripts after os-specific completion data has been loaded.
-autoload -Uz compinit && compinit
+autoload -Uz compinit
+# Cache completion data for 24 hours to speed up shell startup.
+if [[ -f ~/.zcompdump && -z ~/.zcompdump(#qN.mh+24) ]]; then
+  compinit -C
+else
+  compinit
+fi
 
 # Enable syntax highlighting.
 # Note: This must be at the end of .zshrc
