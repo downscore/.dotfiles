@@ -9,6 +9,9 @@ print_red() {
 print_green() {
   printf "\e[32m%s\e[0m\n" "$1"
 }
+print_dark_green() {
+  printf "\e[32;2m%s\e[0m\n" "$1"
+}
 
 create_symlink() {
   local file=$1
@@ -16,7 +19,7 @@ create_symlink() {
 
   echo -n "$file: "
   if [[ -L "$file" && "$(readlink -f "$file")" == "$target" ]]; then
-    print_green "OK Symlink to correct path already exists"
+    print_dark_green "OK Symlink to correct path already exists"
     return 0
   fi
   if [[ -e "$file" && ! -L "$file" ]]; then
@@ -45,6 +48,8 @@ create_symlink "$HOME/.zshrc" "$DF/.zshrc"
 create_symlink "$HOME/.zprofile" "$DF/.zprofile"
 create_symlink "$HOME/.zshenv" "$DF/.zshenv"
 create_symlink "$HOME/.p10k.zsh" "$DF/.p10k.zsh"
+create_symlink "$HOME/.pylintrc" "$DF/.pylintrc"
+create_symlink "$HOME/.style.yapf" "$DF/.style.yapf"
 create_symlink "$CFG/alacritty" "$DFCFG/alacritty"
 create_symlink "$CFG/bat" "$DFCFG/bat"
 create_symlink "$CFG/ghostty" "$DFCFG/ghostty"
