@@ -25,6 +25,8 @@ palette = 13=ff2dde
 palette = 14=22e5ef
 palette = 15=d0dae6
 
+# Shift+enter adds a new line in Claude Code.
+keybind = shift+enter=text:\x1b\r
 # Go to line beginning/ending.
 keybind = cmd+left=esc:[1~
 keybind = cmd+right=esc:[4~
