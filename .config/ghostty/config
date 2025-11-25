@@ -50,6 +50,8 @@ keybind = cmd+w=text:\x02x
 keybind = cmd+u=text:\x02u
 # Open lazygit (^b g).
 keybind = cmd+g=text:\x02g
+# Go to previous response in Claude Code in tmux.
+keybind = cmd+r=text:\x02m
 
 # Save in vim (escape :w enter).
 keybind = cmd+s=text:\x1b:w\n
