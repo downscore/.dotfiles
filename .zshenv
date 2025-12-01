@@ -21,6 +21,11 @@ if test -d "$HOME/.config/emacs/bin"; then
   export PATH="$HOME/.config/emacs/bin:$PATH"
 fi
 
+# Add homebrew's ruby to PATH if it exists.
+if test -d "/opt/homebrew/opt/ruby/bin"; then
+  export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
+fi
+
 # Add ~/.dotfiles/scripts to PATH if it exists.
 if test -d "$HOME/.dotfiles/scripts"; then
   export PATH="$HOME/.dotfiles/scripts:$PATH"

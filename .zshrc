@@ -47,6 +47,7 @@ setopt hist_ignore_space  # If first char is a space, command is not written to 
 setopt hist_find_no_dups  # Don't display dupes while searching through history.
 setopt hist_reduce_blanks  # Remove extra blanks from commands added to history.
 setopt hist_verify  # Don't execute when pressing enter for commands like `!!`, just expand.
+setopt extended_glob  # Extended globbing. Required for using cached completions below.
 
 # Other terminal options.
 setopt nobeep  # No beeping on error.
@@ -99,9 +100,7 @@ zle -N zle_tmux_buffer_to_clipboard
 
 # Enable zoxide if it is available.
 if type zoxide &>/dev/null; then
-  eval "$(zoxide init zsh)"
-  # Replace `cd` with zoxide.
-  alias cd='z'
+  eval "$(zoxide init zsh --cmd cd)"
 fi
 
 # Function for changing the current directory with yazi.
