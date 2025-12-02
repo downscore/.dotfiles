@@ -17,6 +17,7 @@ vim.opt.cursorline = true -- Highlight the line the cursor is on.
 vim.opt.scrolloff = 10 -- Minimum number of screen lines to keep above and below the cursor.
 vim.opt.colorcolumn = "101" -- Ruler just after line length limit.
 vim.opt.wrap = false -- Disable line wrapping.
+vim.opt.linebreak = true -- If we do wrap, wrap at word boundaries.
 vim.opt.textwidth = 100 -- Set the maximum text width.
 vim.g.python_recommended_style = false -- Disable Python recommended style.
 vim.opt.commentstring = "# %s" -- Default to Python-style comments.
@@ -53,17 +54,37 @@ vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
 -- vim.cmd('colorscheme retrobox')
 
 -- Helper function for setting up keybindings.
-function KB(mode, key, action, desc, noremap, silent)
-  if noremap == nil then noremap = true end
-  if silent == nil then silent = true end
+function KB(mode, key, action, desc, expr, noremap, silent)
+  if expr == nil then
+    expr = false
+  end
+  if noremap == nil then
+    noremap = true
+  end
+  if silent == nil then
+    silent = true
+  end
   desc = desc or ""
-  vim.keymap.set(mode, key, action, { noremap = noremap, silent = silent, desc = desc })
+  vim.keymap.set(
+    mode,
+    key,
+    action,
+    { expr = expr, noremap = noremap, silent = silent, desc = desc }
+  )
 end
 
 KB("t", "<Esc><Esc>", "<C-\\><C-n>", "Exit terminal mode") -- Default: <C-\><C-n>
 KB("n", "<leader><leader>", "<C-^>", "Switch to last active buffer")
 KB("n", "<Esc>", "<cmd>nohlsearch<CR>", "[Esc] clears search highlights")
 KB("n", "<leader>cp", ":Copilot panel<CR>", "[C]opilot [P]anel")
+
+-- Make vertical cursor movement work with display lines when lines wrap.
+KB({ "n", "v", "x" }, "<Down>", "v:count == 0 ? 'gj' : 'j'", "", true)
+KB({ "n", "v", "x" }, "<Up>", "v:count == 0 ? 'gk' : 'k'", "", true)
+KB({ "n", "v", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", "", true)
+KB({ "n", "v", "x" }, "k", "v:count == 0 ? 'gk' : 'k'", "", true)
+KB("i", "<Down>", "<C-\\><C-o>gj")
+KB("i", "<Up>", "<C-\\><C-o>gk")
 
 -- Alias <leader>w to C-w for some common panel management commands.
 -- C-w is close to Cmd-w, which will close the window.
@@ -118,6 +139,8 @@ KB("i", "<M-Down>", "<Down>", "Move down in insert mode")
 vim.opt.relativenumber = false -- Default relative line numbers setting.
 KB("n", "<leader>tr", ":set relativenumber!<CR>", "[T]oggle [R]elative line numbers")
 KB("n", "<leader>tb", ":Gitsigns toggle_current_line_blame<CR>", "[T]oggle Git [B]lame")
+KB("n", "<leader>tv", ":VirtColumnToggle<CR>", "[T]oggle [V]irt column (line length)")
+KB("n", "<leader>tw", ":set wrap!<CR>", "[T]oggle display line [W]rapping")
 
 -- Add keybinding for toggling copilot.
 local copilot_enabled = true
@@ -133,7 +156,7 @@ end, { nargs = 0 })
 KB("n", "<leader>tc", ":CopilotToggle<CR>", "[T]oggle [C]opilot")
 
 -- Toggle automatic line wrapping.
-vim.keymap.set("n", "<leader>tw", function()
+vim.keymap.set("n", "<leader>tt", function()
   local format_options = vim.opt.formatoptions:get()
   if format_options.t then
     vim.opt.formatoptions:remove("t")
@@ -142,7 +165,7 @@ vim.keymap.set("n", "<leader>tw", function()
     vim.opt.formatoptions:append("t")
     print("'t' added to formatoptions")
   end
-end, { desc = "[T]oggle automatic line [W]rapping" })
+end, { desc = "[T]oggle line wrapping while [T]yping" })
 
 -- Functionality for getting the editor context.
 -- Helper function for getting the cursor index in the text.
