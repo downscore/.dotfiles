@@ -98,8 +98,8 @@ zle_tmux_buffer_to_clipboard() {
 }
 zle -N zle_tmux_buffer_to_clipboard
 
-# Enable zoxide if it is available.
-if type zoxide &>/dev/null; then
+# Enable zoxide if it is available and Claude Code is not running.
+if type zoxide &>/dev/null && [[ -z "$CLAUDECODE" ]]; then
   eval "$(zoxide init zsh --cmd cd)"
 fi
 
