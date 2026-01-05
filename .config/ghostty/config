@@ -25,6 +25,8 @@ palette = 13=ff2dde
 palette = 14=22e5ef
 palette = 15=d0dae6
 
+# Disable new window shortcut.
+keybind = cmd+n=unbind
 # Shift+enter adds a new line in Claude Code.
 keybind = shift+enter=text:\x1b\r
 # Go to line beginning/ending.
@@ -58,6 +60,12 @@ keybind = cmd+s=text:\x1b:w\n
 keybind = cmd+enter=text:\x1bA\n
 # Add a cursor at the next match in vim.
 keybind = cmd+d=text:\x20mm
+# Remap ctrl-m to ctrl-n (scroll down in autocomplete).
+keybind = ctrl+m=text:\x0e
+# Remap ctrl-, to ctrl-p (scroll up in autocomplete).
+keybind = ctrl+comma=text:\x10
+# Remap ctrl-. to ctrl-y (accept autocomplete suggestion).
+keybind = ctrl+period=text:\x19
 # Duplicate the current line in vim.
 keybind = cmd+shift+d=text:\x1byyp
 

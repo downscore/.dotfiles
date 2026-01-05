@@ -34,6 +34,9 @@ bindings = [
   { key = "W", mods = "Command", chars = "\u0002x"},  # cmd-w closes the current window (^b x).
   { key = "D", mods = "Command", chars = "\u0020mm"},  # cmd-d adds a cursor at the next match.
   { key = "Tab", mods = "Control", chars = "\u0002o"},  # ctrl-tab to change to last tmux window.
+  { key = "M", mods = "Control", chars = "\u000e"},  # ctrl-m → ctrl-n (scroll down autocomplete).
+  { key = "Comma", mods = "Control", chars = "\u0010"},  # ctrl-, → ctrl-p (scroll up autocomplete).
+  { key = "Period", mods = "Control", chars = "\u0019"},  # ctrl-. → ctrl-y (accept autocomplete).
   { key = "P", mods = "Command|Shift", chars = "\u0012" },  # cmd-shift-p opens command search (^r).
 
   # cmd-1 through cmd-9 change tmux windows (^b #).
