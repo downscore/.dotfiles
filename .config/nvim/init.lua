@@ -11,7 +11,7 @@ vim.opt.updatetime = 250 -- Decrease update time.
 vim.opt.timeoutlen = 500 -- Decrease mapped sequence wait time. Display which-key popup sooner.
 vim.opt.splitright = true -- Configure how new splits should be opened.
 vim.opt.splitbelow = true
-vim.opt.signcolumn = "auto:1-4" -- Make gutter autoresize and allow it to get wider.
+vim.opt.signcolumn = "yes:3" -- Fixed gutter width (diagnostics, git, marks).
 vim.opt.inccommand = "split" -- Preview substitutions while typing.
 vim.opt.cursorline = true -- Highlight the line the cursor is on.
 vim.opt.scrolloff = 10 -- Minimum number of screen lines to keep above and below the cursor.
@@ -37,6 +37,20 @@ vim.api.nvim_create_autocmd("FileType", {
   pattern = "*",
   callback = function()
     vim.opt_local.formatoptions:remove({ "r", "o" })
+  end,
+})
+
+-- Hide diagnostics in insert mode. Use ModeChanged with "*:n" instead of InsertLeave to avoid
+-- re-enabling when entering temporary normal mode (niI/niR) via <C-o>.
+vim.api.nvim_create_autocmd("InsertEnter", {
+  callback = function()
+    vim.diagnostic.config({ virtual_text = false })
+  end,
+})
+vim.api.nvim_create_autocmd("ModeChanged", {
+  pattern = "*:n",
+  callback = function()
+    vim.diagnostic.config({ virtual_text = true })
   end,
 })
 
@@ -739,7 +753,7 @@ local main_plugins = {
             },
           },
         },
-        pyright = {},
+        basedpyright = {},
         rust_analyzer = {
           settings = {
             ["rust-analyzer"] = {
@@ -938,7 +952,7 @@ local main_plugins = {
         -- additional_vim_regex_highlighting and disabled languages for indent.
         additional_vim_regex_highlighting = { "ruby" },
       },
-      indent = { enable = true, disable = { "ruby" } },
+      indent = { enable = true, disable = { "ruby", "python" } },
     },
   },
 }
