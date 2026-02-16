@@ -1,0 +1,13 @@
+#!/bin/zsh
+
+# Get the file path from nvim's status line in the current tmux window.
+pane=$(tmux list-panes -F '#{pane_index} #{pane_current_command}' | awk '/nvim/{print $1; exit}')
+
+if [[ -z "$pane" ]]; then
+  echo "No nvim pane found in current window." >&2
+  exit 1
+fi
+
+# The second-to-last line of the capture is the status line with the file path.
+# Format: "~/path/to/file.py                    105,24         14%"
+tmux capture-pane -t "$pane" -p | tail -2 | head -1 | awk '{print $1}' | sed "s|^~|$HOME|"

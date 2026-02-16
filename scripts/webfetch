@@ -1,0 +1,166 @@
+#!/usr/bin/env -S uv run --script
+# /// script
+# dependencies = ["trafilatura", "beautifulsoup4", "truststore", "brotli"]
+# ///
+"""Fetch a URL and extract its main text content, or download PDFs.
+
+For HTML pages, extracts text via trafilatura (with BeautifulSoup fallback) and
+prints to stdout. Output is auto-truncated to ~28k chars to fit in Claude Code's
+Bash tool output limit. Use -o to save to a specific path (skips stdout, prints
+path only).
+
+For PDF URLs (detected by Content-Type or .pdf extension), downloads the file and
+saves locally. Always use -o with a descriptive filename for PDFs. If -o is not
+given, saves to a temp file. Prints the saved path. Use the Read tool to view.
+
+Exit codes:
+    0 - Success
+    1 - Network or HTTP error
+    2 - Empty response from server
+    3 - Content extraction failed (page fetched but no usable text found)
+"""
+
+import argparse
+import gzip
+import hashlib
+import io
+import os
+import sys
+import tempfile
+import urllib.parse
+import urllib.request
+
+import brotli
+import truststore
+import trafilatura
+from bs4 import BeautifulSoup
+
+# Use macOS Security.framework / OS trust store for SSL verification.
+# Handles incomplete cert chains (missing intermediates) via AIA fetching.
+truststore.inject_into_ssl()
+
+# Claude Code's Bash tool truncates at 30k chars; leave headroom for warnings/framing.
+OUTPUT_CHAR_LIMIT = 28_000
+
+HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+    "Accept-Language": "en-US,en;q=0.9",
+    "Accept-Encoding": "gzip, deflate, br",
+    "Sec-Fetch-Dest": "document",
+    "Sec-Fetch-Mode": "navigate",
+    "Sec-Fetch-Site": "none",
+    "Sec-Fetch-User": "?1",
+    "Upgrade-Insecure-Requests": "1",
+    "Connection": "keep-alive",
+    "Cache-Control": "max-age=0",
+}
+
+
+def error(msg, code, quiet=False):
+    if not quiet:
+        print(msg, file=sys.stderr)
+    sys.exit(code)
+
+
+def bs4_fallback(html):
+    """Fallback: use BeautifulSoup to extract text content."""
+    soup = BeautifulSoup(html, "html.parser")
+    for tag in soup(["script", "style", "nav", "header", "footer"]):
+        tag.decompose()
+    text = soup.get_text(separator="\n", strip=True)
+    return text if len(text) > 100 else None
+
+
+def _is_pdf(url, content_type):
+    """Check if the response is a PDF by Content-Type or URL extension."""
+    if content_type and "application/pdf" in content_type:
+        return True
+    return urllib.parse.urlparse(url).path.lower().endswith(".pdf")
+
+
+def save_file(content, url, output_path=None, ext="txt", binary=False):
+    """Save content to the given path, or a deterministic temp file based on URL hash."""
+    if output_path:
+        path = output_path
+    else:
+        url_hash = hashlib.md5(url.encode()).hexdigest()[:10]
+        path = os.path.join(tempfile.gettempdir(), f"webfetch-{url_hash}.{ext}")
+    with open(path, "wb" if binary else "w") as f:
+        f.write(content)
+    return path
+
+
+def fetch(url, quiet=False):
+    """Fetch a URL. Returns {"type": "pdf", "data": bytes} or {"type": "text", "text": str}."""
+    req = urllib.request.Request(url, headers=HEADERS)
+    try:
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            content_type = resp.headers.get("Content-Type", "")
+            raw = resp.read(75_000_000)  # some pages (e.g. Anthropic posts) are very large
+
+            if _is_pdf(url, content_type):
+                if not raw:
+                    error(f"Empty response from {url}", 2, quiet)
+                return {"type": "pdf", "data": raw}
+
+            encoding = resp.headers.get("Content-Encoding", "")
+            if encoding == "br":
+                raw = brotli.decompress(raw)
+            elif encoding == "gzip" or raw[:2] == b"\x1f\x8b":
+                raw = gzip.GzipFile(fileobj=io.BytesIO(raw)).read()
+            downloaded = raw.decode(resp.headers.get_content_charset() or "utf-8", errors="replace")
+    except Exception as e:
+        error(f"Failed to fetch {url}: {e}", 1, quiet)
+
+    if not downloaded:
+        error(f"Empty response from {url}", 2, quiet)
+
+    text = trafilatura.extract(
+        downloaded,
+        include_comments=False,
+        include_tables=True,
+        favor_recall=True,
+    )
+
+    if not text:
+        if not quiet:
+            print("[trafilatura failed, falling back to BeautifulSoup]", file=sys.stderr)
+        text = bs4_fallback(downloaded)
+
+    if not text:
+        error(f"No content extracted from {url}", 3, quiet)
+
+    return {"type": "text", "text": text}
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument("url", help="URL to fetch")
+    parser.add_argument("-q", "--quiet", action="store_true", help="suppress error messages on stderr")
+    parser.add_argument("-o", "--output", help="save to this path, print path only")
+    args = parser.parse_args()
+    result = fetch(args.url, quiet=args.quiet)
+
+    if result["type"] == "pdf":
+        path = save_file(result["data"], args.url, args.output, ext="pdf", binary=True)
+        if not args.quiet:
+            print(f"[PDF saved to: {path} — use Read tool to view]", file=sys.stderr)
+        print(path)
+    elif args.output:
+        path = save_file(result["text"], args.url, args.output)
+        print(path)
+    elif len(result["text"]) > OUTPUT_CHAR_LIMIT:
+        path = save_file(result["text"], args.url)
+        truncated = result["text"][:OUTPUT_CHAR_LIMIT]
+        # Try to cut at a newline to avoid mid-sentence truncation.
+        last_nl = truncated.rfind("\n")
+        if last_nl > OUTPUT_CHAR_LIMIT * 0.8:
+            truncated = truncated[:last_nl]
+        print(truncated)
+        total = len(result["text"])
+        shown = len(truncated)
+        pct = shown * 100 // total
+        print(f"\n[TRUNCATED: {pct}% shown ({shown:,}/{total:,} chars). Full text saved to: {path} — read it, don't re-fetch.]", file=sys.stderr)
+    else:
+        print(result["text"])

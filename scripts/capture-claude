@@ -1,0 +1,7 @@
+#!/bin/zsh
+
+# Capture recent scrollback of the current tmux pane (where Claude Code is running).
+# Outputs to stdout so it can be piped to rg, wc, etc.
+# Usage: capture-claude [lines]   (default: 200)
+local lines=${1:-200}
+tmux capture-pane -p -S "-$lines"
