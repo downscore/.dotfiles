@@ -1,3 +1,10 @@
 [flavor]
 # Need to run `ya pkg add yazi-rs/flavors:catppuccin-mocha`
 dark = "catppuccin-mocha"
+
+# Vivid red/green overrides for colorblind accessibility
+[mgr]
+marker_copied   = { fg = "#3399ff", bg = "#3399ff" }
+marker_cut      = { fg = "#ff1111", bg = "#ff1111" }
+count_copied    = { fg = "#1e1e2e", bg = "#3399ff" }
+count_cut       = { fg = "#1e1e2e", bg = "#ff1111" }

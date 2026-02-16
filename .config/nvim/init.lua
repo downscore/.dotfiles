@@ -1037,7 +1037,16 @@ require("catppuccin").setup({
     operators = {},
     -- miscs = {},  -- Uncomment to turn off hard-coded styles.
   },
-  color_overrides = {},
+  color_overrides = {
+    mocha = {
+      red = "#ff1111",
+      green = "#30d158",
+      yellow = "#ffd60a",
+      blue = "#58a6ff",
+      pink = "#ff37f2",
+      teal = "#53c2c5",
+    },
+  },
   custom_highlights = {},
   default_integrations = true,
   integrations = {
