@@ -1,5 +1,6 @@
 window-decoration = none
 window-save-state = always
+macos-window-shadow = false
 macos-option-as-alt = true
 confirm-close-surface = false
 
