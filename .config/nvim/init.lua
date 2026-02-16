@@ -36,7 +36,7 @@ vim.opt.expandtab = true
 vim.api.nvim_create_autocmd("FileType", {
   pattern = "*",
   callback = function()
-    vim.opt_local.formatoptions:remove({ "r", "o" })
+    vim.opt_local.formatoptions:remove({ "r", "o", "t" })
   end,
 })
 
@@ -382,7 +382,7 @@ local main_plugins = {
   {
     "nvim-telescope/telescope.nvim",
     event = "VimEnter",
-    branch = "0.1.x",
+    branch = "master",
     dependencies = {
       "nvim-lua/plenary.nvim",
       "nvim-telescope/telescope-ui-select.nvim",
@@ -396,7 +396,7 @@ local main_plugins = {
           },
         },
         defaults = {
-          file_ignore_patterns = { "node_modules", ".DS_Store", ".git", "venv" },
+          file_ignore_patterns = { "node_modules", "%.DS_Store", "%.git", "venv" },
         },
         pickers = {
           find_files = {
@@ -709,12 +709,6 @@ local main_plugins = {
             [vim.diagnostic.severity.INFO] = " ",
             [vim.diagnostic.severity.HINT] = "󰠠 ",
           },
-          linehl = {
-            [vim.diagnostic.severity.ERROR] = "Error",
-            [vim.diagnostic.severity.WARN] = "Warn",
-            [vim.diagnostic.severity.INFO] = "Info",
-            [vim.diagnostic.severity.HINT] = "Hint",
-          },
         },
       })
 
@@ -850,6 +844,9 @@ local main_plugins = {
       luasnip.config.setup({})
 
       cmp.setup({
+        performance = {
+          debounce = 0,
+        },
         snippet = {
           expand = function(args)
             luasnip.lsp_expand(args.body)
@@ -928,6 +925,9 @@ local main_plugins = {
   {
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
+    dependencies = {
+      "nvim-treesitter/nvim-treesitter-textobjects",
+    },
     main = "nvim-treesitter.configs", -- Sets main module to use for opts.
     opts = {
       ensure_installed = {
@@ -953,6 +953,29 @@ local main_plugins = {
         additional_vim_regex_highlighting = { "ruby" },
       },
       indent = { enable = true, disable = { "ruby", "python" } },
+      textobjects = {
+        select = {
+          enable = true,
+          lookahead = true, -- Jump forward to matching textobject.
+          keymaps = {
+            ["af"] = { query = "@function.outer", desc = "[A]round [F]unction" },
+            ["if"] = { query = "@function.inner", desc = "[I]nside [F]unction" },
+            ["ac"] = { query = "@class.outer", desc = "[A]round [C]lass" },
+            ["ic"] = { query = "@class.inner", desc = "[I]nside [C]lass" },
+            ["aa"] = { query = "@parameter.outer", desc = "[A]round [A]rgument" },
+            ["ia"] = { query = "@parameter.inner", desc = "[I]nside [A]rgument" },
+          },
+        },
+        swap = {
+          enable = true,
+          swap_next = {
+            ["<leader>a"] = { query = "@parameter.inner", desc = "Swap with next [A]rgument" },
+          },
+          swap_previous = {
+            ["<leader>A"] = { query = "@parameter.inner", desc = "Swap with previous [A]rgument" },
+          },
+        },
+      },
     },
   },
 }
