@@ -3,6 +3,11 @@ if test -d "$HOME/.bin"; then
   export PATH="$HOME/.bin:$PATH"
 fi
 
+# Add ~/.local/bin to PATH if it exists.
+if test -d "$HOME/.local/bin"; then
+  export PATH="$HOME/.local/bin:$PATH"
+fi
+
 # Add neovim to PATH if it exists in .bin.
 if test -d "$HOME/.bin/nvim/bin"; then
   export PATH="$HOME/.bin/nvim/bin:$PATH"
@@ -55,7 +60,7 @@ if type batcat &>/dev/null; then
   # Use `batcat` as the default pager. Try it first to prevent problems with "bat" on linux.
   export PAGER='batcat --paging=always'
   # Note: The -p option messes with --paging=always, but --style=plain does not.
-  export MANPAGER="batcat -l man --paging=always --style=plain'"
+  export MANPAGER="batcat -l man --paging=always --style=plain"
 elif type bat &>/dev/null; then
   export PAGER='bat --paging=always'  # Use `bat` as the default pager.
   # Note: The -p option messes with --paging=always, but --style=plain does not.

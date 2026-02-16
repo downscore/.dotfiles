@@ -13,4 +13,4 @@ if type fzf &>/dev/null; then
 fi
 
 # OS-specific aliases and abbreviations.
-abbr --force -q ldd='otool -L'
+abbr -S -q ldd='otool -L'

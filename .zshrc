@@ -5,6 +5,7 @@ test -f ~/.p10k.zsh && source ~/.p10k.zsh
 
 # Fish-style autocomplete and abbreviations.
 source ~/.config/zsh/zsh-autosuggestions.zsh
+ABBR_AUTOLOAD=0  # Don't reload abbreviations before every abbr command.
 source ~/.config/zsh/zsh-abbr/zsh-abbr.zsh
 # Allow placing the cursor inside an abbreviation.
 ABBR_SET_EXPANSION_CURSOR=1
@@ -156,13 +157,13 @@ alias pip=pip3  # Set default pip version.
 alias print_colors='for i in {0..255}; do print -Pn "%K{$i}  %k%F{$i}${(l:3::0:)i}%f " ${${(M)$((i%6)):#3}:+$'\''\n'\''}; done'
 alias mansyscall='manfzf 2'
 alias manlib='manfzf 3'
-abbr --force -q v='vi'
-abbr --force -q l='yazicd'
-abbr --force -q c='claude'
-abbr --force -q cpy='tmux capture-pane -pS -10000% | copy_to_clipboard'
-abbr --force -q a2=' aria2c "%"'
-abbr --force -q cdi='cd $HOME/Library/Mobile Documents/com~apple~CloudDocs'
-abbr --force -q cdo='cd $HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents/Notes'
+abbr -S -q v='vi'
+abbr -S -q l='yazicd'
+abbr -S -q c='claude'
+abbr -S -q cpy='tmux capture-pane -pS -10000% | copy_to_clipboard'
+abbr -S -q a2=' aria2c "%"'
+abbr -S -q cdi='cd $HOME/Library/Mobile Documents/com~apple~CloudDocs'
+abbr -S -q cdo='cd $HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents/Notes'
 
 # Load API keys and other private configuration if available.
 test -f ~/.api_keys.zsh && source ~/.api_keys.zsh
