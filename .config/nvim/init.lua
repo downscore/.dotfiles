@@ -68,7 +68,7 @@ vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
 -- vim.cmd('colorscheme retrobox')
 
 -- Helper function for setting up keybindings.
-function KB(mode, key, action, desc, expr, noremap, silent)
+local function KB(mode, key, action, desc, expr, noremap, silent)
   if expr == nil then
     expr = false
   end
@@ -181,92 +181,6 @@ vim.keymap.set("n", "<leader>tt", function()
   end
 end, { desc = "[T]oggle line wrapping while [T]yping" })
 
--- Functionality for getting the editor context.
--- Helper function for getting the cursor index in the text.
-function GetCursorIndex(text_before_length, cursor_line_length, cursor_col)
-  -- Account for cursor column being 1-based.
-  return text_before_length - (cursor_line_length - cursor_col + 1)
-end
--- Copy the current mode and surrounding lines to the system clipboard.
-function CopyEditorContext(current_mode)
-  -- Get the current selection. Outside of visual mode, we just use the cursor position as the start
-  -- and end of the selection.
-  local cursor_line_from
-  local cursor_line_to
-  local cursor_col_from
-  local cursor_col_to
-  local cursor_line_length_from
-  local cursor_line_length_to
-  if current_mode == "v" then
-    -- Get the visual selection range (1-based indices).
-    cursor_line_from = vim.fn.line("'<")
-    cursor_line_to = vim.fn.line("'>")
-    cursor_col_from = vim.fn.col("'<")
-    -- In insert mode, the cursor is before the character, but in visual mode the character is
-    -- included in the selection, so we need to add 1 here.
-    cursor_col_to = vim.fn.col("'>") + 1
-    -- Swap the start and end if the selection is backwards.
-    if
-      cursor_line_from > cursor_line_to
-      or (cursor_line_from == cursor_line_to and cursor_col_from > cursor_col_to)
-    then
-      cursor_line_from, cursor_line_to = cursor_line_to, cursor_line_from
-      cursor_col_from, cursor_col_to = cursor_col_to, cursor_col_from
-    end
-    cursor_line_length_from = #vim.fn.getline(cursor_line_from)
-    cursor_line_length_to = #vim.fn.getline(cursor_line_to)
-  else
-    cursor_line_from = vim.fn.line(".") -- 1-based.
-    cursor_line_to = cursor_line_from
-    cursor_col_from = vim.fn.col(".") -- 1-based.
-    cursor_col_to = cursor_col_from
-    cursor_line_length_from = vim.fn.col("$") - 1
-    cursor_line_length_to = cursor_line_length_from
-  end
-
-  local doc_lines = vim.fn.line("$")
-  local context_num_lines = 5 -- Returns this many lines before and after the cursor.
-
-  -- Get text before the beginning and end of the selection.
-  local line_before = math.max(1, cursor_line_from - context_num_lines)
-  ---@diagnostic disable-next-line: param-type-mismatch
-  local text_before_from = table.concat(vim.fn.getline(line_before, cursor_line_from), "\n")
-  ---@diagnostic disable-next-line: param-type-mismatch
-  local text_before_to = table.concat(vim.fn.getline(line_before, cursor_line_to), "\n")
-
-  -- Compute the cursor positions in the text we will return.
-  local cursor_index_from =
-    GetCursorIndex(#text_before_from, cursor_line_length_from, cursor_col_from)
-  local cursor_index_to = GetCursorIndex(#text_before_to, cursor_line_length_to, cursor_col_to)
-
-  -- Get text after the cursor.
-  local text_after = ""
-  if cursor_line_to < doc_lines then
-    local line_after = math.min(doc_lines, cursor_line_to + context_num_lines)
-    ---@diagnostic disable-next-line: param-type-mismatch
-    text_after = table.concat(vim.fn.getline(cursor_line_to + 1, line_after), "\n")
-  end
-
-  -- Combine mode and lines into a single string.
-  local result = current_mode
-    .. "\n"
-    .. cursor_index_from
-    .. "\n"
-    .. cursor_index_to
-    .. "\n"
-    .. text_before_to
-  if #text_after > 0 then
-    result = result .. "\n" .. text_after
-  end
-
-  -- Copy to system clipboard.
-  vim.fn.setreg("+", result)
-end
--- Shortcuts in different modes to copy the mode and surrounding lines to the clipboard.
-KB("n", "<C-s>", ':lua CopyEditorContext("n")<CR>', "Copy editor context to clipboard")
-KB("v", "<C-s>", ':<C-u>lua CopyEditorContext("v")<CR>gv', "Copy editor context to clipboard")
-KB("i", "<C-s>", '<C-o>:lua CopyEditorContext("i")<CR>', "Copy editor context to clipboard")
-
 -- Highlight when yanking (copying) text.
 vim.api.nvim_create_autocmd("TextYankPost", {
   desc = "Highlight when yanking (copying) text",
@@ -324,19 +238,11 @@ local main_plugins = {
   },
 
   -- Auto-insert closing brackets, etc.
-  {
-    "windwp/nvim-autopairs",
-    event = "InsertEnter",
-    config = true,
-  },
+  { "windwp/nvim-autopairs", event = "InsertEnter", config = true },
 
   -- Make scrolloff also apply to the last line in a file so there is always space under the line
   -- being edited.
-  {
-    "Aasim-A/scrollEOF.nvim",
-    event = { "CursorMoved", "WinScrolled" },
-    opts = {},
-  },
+  { "Aasim-A/scrollEOF.nvim", event = { "CursorMoved", "WinScrolled" }, opts = {} },
 
   -- Use custom character for colorcolumn.
   {
@@ -449,7 +355,7 @@ local main_plugins = {
         builtin.find_files({ cwd = vim.fn.stdpath("config") })
       end, { desc = "[S]earch [N]eovim files" })
 
-      -- Special shortcut: cmd-p is mapped to ctrl-t for searchingi files in the terminal emulator.
+      -- Special shortcut: cmd-p is mapped to ctrl-t for searching files in the terminal emulator.
       -- Use it here to search for files in telescope.
       -- TODO: Overwrites shortcut for jumping to previous tag in tag list. Use something besides
       -- ctrl-t in the terminal emulator as well
@@ -502,8 +408,7 @@ local main_plugins = {
   },
   { "Bilal2453/luvit-meta", lazy = true },
 
-  -- Multiple cursors.
-  -- Uses <leader>m as prefix for most shortcuts.
+  -- Multiple cursors. Uses <leader>m as prefix for most shortcuts.
   {
     "jake-stewart/multicursor.nvim",
     branch = "1.0",
@@ -513,10 +418,11 @@ local main_plugins = {
       local set = vim.keymap.set
 
       -- Clear multiple cursors with <esc>.
-      set("n", "<esc>", function()
+      set({ "n", "v" }, "<esc>", function()
         if not mc.cursorsEnabled() then
           mc.enableCursors()
         elseif mc.hasCursors() then
+          vim.cmd("normal! \27") -- Exit visual mode first if active.
           mc.clearCursors()
         else
           -- Default <esc> handler: clear search highlights.
@@ -1003,39 +909,10 @@ end
 vim.list_extend(main_plugins, private_plugins)
 require("lazy").setup(main_plugins)
 
--- Load the Catppuccin theme.
+-- Load the Catppuccin theme with overrides to make it more colorblind-friendly.
 require("catppuccin").setup({
-  flavour = "mocha", -- auto, latte, frappe, macchiato, mocha
-  background = { -- :h background
-    light = "mocha",
-    dark = "mocha",
-  },
-  transparent_background = false, -- Disables setting the background color.
-  show_end_of_buffer = false, -- Shows the '~' characters after the end of buffers.
-  term_colors = false, -- Sets terminal colors (e.g. `g:terminal_color_0`).
-  dim_inactive = {
-    enabled = false, -- Dims the background color of inactive window.
-    shade = "dark",
-    percentage = 0.15, -- Percentage of the shade to apply to the inactive window.
-  },
-  no_italic = false, -- Force no italic.
-  no_bold = false, -- Force no bold.
-  no_underline = false, -- Force no underline.
-  styles = { -- Handles the styles of general hi groups (see `:h highlight-args`):
-    comments = { "italic" }, -- Change the style of comments.
-    conditionals = { "italic" },
-    loops = {},
-    functions = {},
-    keywords = {},
-    strings = {},
-    variables = {},
-    numbers = {},
-    booleans = {},
-    properties = {},
-    types = {},
-    operators = {},
-    -- miscs = {},  -- Uncomment to turn off hard-coded styles.
-  },
+  flavour = "mocha",
+  background = { light = "mocha", dark = "mocha" },
   color_overrides = {
     mocha = {
       red = "#ff1111",
@@ -1046,19 +923,14 @@ require("catppuccin").setup({
       teal = "#53c2c5",
     },
   },
-  custom_highlights = function(colors)
+  custom_highlights = function(_)
     return {
       LspReferenceText = { bg = "#313244" },
       LspReferenceRead = { bg = "#313244" },
       LspReferenceWrite = { bg = "#313244" },
     }
   end,
-  default_integrations = true,
   integrations = {
-    gitsigns = true,
-    nvimtree = true,
-    cmp = true,
-    treesitter = true,
     native_lsp = {
       enabled = true,
       underlines = {
