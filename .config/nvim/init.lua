@@ -311,6 +311,18 @@ local main_plugins = {
   -- Easily changing brackets and surrounding text.
   { "tpope/vim-surround" },
 
+  -- Make . repeat work with plugin actions (surround, etc.).
+  { "tpope/vim-repeat" },
+
+  -- Jump to any visible location with s + 2 characters.
+  {
+    url = "https://codeberg.org/andyg/leap.nvim",
+    config = function()
+      vim.keymap.set({ "n", "x", "o" }, "s", "<Plug>(leap)")
+      vim.keymap.set("n", "S", "<Plug>(leap-from-window)")
+    end,
+  },
+
   -- Auto-insert closing brackets, etc.
   {
     "windwp/nvim-autopairs",
@@ -660,34 +672,34 @@ local main_plugins = {
 
           -- Autocommands for highlighting instances of the word under the cursor.
           local client = vim.lsp.get_client_by_id(event.data.client_id)
-          -- Uncomment to enable highlighting.
-          -- if
-          --   client
-          --   and client.supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight)
-          -- then
-          --   local highlight_augroup =
-          --     vim.api.nvim_create_augroup("kickstart-lsp-highlight", { clear = false })
-          --   vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
-          --     buffer = event.buf,
-          --     group = highlight_augroup,
-          --     callback = vim.lsp.buf.document_highlight,
-          --   })
-          --   vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
-          --     buffer = event.buf,
-          --     group = highlight_augroup,
-          --     callback = vim.lsp.buf.clear_references,
-          --   })
-          --   vim.api.nvim_create_autocmd("LspDetach", {
-          --     group = vim.api.nvim_create_augroup("kickstart-lsp-detach", { clear = true }),
-          --     callback = function(event2)
-          --       vim.lsp.buf.clear_references()
-          --       vim.api.nvim_clear_autocmds({
-          --         group = "kickstart-lsp-highlight",
-          --         buffer = event2.buf,
-          --       })
-          --     end,
-          --   })
-          -- end
+          -- Highlight instances of the word under the cursor.
+          if
+            client
+            and client:supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight)
+          then
+            local highlight_augroup =
+              vim.api.nvim_create_augroup("kickstart-lsp-highlight", { clear = false })
+            vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
+              buffer = event.buf,
+              group = highlight_augroup,
+              callback = vim.lsp.buf.document_highlight,
+            })
+            vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
+              buffer = event.buf,
+              group = highlight_augroup,
+              callback = vim.lsp.buf.clear_references,
+            })
+            vim.api.nvim_create_autocmd("LspDetach", {
+              group = vim.api.nvim_create_augroup("kickstart-lsp-detach", { clear = true }),
+              callback = function(event2)
+                vim.lsp.buf.clear_references()
+                vim.api.nvim_clear_autocmds({
+                  group = "kickstart-lsp-highlight",
+                  buffer = event2.buf,
+                })
+              end,
+            })
+          end
 
           -- The following code creates a keymap to toggle inlay hints, if the current language
           -- server supports them.
@@ -983,26 +995,13 @@ local main_plugins = {
 -- Load private plugin configuration if available.
 local private_plugins = {}
 local private_plugins_path = os.getenv("HOME") .. "/.private_plugins.lua"
-local function file_exists(file)
-  local f = io.open(file, "r")
-  if f then
-    f:close()
-  end
-  return f ~= nil
-end
-if file_exists(private_plugins_path) then
+if vim.uv.fs_stat(private_plugins_path) then
   private_plugins = dofile(private_plugins_path)
 end
 
 -- Load all plugins.
-function TableConcat(t1, t2)
-  for i = 1, #t2 do
-    t1[#t1 + 1] = t2[i]
-  end
-  return t1
-end
-local plugins = TableConcat(main_plugins, private_plugins)
-require("lazy").setup(plugins)
+vim.list_extend(main_plugins, private_plugins)
+require("lazy").setup(main_plugins)
 
 -- Load the Catppuccin theme.
 require("catppuccin").setup({
@@ -1047,7 +1046,13 @@ require("catppuccin").setup({
       teal = "#53c2c5",
     },
   },
-  custom_highlights = {},
+  custom_highlights = function(colors)
+    return {
+      LspReferenceText = { bg = "#313244" },
+      LspReferenceRead = { bg = "#313244" },
+      LspReferenceWrite = { bg = "#313244" },
+    }
+  end,
   default_integrations = true,
   integrations = {
     gitsigns = true,
@@ -1066,6 +1071,31 @@ require("catppuccin").setup({
   },
 })
 vim.cmd.colorscheme("catppuccin")
+
+-- Override LSP document highlight handler to skip the instance under the cursor.
+local orig_doc_highlight_handler = vim.lsp.handlers["textDocument/documentHighlight"]
+vim.lsp.handlers["textDocument/documentHighlight"] = function(err, result, ctx, config)
+  if result then
+    local cursor = vim.api.nvim_win_get_cursor(0)
+    local row = cursor[1] - 1 -- 0-indexed to match LSP ranges
+    local col = cursor[2]
+    result = vim.tbl_filter(function(ref)
+      local s = ref.range.start
+      local e = ref.range["end"]
+      if row < s.line or row > e.line then
+        return true
+      end
+      if row == s.line and col < s.character then
+        return true
+      end
+      if row == e.line and col >= e.character then
+        return true
+      end
+      return false
+    end, result)
+  end
+  return orig_doc_highlight_handler(err, result, ctx, config)
+end
 
 -- Configure marks plugin.
 require("marks").setup({
@@ -1106,6 +1136,6 @@ require("gitsigns").setup({
 
 -- Load external configuration file if it exists.
 local private_init_path = os.getenv("HOME") .. "/.private_init.lua"
-if file_exists(private_init_path) then
-  private_plugins = dofile(private_init_path)
+if vim.uv.fs_stat(private_init_path) then
+  dofile(private_init_path)
 end
