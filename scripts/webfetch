@@ -1,6 +1,6 @@
 #!/usr/bin/env -S uv run --script
 # /// script
-# dependencies = ["trafilatura", "beautifulsoup4", "truststore", "brotli"]
+# dependencies = ["trafilatura", "beautifulsoup4", "curl_cffi", "playwright", "playwright-stealth"]
 # ///
 """Fetch a URL and extract its main text content, or download PDFs.
 
@@ -13,6 +13,12 @@ For PDF URLs (detected by Content-Type or .pdf extension), downloads the file an
 saves locally. Always use -o with a descriptive filename for PDFs. If -o is not
 given, saves to a temp file. Prints the saved path. Use the Read tool to view.
 
+Uses curl_cffi to impersonate Chrome's TLS fingerprint, bypassing bot detection
+on sites that reject Python's default TLS handshake. For sites with JavaScript
+challenges (e.g. Akamai Bot Manager), use -b to render with headless Chromium.
+
+Requires one-time setup for -b: playwright install chromium
+
 Exit codes:
     0 - Success
     1 - Network or HTTP error
@@ -21,49 +27,27 @@ Exit codes:
 """
 
 import argparse
-import gzip
 import hashlib
-import io
 import os
 import sys
 import tempfile
 import urllib.parse
-import urllib.request
 
-import brotli
-import truststore
+from curl_cffi import requests as cffi_requests
 import trafilatura
 from bs4 import BeautifulSoup
-
-# Use macOS Security.framework / OS trust store for SSL verification.
-# Handles incomplete cert chains (missing intermediates) via AIA fetching.
-truststore.inject_into_ssl()
 
 # Claude Code's Bash tool truncates at 30k chars; leave headroom for warnings/framing.
 OUTPUT_CHAR_LIMIT = 28_000
 
-HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36",
-    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
-    "Accept-Language": "en-US,en;q=0.9",
-    "Accept-Encoding": "gzip, deflate, br",
-    "Sec-Fetch-Dest": "document",
-    "Sec-Fetch-Mode": "navigate",
-    "Sec-Fetch-Site": "none",
-    "Sec-Fetch-User": "?1",
-    "Upgrade-Insecure-Requests": "1",
-    "Connection": "keep-alive",
-    "Cache-Control": "max-age=0",
-}
 
-
-def error(msg, code, quiet=False):
+def _error(msg, code, quiet=False):
     if not quiet:
         print(msg, file=sys.stderr)
     sys.exit(code)
 
 
-def bs4_fallback(html):
+def _bs4_fallback(html):
     """Fallback: use BeautifulSoup to extract text content."""
     soup = BeautifulSoup(html, "html.parser")
     for tag in soup(["script", "style", "nav", "header", "footer"]):
@@ -79,7 +63,27 @@ def _is_pdf(url, content_type):
     return urllib.parse.urlparse(url).path.lower().endswith(".pdf")
 
 
-def save_file(content, url, output_path=None, ext="txt", binary=False):
+def _extract_text(html, url, quiet=False):
+    """Extract text content from HTML via trafilatura with bs4 fallback."""
+    text = trafilatura.extract(
+        html,
+        include_comments=False,
+        include_tables=True,
+        favor_recall=True,
+    )
+
+    if not text:
+        if not quiet:
+            print("[trafilatura failed, falling back to BeautifulSoup]", file=sys.stderr)
+        text = _bs4_fallback(html)
+
+    if not text:
+        _error(f"No content extracted from {url}", 3, quiet)
+
+    return {"type": "text", "text": text}
+
+
+def _save_file(content, url, output_path=None, ext="txt", binary=False):
     """Save content to the given path, or a deterministic temp file based on URL hash."""
     if output_path:
         path = output_path
@@ -93,65 +97,86 @@ def save_file(content, url, output_path=None, ext="txt", binary=False):
 
 def fetch(url, quiet=False):
     """Fetch a URL. Returns {"type": "pdf", "data": bytes} or {"type": "text", "text": str}."""
-    req = urllib.request.Request(url, headers=HEADERS)
     try:
-        with urllib.request.urlopen(req, timeout=15) as resp:
-            content_type = resp.headers.get("Content-Type", "")
-            raw = resp.read(75_000_000)  # some pages (e.g. Anthropic posts) are very large
+        resp = cffi_requests.get(url, impersonate="chrome", timeout=15)
+        resp.raise_for_status()
+    except Exception as e:
+        _error(f"Failed to fetch {url}: {e}", 1, quiet)
+
+    content_type = resp.headers.get("Content-Type", "")
+
+    if _is_pdf(url, content_type):
+        if not resp.content:
+            _error(f"Empty response from {url}", 2, quiet)
+        return {"type": "pdf", "data": resp.content}
+
+    downloaded = resp.text
+    if not downloaded:
+        _error(f"Empty response from {url}", 2, quiet)
+
+    return _extract_text(downloaded, url, quiet)
+
+
+def fetch_browser(url, quiet=False):
+    """Fetch a URL using headless Chromium. Handles JS challenges."""
+    from playwright.sync_api import sync_playwright
+    from playwright_stealth import Stealth
+
+    try:
+        with Stealth().use_sync(sync_playwright()) as p:
+            # If this fails, run: playwright install chromium
+            browser = p.chromium.launch()
+            page = browser.new_page()
+
+            # Load page and give JS time to render. networkidle is unreliable
+            # (SPAs never idle; challenge pages reload mid-wait), so we use a
+            # fixed wait after load, which covers both cases.
+            page.goto(url, wait_until="load", timeout=30000)
+            page.wait_for_timeout(3000)
+
+            content_type = page.evaluate(
+                "() => document.contentType || ''"
+            )
 
             if _is_pdf(url, content_type):
-                if not raw:
-                    error(f"Empty response from {url}", 2, quiet)
-                return {"type": "pdf", "data": raw}
+                # PDF downloads don't work well in headless mode.
+                browser.close()
+                return fetch(url, quiet)
 
-            encoding = resp.headers.get("Content-Encoding", "")
-            if encoding == "br":
-                raw = brotli.decompress(raw)
-            elif encoding == "gzip" or raw[:2] == b"\x1f\x8b":
-                raw = gzip.GzipFile(fileobj=io.BytesIO(raw)).read()
-            downloaded = raw.decode(resp.headers.get_content_charset() or "utf-8", errors="replace")
+            html = page.content()
+            browser.close()
     except Exception as e:
-        error(f"Failed to fetch {url}: {e}", 1, quiet)
+        _error(f"Failed to fetch {url}: {e}", 1, quiet)
 
-    if not downloaded:
-        error(f"Empty response from {url}", 2, quiet)
+    if not html:
+        _error(f"Empty response from {url}", 2, quiet)
 
-    text = trafilatura.extract(
-        downloaded,
-        include_comments=False,
-        include_tables=True,
-        favor_recall=True,
-    )
-
-    if not text:
-        if not quiet:
-            print("[trafilatura failed, falling back to BeautifulSoup]", file=sys.stderr)
-        text = bs4_fallback(downloaded)
-
-    if not text:
-        error(f"No content extracted from {url}", 3, quiet)
-
-    return {"type": "text", "text": text}
+    return _extract_text(html, url, quiet)
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("url", help="URL to fetch")
+    parser.add_argument("-b", "--browser", action="store_true", help="use headless Chromium (for JS-rendered pages)")
     parser.add_argument("-q", "--quiet", action="store_true", help="suppress error messages on stderr")
     parser.add_argument("-o", "--output", help="save to this path, print path only")
     args = parser.parse_args()
-    result = fetch(args.url, quiet=args.quiet)
+
+    if args.browser:
+        result = fetch_browser(args.url, quiet=args.quiet)
+    else:
+        result = fetch(args.url, quiet=args.quiet)
 
     if result["type"] == "pdf":
-        path = save_file(result["data"], args.url, args.output, ext="pdf", binary=True)
+        path = _save_file(result["data"], args.url, args.output, ext="pdf", binary=True)
         if not args.quiet:
             print(f"[PDF saved to: {path} — use Read tool to view]", file=sys.stderr)
         print(path)
     elif args.output:
-        path = save_file(result["text"], args.url, args.output)
+        path = _save_file(result["text"], args.url, args.output)
         print(path)
     elif len(result["text"]) > OUTPUT_CHAR_LIMIT:
-        path = save_file(result["text"], args.url)
+        path = _save_file(result["text"], args.url)
         truncated = result["text"][:OUTPUT_CHAR_LIMIT]
         # Try to cut at a newline to avoid mid-sentence truncation.
         last_nl = truncated.rfind("\n")
