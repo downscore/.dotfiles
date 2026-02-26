@@ -152,6 +152,7 @@ fi
 if type nvim &>/dev/null; then
   alias vi='nvim'  # Use neovim as default editor.
 fi
+alias cd..='cd ..'  # Typo-friendly alias.
 alias python=python3  # Set default python version.
 alias pip=pip3  # Set default pip version.
 alias print_colors='for i in {0..255}; do print -Pn "%K{$i}  %k%F{$i}${(l:3::0:)i}%f " ${${(M)$((i%6)):#3}:+$'\''\n'\''}; done'
