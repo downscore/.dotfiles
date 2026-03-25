@@ -47,14 +47,14 @@ end)
 hs.hotkey.bind({ "ctrl", "alt" }, "w", CloseAllSystemNotifications)
 
 -- Bind app/tab switching shortcuts.
-BindAppFocusKey("a", "Google Chat")
+BindAppFocusKey("a", "Slack")
 hs.hotkey.bind({ "cmd", "ctrl" }, "b", FocusBrowser)
 BindAppFocusKey("c", "Visual Studio Code")
 BindBrowserTabFocusKey("d", "docs.google.com")
 BindAppFocusKey("e", "Reminders")
 BindAppFocusKey("f", "Finder")
 BindBrowserTabFocusKey("g", "mail.google.com")
-BindAppFocusKey("k", "Emacs")
+BindAppFocusKey("k", "Notion Dev")
 BindBrowserTabFocusKey("l", "calendar.google.com")
 BindAppFocusKey("m", "Messages")
 BindAppFocusKey("n", "Notes")
@@ -67,14 +67,14 @@ BindAppFocusKey(";", "Claude")
 -- Add switcher shortcuts using a leader key.
 local singleKey = spoon.RecursiveBinder.singleKey
 local switcherKeyMap = {
-  [singleKey("a", "Slack")] = function()
-    hs.application.launchOrFocus("Slack")
+  [singleKey("a", "Google Chat")] = function()
+    hs.application.launchOrFocus("Google Chat")
   end,
   [singleKey("b", "Books")] = function()
     hs.application.launchOrFocus("Books")
   end,
-  [singleKey("c", "Claude")] = function()
-    hs.application.launchOrFocus("Claude")
+  [singleKey("c", "Cursor")] = function()
+    hs.application.launchOrFocus("Cursor")
   end,
   [singleKey("d", "Discord")] = function()
     hs.application.launchOrFocus("Discord")
@@ -103,8 +103,8 @@ local switcherKeyMap = {
   [singleKey("m", "Act. Monitor")] = function()
     hs.application.launchOrFocus("Activity Monitor")
   end,
-  [singleKey("n", "Night PDF")] = function()
-    hs.application.launchOrFocus("nightPDF")
+  [singleKey("n", "Skim")] = function()
+    hs.application.launchOrFocus("Skim")
   end,
   [singleKey("p", "ProtonVPN")] = function()
     hs.application.launchOrFocus("ProtonVPN")
