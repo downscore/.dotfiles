@@ -92,7 +92,9 @@ def _save_file(content, url, output_path=None, ext="txt", binary=False):
         path = os.path.join(tempfile.gettempdir(), f"webfetch-{url_hash}.{ext}")
     with open(path, "wb" if binary else "w") as f:
         f.write(content)
-    return path
+    size = len(content)
+    lines = content.count("\n") + 1 if isinstance(content, str) else None
+    return path, size, lines
 
 
 def fetch(url, quiet=False):
@@ -168,24 +170,25 @@ if __name__ == "__main__":
         result = fetch(args.url, quiet=args.quiet)
 
     if result["type"] == "pdf":
-        path = _save_file(result["data"], args.url, args.output, ext="pdf", binary=True)
+        path, size, _ = _save_file(result["data"], args.url, args.output, ext="pdf", binary=True)
         if not args.quiet:
-            print(f"[PDF saved to: {path} — use Read tool to view]", file=sys.stderr)
+            print(f"[PDF saved to: {path} ({size:,} bytes) — use Read tool to view]", file=sys.stderr)
         print(path)
     elif args.output:
-        path = _save_file(result["text"], args.url, args.output)
+        path, size, lines = _save_file(result["text"], args.url, args.output)
+        if not args.quiet:
+            print(f"[Saved to: {path} ({size:,} chars, {lines:,} lines)]", file=sys.stderr)
         print(path)
     elif len(result["text"]) > OUTPUT_CHAR_LIMIT:
-        path = _save_file(result["text"], args.url)
+        path, size, lines = _save_file(result["text"], args.url)
         truncated = result["text"][:OUTPUT_CHAR_LIMIT]
         # Try to cut at a newline to avoid mid-sentence truncation.
         last_nl = truncated.rfind("\n")
         if last_nl > OUTPUT_CHAR_LIMIT * 0.8:
             truncated = truncated[:last_nl]
         print(truncated)
-        total = len(result["text"])
         shown = len(truncated)
-        pct = shown * 100 // total
-        print(f"\n[TRUNCATED: {pct}% shown ({shown:,}/{total:,} chars). Full text saved to: {path} — read it, don't re-fetch.]", file=sys.stderr)
+        pct = shown * 100 // size
+        print(f"\n[TRUNCATED: {pct}% shown ({shown:,}/{size:,} chars, {lines:,} lines). Full text saved to: {path} — read it, don't re-fetch.]", file=sys.stderr)
     else:
         print(result["text"])
