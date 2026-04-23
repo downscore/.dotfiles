@@ -342,8 +342,6 @@ start_session = function(ref_lines, filetype, filter_arg)
   if filetype and filetype ~= "" then
     vim.bo[type_buf].filetype = filetype
   end
-  -- Disable Copilot
-  vim.b[type_buf].copilot_enabled = false
   local type_win = vim.api.nvim_get_current_win()
   vim.wo[type_win].signcolumn = "no"
   vim.wo[type_win].foldcolumn = "0"

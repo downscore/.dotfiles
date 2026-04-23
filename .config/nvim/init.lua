@@ -90,8 +90,6 @@ end
 KB("t", "<Esc><Esc>", "<C-\\><C-n>", "Exit terminal mode") -- Default: <C-\><C-n>
 KB("n", "<leader><leader>", "<C-^>", "Switch to last active buffer")
 KB("n", "<Esc>", "<cmd>nohlsearch<CR>", "[Esc] clears search highlights")
-KB("n", "<leader>cp", ":Copilot panel<CR>", "[C]opilot [P]anel")
-
 -- Make vertical cursor movement work with display lines when lines wrap.
 KB({ "n", "v", "x" }, "<Down>", "v:count == 0 ? 'gj' : 'j'", "", true)
 KB({ "n", "v", "x" }, "<Up>", "v:count == 0 ? 'gk' : 'k'", "", true)
@@ -155,19 +153,6 @@ KB("n", "<leader>tr", ":set relativenumber!<CR>", "[T]oggle [R]elative line numb
 KB("n", "<leader>tb", ":Gitsigns toggle_current_line_blame<CR>", "[T]oggle Git [B]lame")
 KB("n", "<leader>tv", ":VirtColumnToggle<CR>", "[T]oggle [V]irt column (line length)")
 KB("n", "<leader>tw", ":set wrap!<CR>", "[T]oggle display line [W]rapping")
-
--- Add keybinding for toggling copilot.
-local copilot_enabled = true
-vim.api.nvim_create_user_command("CopilotToggle", function()
-  if copilot_enabled then
-    vim.cmd("Copilot disable")
-  else
-    vim.cmd("Copilot enable")
-  end
-  copilot_enabled = not copilot_enabled
-  print("Copilot Enabled: " .. tostring(copilot_enabled))
-end, { nargs = 0 })
-KB("n", "<leader>tc", ":CopilotToggle<CR>", "[T]oggle [C]opilot")
 
 -- Toggle automatic line wrapping.
 vim.keymap.set("n", "<leader>tt", function()
