@@ -5,6 +5,7 @@ require("notifications")
 require("obsidian")
 require("window_management")
 hs.loadSpoon("RecursiveBinder")
+GhosttyInitialize()
 
 -- Shortcut to reload Hammerspoon config.
 hs.hotkey.bind({ "cmd", "ctrl" }, "r", function()
@@ -183,26 +184,3 @@ end)
 hs.hotkey.bind({ "ctrl", "shift" }, "v", function()
   AnnotationsDrawCircle(100)
 end)
-
--- Set up app-specific behavior.
-local appEvents = {
-  { "Ghostty", GhosttyOnFocus, GhosttyOnFocusLost },
-}
-local appWatcher = hs.application.watcher.new(function(appName, eventType)
-  if eventType == hs.application.watcher.activated then
-    for _, event in ipairs(appEvents) do
-      if appName == event[1] then
-        event[2]() -- Focus event
-      else
-        event[3]() -- Focus lost event
-      end
-    end
-  elseif eventType == hs.application.watcher.deactivated then
-    for _, event in ipairs(appEvents) do
-      if appName == event[1] then
-        event[3]() -- Focus lost event
-      end
-    end
-  end
-end)
-appWatcher:start()
