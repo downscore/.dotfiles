@@ -15,7 +15,6 @@ zstyle ':completion:*' menu select
 zstyle ':completion:*' list-prompt '%SList: %M (%p)%s'
 zstyle ':completion:*' select-prompt '%SMenu: %M (%p)%s'
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'  # Make case-insensitive.
-_comp_options+=(globdots)  # Show hidden files in tab completion.
 
 # Use bash-style globbing -- don't raise an error when * doesn't match anything, and just pass in
 # the glob itself as an argument. This makes it easier to use commands shared by people running
@@ -34,13 +33,13 @@ autoload -U zmv
 
 # History options.
 HISTFILE=~/.zsh_history
-HISTSIZE=200000
+HISTSIZE=250000
 SAVEHIST=200000
 # Only include `cd` commands containing a slash in history.
 HISTORY_IGNORE='(ls|cd [^/]*|pwd|exit)'
 setopt append_history  # Append commands to the history file, rather than overwriting it.
 setopt share_history  # Share history between all sessions.
-setopt inc_append_history # Append commands immediately. Implied by share_history. 
+unsetopt inc_append_history  # share_history already appends commands immediately.
 setopt extended_history  # Save command timestamp and duration.
 setopt hist_expire_dups_first  # Delete oldest dupes first.
 setopt hist_ignore_dups  # Do not write dupes to history.
@@ -56,10 +55,7 @@ setopt autopushd  # Enable auto directory stack.
 setopt pushd_ignore_dups  # Don't add duplicate dirs to directory stack.
 setopt interactive_comments  # Allow inline comments in interactive shells.
 
-# GhosTTY terminfo is not widely available. For now, use `xterm-256color`.
-if [[ "$TERM_PROGRAM" == "ghostty" ]]; then
-  export TERM=xterm-256color
-fi
+# Preserve TERM supplied by the terminal emulator or tmux.
 
 # Reduce delay after receiving an escape key code (^[). Note that some keys (such as arrow keys)
 # send an escape key code followed by another code, so the terminal waits for a bit to
@@ -116,24 +112,24 @@ yazicd() {
 # Watch for file changes then compile and run the program.
 entrcc() {
   ls "$1" | entr -s "g++ -std=c++20 -o \"${1%.*}\" \"$1\" && \
-    echo \"*** START [$(date +'%Y-%m-%d %H:%M:%S')] ***\" && \
+    echo \"*** START [\$(date +'%Y-%m-%d %H:%M:%S')] ***\" && \
     \"./${1%.*}\" && \
-    echo \"*** END [$(date +'%Y-%m-%d %H:%M:%S')] ***\""
+    echo \"*** END [\$(date +'%Y-%m-%d %H:%M:%S')] ***\""
 }
 entrc() {
   ls "$1" | entr -s "gcc -std=c11 -o \"${1%.*}\" \"$1\" && \
-    echo \"*** START [$(date +'%Y-%m-%d %H:%M:%S')] ***\" && \
+    echo \"*** START [\$(date +'%Y-%m-%d %H:%M:%S')] ***\" && \
     \"./${1%.*}\" && \
-    echo \"*** END [$(date +'%Y-%m-%d %H:%M:%S')] ***\""
+    echo \"*** END [\$(date +'%Y-%m-%d %H:%M:%S')] ***\""
 }
 entrpy() {
   local python_bin=$(which python3)
-  ls "$1" | entr -s "echo \"*** START [$(date +'%Y-%m-%d %H:%M:%S')] ***\" && \
+  ls "$1" | entr -s "echo \"*** START [\$(date +'%Y-%m-%d %H:%M:%S')] ***\" && \
     $python_bin \"$1\" && \
-    echo \"*** END [$(date +'%Y-%m-%d %H:%M:%S')] ***\""
+    echo \"*** END [\$(date +'%Y-%m-%d %H:%M:%S')] ***\""
 }
 
-# Replace some substring in command output with ellipses. Pipe to this to make output more readable
+# Replace a literal substring in command output with ellipses. Pipe to this to make output more readable
 # when it contains long paths or other strings that are repeated many times.
 ellipses() {
   local pattern="$1"
@@ -141,8 +137,7 @@ ellipses() {
     echo "Usage: ellipses <pattern>" >&2
     return 1
   fi
-  pattern=$(echo "$pattern" | sed 's/[\/&]/\\&/g') # Escape `/` and `&` for sed
-  sed -E "s/$pattern/…/g"
+  ELLIPSES_PATTERN="$pattern" perl -pe 's/\Q$ENV{ELLIPSES_PATTERN}\E/…/g'
 }
 
 # Command aliases and abbreviations.
@@ -161,10 +156,11 @@ alias manlib='manfzf 3'
 abbr -S -q v='vi'
 abbr -S -q l='yazicd'
 abbr -S -q c='claude'
+abbr -S -q co='codex'
 abbr -S -q cpy='tmux capture-pane -pS -10000% | copy_to_clipboard'
 abbr -S -q a2=' aria2c "%"'
-abbr -S -q cdi='cd $HOME/Library/Mobile Documents/com~apple~CloudDocs'
-abbr -S -q cdo='cd $HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents/Notes'
+abbr -S -q cdi='cd "$HOME/Library/Mobile Documents/com~apple~CloudDocs"'
+abbr -S -q cdo='cd "$HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents/Notes"'
 
 # Load API keys and other private configuration if available.
 test -f ~/.api_keys.zsh && source ~/.api_keys.zsh
@@ -185,6 +181,7 @@ if [[ -f ~/.zcompdump && -z ~/.zcompdump(#qN.mh+24) ]]; then
 else
   compinit
 fi
+_comp_options+=(globdots)  # Show hidden files in tab completion.
 
 # Enable syntax highlighting.
 # Note: This must be at the end of .zshrc

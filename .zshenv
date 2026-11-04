@@ -1,3 +1,6 @@
+# Keep PATH entries unique, preserving the first occurrence.
+typeset -U PATH path
+
 # Add ~/.bin to PATH if it exists.
 if test -d "$HOME/.bin"; then
   export PATH="$HOME/.bin:$PATH"
